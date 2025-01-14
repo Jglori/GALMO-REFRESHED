@@ -2,6 +2,7 @@ import { refreshApex } from '@salesforce/apex';
 import { LightningElement, track, api, wire } from 'lwc';
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 import getDocumentsForEachContactRole from '@salesforce/apex/DocumentController.getDocumentsForEachContactRole';
+import { RefreshEvent } from 'lightning/refresh';
 import salvarImagem from '@salesforce/apex/DocumentController.salvarImagem';
 import deletar from '@salesforce/apex/DocumentController.deletar'
 import recuperar from '@salesforce/apex/DocumentController.recuperar';
@@ -138,7 +139,7 @@ export default class DocumentChecklist extends LightningElement {
                     reader.readAsDataURL(file);
                 } else {
                     console.error('O arquivo é muito grande.');
-                    this.event.success('O arquivo é muito grande. O tamanho máximo permitido é 5 MB.');
+                    this.event.error('O arquivo é muito grande. O tamanho máximo permitido é 5 MB.');
                 }
             } else {
                 console.error('Tipo de arquivo não suportado.');
@@ -159,6 +160,7 @@ export default class DocumentChecklist extends LightningElement {
         })
         .then((result) => {
             this.event.success('Imagem salva com sucesso');
+            this.dispatchEvent(new RefreshEvent());
             refreshApex(this.wiredDocumentos);
         })
         .catch(error => {
@@ -275,6 +277,7 @@ export default class DocumentChecklist extends LightningElement {
         .then(result => {
             console.log(result);
             this.event.success('Documento deletado com sucesso');
+            this.dispatchEvent(new RefreshEvent());
             refreshApex(this.wiredDocumentos);
         })
         .catch(error => {

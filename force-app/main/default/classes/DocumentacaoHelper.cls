@@ -55,7 +55,9 @@ public class DocumentacaoHelper {
         documento.ContentDocumentId_c__c = cv.contentDocumentId;
         documento.DataEntrega__c = Date.today(); 
         insert documento;
-    
+        
+
+        // Adicionar lógica onde só possa haver um checklist para cada contato
         Checklist_de_Documentos__c checklist = new Checklist_de_Documentos__c();
         checklist.Oportunidade__c = opportunityId;
         checklist.Documenta_o__c = documento.Id;
@@ -190,8 +192,6 @@ public class DocumentacaoHelper {
                 WHERE Papel__c = :cr.Role
             ];
     
-            System.debug('Documentos do metadata: ' + listOfMtdDocuments);
-    
             List<Documentacao__c> documents = new List<Documentacao__c>();
     
             for (Documento__mdt docMdt : listOfMtdDocuments) {
@@ -201,8 +201,6 @@ public class DocumentacaoHelper {
                     WHERE Contato__c = :cr.ContactId AND Name = :docMdt.Nome_do_Documento__c
                     LIMIT 1
                 ];
-    
-                System.debug('Documentos existentes: ' + existingDocs);
     
                 if (existingDocs.isEmpty()) {
                     Documentacao__c newDoc = new Documentacao__c();
