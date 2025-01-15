@@ -20,6 +20,11 @@ jobs:
         run: |
           git fetch --all
 
+      - name: Configure Git user
+        run: |
+          git config --global user.email "willgustavodantasadolpho@gmail.com"
+          git config --global user.name "WillDantasJPG"
+
       - name: Update source branch with target branch
         run: |
           git checkout ${{ github.event.pull_request.head.ref }}
