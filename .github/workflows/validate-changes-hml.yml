@@ -30,6 +30,10 @@ jobs:
           git checkout ${{ github.event.pull_request.head.ref }}
           git merge origin/hml
 
+      - name: Authenticate with Salesforce
+        run: |
+          echo ${{ secrets.AUTH_URL_HML }} | sfdx force:auth:sfdxurl:store --setalias hml --noprompt
+
       - name: Identify Modified Test Classes
         id: identify_tests
         run: |
