@@ -16,10 +16,6 @@ jobs:
         run: |
           npm install sfdx-cli --global
 
-      - name: Authenticate with Salesforce
-        run: |
-          echo ${{ secrets.AUTH_URL_HML }} | sfdx auth:sfdxurl:store --setalias hml --noprompt
-
       - name: Identify Modified Test Classes
         id: identify_tests
         run: |
