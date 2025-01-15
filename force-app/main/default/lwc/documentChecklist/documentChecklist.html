@@ -9,6 +9,9 @@
                 </div>
             </template>
             <template if:false={isContactRoleEmpty}>
+                <template if:true={isLoading}>
+                    <lightning-spinner alternative-text="Carregando..." size="medium"></lightning-spinner>
+                </template>
                 <template for:each={opportunityContactRole} for:item="contact">
                     <lightning-accordion key={contact.ContactId} allow-multiple-sections-open>
                         <lightning-accordion-section name={contact.ContactId} label={contact.ContactName}>

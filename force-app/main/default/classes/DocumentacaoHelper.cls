@@ -1,4 +1,58 @@
 public class DocumentacaoHelper {
+    
+    public static List<Documentacao__c> getByAnaliseCredito(Id analiseCreditoId) {
+        List<Checklist_de_Documentos__c> cklistDocs = ChecklistHelper.getByAnaliseCredito(analiseCreditoId);
+        
+        List<Documentacao__c> docs = new List<Documentacao__c>();
+        for (Checklist_de_Documentos__c cklistDoc : cklistDocs) {
+            docs.add(
+                new Documentacao__c(
+                    Id = cklistDoc.Documenta_o__c,
+                    Name = cklistDoc.Documenta_o__r.Name,
+                    Validado__c = cklistDoc.Documenta_o__r.Validado__c,
+                    Obrigatorio__c = cklistDoc.Documenta_o__r.Obrigatorio__c, 
+                    Entregue__c = cklistDoc.Documenta_o__r.Entregue__c
+                )
+            );
+        }
+
+        return docs;
+    }  
+
+    public static List<Documentacao__c> validateDocuments(Set<Id> ids) {
+        List<Documentacao__c> documents = DocumentacaoDA.getAllById(ids);
+
+        for (Documentacao__c document : documents) {
+            document.Validado__c = true;
+        }
+
+        try {
+            update documents;
+        } catch (DMLException e) {
+            System.debug('Erro ao atualizar documentos: ' + e.getMessage());
+            throw new DMLException('Erro ao atualizar documentos: ' + e.getMessage());
+        }
+
+        return documents;
+    }
+
+    public static List<Documentacao__c> invalidateDocuments(Set<Id> ids) {
+        List<Documentacao__c> documents = DocumentacaoDA.getAllById(ids);
+        
+        for (Documentacao__c document : documents) {
+            document.Validado__c = false;
+        }
+ 
+        try {
+            update documents;
+        } catch (Exception e) {
+            System.debug('Erro ao atualizar documentos: ' + e.getMessage());
+            throw new DMLException('Erro ao atualizar documentos: '+ e.getMessage());
+        }
+
+        return documents;
+    }
+
     public static void criarDocumentacao(String nomeDocumento) {
         // Cria um novo registro de Documentacao__c
         Documentacao__c doc = new Documentacao__c();
@@ -55,9 +109,7 @@ public class DocumentacaoHelper {
         documento.ContentDocumentId_c__c = cv.contentDocumentId;
         documento.DataEntrega__c = Date.today(); 
         insert documento;
-        
-
-        // Adicionar lógica onde só possa haver um checklist para cada contato
+    
         Checklist_de_Documentos__c checklist = new Checklist_de_Documentos__c();
         checklist.Oportunidade__c = opportunityId;
         checklist.Documenta_o__c = documento.Id;
@@ -85,11 +137,15 @@ public class DocumentacaoHelper {
         if (contentDocLink != null && !contentDocLink.isEmpty()) delete contentDocLink;
 
         List<Checklist_de_Documentos__c> cklistDocs = [
-            SELECT Id 
+            SELECT Id, Oportunidade__c
             FROM Checklist_de_Documentos__c
             WHERE Documenta_o__c = :doc.Id
         ];
         if (cklistDocs != null && !cklistDocs.isEmpty()) delete cklistDocs;
+
+        System.debug(cklistDocs);
+
+        ChecklistHelper.updateOpportunityChecklistStatus(new List<Checklist_de_Documentos__c>(cklistDocs));
 
         delete doc;
     }
@@ -262,67 +318,6 @@ public class DocumentacaoHelper {
         }
 
         return docs;
-    }
-
-    public static List<Documentacao__c> getByAnaliseCredito(Id analiseCreditoId) {
-        List<Opportunity> opps = OpportunityHelper.getByAnaliseCreditoId(new Set<Id>{analiseCreditoId});
-        if (opps.isEmpty()) throw new IllegalArgumentException('Nenhuma opportunidade relacionada à essas análises.');
-        Set<Id> oppIds = new Set<Id>();
-        for (Opportunity opp : opps) {
-            oppIds.add(opp.Id);
-        }
-
-        List<Checklist_de_Documentos__c> cklistDocs = ChecklistHelper.getByOpportunityId(oppIds);
-        if (cklistDocs.isEmpty()) throw new IllegalArgumentException('Nenhum checklist relacionada à essas opportunidades.');
-        
-        List<Documentacao__c> docs = new List<Documentacao__c>();
-        for (Checklist_de_Documentos__c cklistDoc : cklistDocs) {
-            docs.add(
-                new Documentacao__c(
-                    Id = cklistDoc.Documenta_o__c,
-                    Name = cklistDoc.Documenta_o__r.Name,
-                    Validado__c = cklistDoc.Documenta_o__r.Validado__c,
-                    Obrigatorio__c = cklistDoc.Documenta_o__r.Obrigatorio__c, 
-                    Entregue__c = cklistDoc.Documenta_o__r.Entregue__c
-                )
-            );
-        }
-
-        return docs;
-    }  
-
-    public static List<Documentacao__c> validateDocuments(Set<Id> ids) {
-        List<Documentacao__c> documents = DocumentacaoDA.getAllById(ids);
-
-        for (Documentacao__c document : documents) {
-            document.Validado__c = true;
-        }
-
-        try {
-            update documents;
-        } catch (DMLException e) {
-            System.debug('Erro ao atualizar documentos: ' + e.getMessage());
-            throw new DMLException('Erro ao atualizar documentos: ' + e.getMessage());
-        }
-
-        return documents;
-    }
-
-    public static List<Documentacao__c> invalidateDocuments(Set<Id> ids) {
-        List<Documentacao__c> documents = DocumentacaoDA.getAllById(ids);
-        
-        for (Documentacao__c document : documents) {
-            document.Validado__c = false;
-        }
- 
-        try {
-            update documents;
-        } catch (Exception e) {
-            System.debug('Erro ao atualizar documentos: ' + e.getMessage());
-            throw new DMLException('Erro ao atualizar documentos: '+ e.getMessage());
-        }
-
-        return documents;
     }
 
     private static String getMimeTypeFromFileName(String fileName) {

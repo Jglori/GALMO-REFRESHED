@@ -15,6 +15,7 @@ export default class DocumentChecklist extends LightningElement {
     @api recordId;
     @track opportunityContactRole = [];
     @track documents;
+    @track isLoading = false;
     @track contactId;
 
     @track mandatory;
@@ -81,6 +82,7 @@ export default class DocumentChecklist extends LightningElement {
     }
 
     handleUploadClick(event) {
+        event.target.value = '';
         const documentId = event.target.dataset.id;
         const contactId = event.target.dataset.contactId;
         const nomeArquivo = event.target.dataset.nomeId
@@ -92,10 +94,11 @@ export default class DocumentChecklist extends LightningElement {
         input.dataset.nomeId = nomeArquivo; 
         input.dataset.completed = obrigatorio;
 
-        console.log("Click ", contactId);
-        console.log("Obrigatorio", obrigatorio);
-        
+        console.log("Nome", input.dataset.nomeId);
+        console.log(input);
+
         input.click();
+
     }
 
     findDocumentByContactIdAndName(data, contactId, docMtdName) {
@@ -118,7 +121,7 @@ export default class DocumentChecklist extends LightningElement {
         
         console.log("Nome do documento:", name);
         console.log("ID do contato:", contactId);
-        console.log("Documento encontrado:", doc);
+        console.log("Metadado encontrado:", doc);
 
         
         if (file && doc) {
@@ -145,10 +148,13 @@ export default class DocumentChecklist extends LightningElement {
                 console.error('Tipo de arquivo não suportado.');
                 this.event.error('Tipo de arquivo não suportado. Apenas JPG, PNG e PDF são aceitos.');
             }
+
+            event.target.value = '';
         }
     }
    
     saveImage(contactId, base64, fileName, title, obrigatorio, fileType) {
+        this.isLoading = true;
         salvarImagem({
             contactId,
             opportunityId: this.recordId, 
@@ -166,6 +172,9 @@ export default class DocumentChecklist extends LightningElement {
         .catch(error => {
             console.error("Erro ao salvar imagem: ", error);
             this.event.error('Erro ao salvar a imagem: ' + error.body.message);
+        })
+        .finally(() => {
+            this.isLoading = false;
         });
     }
 
@@ -275,7 +284,7 @@ export default class DocumentChecklist extends LightningElement {
    deletarDocumento(id) {
     deletar({ id })
         .then(result => {
-            console.log(result);
+            console.log(id);
             this.event.success('Documento deletado com sucesso');
             this.dispatchEvent(new RefreshEvent());
             refreshApex(this.wiredDocumentos);
