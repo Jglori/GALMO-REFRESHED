@@ -45,7 +45,7 @@ jobs:
 
           # Identificar arquivos de teste modificados
           TEST_FILES=$(git diff --name-only origin/hml...HEAD | grep 'force-app/main/default/classes' | grep 'Test.cls')
-          if [ -z "$TEST_FILES" ]; then
+          if [ -z "$TEST_FILES" ]; então
             echo "Nenhum arquivo de teste modificado encontrado."
             exit 1
           fi
@@ -61,11 +61,14 @@ jobs:
 
       - name: Run Modified Tests
         run: |
-          if [ -z "${{ steps.identify_tests.outputs.test_classes }}" ]; then
+          if [ -z "${{ steps.identify_tests.outputs.test_classes }}" ]; então
             echo "Nenhuma classe de teste identificada para execução."
             exit 1
           fi
-          sfdx force:apex:test:run --tests ${{ steps.identify_tests.outputs.test_classes }} --resultformat human --codecoverage --wait 10
+          echo ${{ secrets.AUTH_URL_HML }} > sfdx_auth_url.txt
+          sfdx force:auth:sfdxurl:store --sfdxurlfile sfdx_auth_url.txt --setalias hml --noprompt
+          sfdx force:apex:test:run --tests ${{ steps.identify_tests.outputs.test_classes }} --resultformat human --codecoverage --wait 10 --targetusername hml
+          rm sfdx_auth_url.txt
 
       - name: Validate on HML
         uses: jawills/sf-deploy@v1.0
