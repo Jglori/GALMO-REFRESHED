@@ -38,7 +38,7 @@ public class OLXLeadWebhookService {
             recordTypeId = getRecordTypeId('Pessoa Física');
         }
 
-        // Criando o Lead
+     
         Lead novoLead = new Lead(
             LastName = dadosLead.name,
             Email = dadosLead.email,
@@ -60,7 +60,7 @@ public class OLXLeadWebhookService {
           
             insert novoLead;
 
-            // Chama o método assíncrono para o envio do lead para a OLX
+           
            OLXAsync.enviarParaAPIOLX(novoLead.Id);
 
             res.statusCode = 200;

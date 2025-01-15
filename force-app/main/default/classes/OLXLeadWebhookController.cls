@@ -9,10 +9,9 @@ global with sharing class OLXLeadWebhookController {
         Long tempoInicio = Datetime.now().getTime();
         
         try {
-            // Recebe e processa a requisição
+           
             String corpoRequisicao = req.requestBody.toString();
             
-            // Chama a service para processar o lead
             OLXLeadWebhookService.processarLead(corpoRequisicao, res);
 
         } catch (Exception e) {
