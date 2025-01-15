@@ -1,6 +1,4 @@
-
-		  
-		  name: Validate Pull Request - HML
+name: Validate Pull Request - HML
 
 on:
   pull_request:
