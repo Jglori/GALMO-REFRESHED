@@ -59,20 +59,87 @@ jobs:
           # Passar os nomes das classes de teste para a próxima etapa
           echo "::set-output name=test_classes::$TEST_CLASSES"
 
-      - name: Run Modified Tests
+      - name: Validate Pull Request - HML
+
+on:
+  pull_request:
+    branches:
+      - hml
+    paths:
+      - 'force-app/**'
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install Salesforce CLI
         run: |
-          if [ -z "${{ steps.identify_tests.outputs.test_classes }}" ]; then
-            echo "Nenhuma classe de teste identificada para execução."
-            exit 1
-          fi
+          npm install sfdx-cli --global
+
+      - name: Fetch all branches
+        run: |
+          git fetch --all
+
+      - name: Configure Git user
+        run: |
+          git config --global user.email "willgustavodantasadolpho@gmail.com"
+          git config --global user.name "WillDantasJPG"
+
+      - name: Update source branch with target branch
+        run: |
+          git checkout ${{ github.event.pull_request.head.ref }}
+          git merge origin/hml
+
+      - name: Authenticate with Salesforce
+        run: |
           echo ${{ secrets.AUTH_URL_HML }} > sfdx_auth_url.txt
           sfdx force:auth:sfdxurl:store --sfdxurlfile sfdx_auth_url.txt --setalias hml --noprompt
-          sfdx force:apex:test:run --tests ${{ steps.identify_tests.outputs.test_classes }} --resultformat human --codecoverage --wait 10 --targetusername hml
           rm sfdx_auth_url.txt
 
-      - name: Validate on HML
-        uses: jawills/sf-deploy@v1.0
-        with:
-          SFDX_AUTH_URL: ${{ secrets.AUTH_URL_HML }}
-          DRY_RUN: true
-          TEST_LEVEL: NoTestRun
+      - name: Identify Modified Test Classes
+        id: identify_tests
+        run: |
+          # Identificar o branch de origem do PR
+          SOURCE_BRANCH=${{ github.event.pull_request.head.ref }}
+          echo "Branch de origem: $SOURCE_BRANCH"
+
+          # Identificar arquivos de teste modificados
+          TEST_FILES=$(git diff --name-only origin/hml...HEAD | grep 'force-app/main/default/classes' | grep 'Test.cls')
+          if [ -z "$TEST_FILES" ]; then
+            echo "Nenhum arquivo de teste modificado encontrado."
+            exit 1
+          fi
+          echo "Modified test files: $TEST_FILES"
+          
+          # Filtrar apenas arquivos .cls e extrair nomes das classes de teste
+          TEST_CLASSES=$(echo "$TEST_FILES" | grep '.cls$' | sed -e 's/force-app\/main\/default\/classes\///g' -e 's/.cls//g' | tr '\n' ',')
+          TEST_CLASSES=${TEST_CLASSES%,} # Remove a última vírgula
+          echo "Test classes to run: $TEST_CLASSES"
+          
+          # Passar os nomes das classes de teste para a próxima etapa
+          echo "::set-output name=test_classes::$TEST_CLASSES"
+
+     - name: Run Modified Tests
+  run: |
+    if [ -z "${{ steps.identify_tests.outputs.test_classes }}" ]; then
+      echo "Nenhuma classe de teste identificada para execução."
+      exit 1
+    fi
+    echo "Autenticando com a organização de desenvolvimento..."
+    sfdx force:auth:sfdxurl:store --sfdxurl "force://PlatformCLI::5Aep861SLu.q9pDVKUbcqF2uA21u3ZevzOVeWVDVepDSyR7RKtcEy9e5WRsNIaVI60tgjpETxwUtJMxQotV0kW4@galmoambientesf24--dev.sandbox.my.salesforce.com" --setalias dev --noprompt
+    sfdx force:apex:test:run --tests ${{ steps.identify_tests.outputs.test_classes }} --resultformat human --codecoverage --wait 10 --targetusername dev
+
+- name: Validate on HML
+  uses: jawills/sf-deploy@v1.0
+  with:
+    SFDX_AUTH_URL: ${{ secrets.AUTH_URL_HML }}
+    DRY_RUN: true
+    TEST_LEVEL: NoTestRun
+
+- name: Validate on HML
+  uses: jawills/sf-deploy@v1.0
+  with:
+    SFDX_AUTH_URL: ${{ secrets.AUTH_URL_HML }}
+    DRY_RUN: true
+    TEST_LEVEL: NoTestRun
