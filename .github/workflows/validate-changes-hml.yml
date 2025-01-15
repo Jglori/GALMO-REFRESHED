@@ -45,7 +45,7 @@ jobs:
 
           # Identificar arquivos de teste modificados
           TEST_FILES=$(git diff --name-only origin/hml...HEAD | grep 'force-app/main/default/classes' | grep 'Test.cls')
-          if [ -z "$TEST_FILES" ]; então
+          if [ -z "$TEST_FILES" ]; then
             echo "Nenhum arquivo de teste modificado encontrado."
             exit 1
           fi
@@ -61,7 +61,7 @@ jobs:
 
       - name: Run Modified Tests
         run: |
-          if [ -z "${{ steps.identify_tests.outputs.test_classes }}" ]; então
+          if [ -z "${{ steps.identify_tests.outputs.test_classes }}" ]; then
             echo "Nenhuma classe de teste identificada para execução."
             exit 1
           fi
