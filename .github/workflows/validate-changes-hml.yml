@@ -20,15 +20,20 @@ jobs:
         run: |
           git fetch --all
 
+      - name: Update source branch with target branch
+        run: |
+          git checkout ${{ github.event.pull_request.head.ref }}
+          git merge origin/hml
+
       - name: Identify Modified Test Classes
         id: identify_tests
         run: |
           # Identificar o branch de origem do PR
-          SOURCE_BRANCH=$(echo ${{ github.event.pull_request.head.ref }})
+          SOURCE_BRANCH=${{ github.event.pull_request.head.ref }}
           echo "Branch de origem: $SOURCE_BRANCH"
 
           # Identificar arquivos de teste modificados
-          TEST_FILES=$(git diff --name-only origin/$SOURCE_BRANCH...HEAD | grep 'force-app/main/default/classes' | grep 'Test.cls')
+          TEST_FILES=$(git diff --name-only origin/hml...HEAD | grep 'force-app/main/default/classes' | grep 'Test.cls')
           if [ -z "$TEST_FILES" ]; then
             echo "Nenhum arquivo de teste modificado encontrado."
             exit 1
