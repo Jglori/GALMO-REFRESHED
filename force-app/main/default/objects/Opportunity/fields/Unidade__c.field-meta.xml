@@ -5,8 +5,8 @@
     <externalId>false</externalId>
     <label>Unidade</label>
     <referenceTo>Product2</referenceTo>
-    <relationshipLabel>Oportunidades</relationshipLabel>
-    <relationshipName>Oportunidades</relationshipName>
+    <relationshipLabel>Unidades Relacionadas</relationshipLabel>
+    <relationshipName>Unidades_Relacionadas</relationshipName> 
     <required>false</required>
     <trackFeedHistory>false</trackFeedHistory>
     <type>Lookup</type>
