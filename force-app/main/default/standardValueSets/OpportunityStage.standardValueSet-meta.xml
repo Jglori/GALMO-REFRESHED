@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<StandardValueSet xmlns="http://soap.sforce.com/2006/04/metadata">
+    <sorted>false</sorted>
+    <standardValue>
+        <fullName>Cancelado</fullName>
+        <default>false</default>
+        <label>Cancelado</label>
+        <closed>false</closed>
+        <forecastCategory>Omitted</forecastCategory>
+        <probability>0</probability>
+        <won>false</won>
+    </standardValue>
+    <standardValue>
+        <fullName>Montagem de Pasta</fullName>
+        <default>false</default>
+        <label>Montagem de Pasta</label>
+        <closed>false</closed>
+        <forecastCategory>Pipeline</forecastCategory>
+        <probability>20</probability>
+        <won>false</won>
+    </standardValue>
+    <standardValue>
+        <fullName>Negociação</fullName>
+        <default>false</default>
+        <description>Negociação</description>
+        <label>Negociação</label>
+        <closed>false</closed>
+        <forecastCategory>Pipeline</forecastCategory>
+        <probability>20</probability>
+        <won>false</won>
+    </standardValue>
+    <standardValue>
+        <fullName>Visita Técnica</fullName>
+        <default>false</default>
+        <description>Visita Técnica</description>
+        <label>Visita Técnica</label>
+        <closed>false</closed>
+        <forecastCategory>Pipeline</forecastCategory>
+        <probability>50</probability>
+        <won>false</won>
+    </standardValue>
+    <standardValue>
+        <fullName>Ficha Cadastral</fullName>
+        <default>false</default>
+        <description>Ficha Cadastral</description>
+        <label>Ficha Cadastral</label>
+        <closed>false</closed>
+        <forecastCategory>Pipeline</forecastCategory>
+        <probability>40</probability>
+        <won>false</won>
+    </standardValue>
+    <standardValue>
+        <fullName>Pré-análise</fullName>
+        <default>false</default>
+        <description>Pré-análise</description>
+        <label>Pré-análise</label>
+        <closed>false</closed>
+        <forecastCategory>Pipeline</forecastCategory>
+        <probability>50</probability>
+        <won>false</won>
+    </standardValue>
+    <standardValue>
+        <fullName>Geração de Contrato</fullName>
+        <default>false</default>
+        <label>Geração de Contrato</label>
+        <closed>false</closed>
+        <forecastCategory>Pipeline</forecastCategory>
+        <probability>80</probability>
+        <won>false</won>
+    </standardValue>
+    <standardValue>
+        <fullName>Geração de Contrato/Anexo Vistoria</fullName>
+        <default>false</default>
+        <description>Geração de Contrato/Anexo Vistoria</description>
+        <label>Geração de Contrato/Anexo Vistoria</label>
+        <closed>false</closed>
+        <forecastCategory>Pipeline</forecastCategory>
+        <probability>60</probability>
+        <won>false</won>
+    </standardValue>
+    <standardValue>
+        <fullName>Aguardando Assinatura</fullName>
+        <default>false</default>
+        <description>Aguardando Assinatura</description>
+        <label>Aguardando Assinatura</label>
+        <closed>false</closed>
+        <forecastCategory>Pipeline</forecastCategory>
+        <probability>80</probability>
+        <won>false</won>
+    </standardValue>
+    <standardValue>
+        <fullName>Conferência</fullName>
+        <default>false</default>
+        <label>Conferência</label>
+        <closed>false</closed>
+        <forecastCategory>Pipeline</forecastCategory>
+        <probability>90</probability>
+        <won>false</won>
+    </standardValue>
+    <standardValue>
+        <fullName>Pagadoria</fullName>
+        <default>false</default>
+        <description>Pagadoria</description>
+        <label>Pagadoria</label>
+        <closed>false</closed>
+        <forecastCategory>Pipeline</forecastCategory>
+        <probability>90</probability>
+        <won>false</won>
+    </standardValue>
+    <standardValue>
+        <fullName>Fechado Ganho/Desistência</fullName>
+        <default>false</default>
+        <description>Fechado Ganho/Desistência</description>
+        <label>Fechado Ganho/Desistência</label>
+        <closed>true</closed>
+        <forecastCategory>Closed</forecastCategory>
+        <probability>100</probability>
+        <won>true</won>
+    </standardValue>
+    <standardValue>
+        <fullName>Fechado Ganho/Perdido</fullName>
+        <default>false</default>
+        <description>Fechado Ganho/Perdido</description>
+        <label>Fechado Ganho/Perdido</label>
+        <closed>false</closed>
+        <forecastCategory>Pipeline</forecastCategory>
+        <probability>100</probability>
+        <won>false</won>
+    </standardValue>
+    <standardValue>
+        <fullName>Ganho</fullName>
+        <default>false</default>
+        <label>Ganho</label>
+        <closed>false</closed>
+        <forecastCategory>Pipeline</forecastCategory>
+        <probability>100</probability>
+        <won>false</won>
+    </standardValue>
+    <standardValue>
+        <fullName>Fechado Ganho</fullName>
+        <default>false</default>
+        <label>Fechado Ganho</label>
+        <closed>true</closed>
+        <forecastCategory>Closed</forecastCategory>
+        <probability>100</probability>
+        <won>true</won>
+    </standardValue>
+</StandardValueSet>
