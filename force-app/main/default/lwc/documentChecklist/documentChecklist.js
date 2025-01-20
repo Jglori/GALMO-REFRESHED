@@ -68,10 +68,12 @@ export default class DocumentChecklist extends LightningElement {
                 const mandatoryDocuments = contact.Documents.filter(doc => doc.Obrigatorio__c === true);
                 const optionalDocuments = contact.Documents.filter(doc => doc.Obrigatorio__c === false);
 
+                const filtredData = this.formatDocumentsData(mandatoryDocuments, optionalDocuments);
+
                 return {
                     ...contact,
-                    mandatoryDocuments,
-                    optionalDocuments,
+                    mandatoryDocuments: filtredData.updatedMandatoryDocuments,
+                    optionalDocuments: filtredData.updatedOptionalDocuments,
                 };
             });
 
@@ -79,6 +81,24 @@ export default class DocumentChecklist extends LightningElement {
             console.error(error);
             this.event.error('Erro ao pegar novos documentos filtrados');
         }
+    }
+
+    formatDocumentsData(mandatoryDocuments, optionalDocuments) {
+        const updatedMandatoryDocuments = mandatoryDocuments.map(doc => {
+            return {
+                ...doc,
+                DataEntrega__c: doc.DataEntrega__c ? formatData(doc.DataEntrega__c) : doc.DataEntrega__c
+            };
+        });
+
+        const updatedOptionalDocuments = optionalDocuments.map(doc => {
+            return {
+                ...doc,
+                DataEntrega__c: doc.DataEntrega__c ? formatData(doc.DataEntrega__c) : doc.DataEntrega__c
+            };
+        });
+
+        return {updatedMandatoryDocuments, updatedOptionalDocuments}
     }
 
     handleUploadClick(event) {
@@ -94,11 +114,7 @@ export default class DocumentChecklist extends LightningElement {
         input.dataset.nomeId = nomeArquivo; 
         input.dataset.completed = obrigatorio;
 
-        console.log("Nome", input.dataset.nomeId);
-        console.log(input);
-
         input.click();
-
     }
 
     findDocumentByContactIdAndName(data, contactId, docMtdName) {
@@ -118,11 +134,6 @@ export default class DocumentChecklist extends LightningElement {
         const name = event.target.dataset.nomeId;
         const contactId = event.target.dataset.contactId;
         const doc = this.findDocumentByContactIdAndName(this.wiredDocumentos.data, contactId, name);
-        
-        console.log("Nome do documento:", name);
-        console.log("ID do contato:", contactId);
-        console.log("Metadado encontrado:", doc);
-
         
         if (file && doc) {
             const fileName = file.name;
@@ -284,7 +295,6 @@ export default class DocumentChecklist extends LightningElement {
    deletarDocumento(id) {
     deletar({ id })
         .then(result => {
-            console.log(id);
             this.event.success('Documento deletado com sucesso');
             this.dispatchEvent(new RefreshEvent());
             refreshApex(this.wiredDocumentos);

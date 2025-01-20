@@ -99,10 +99,8 @@ public class ChecklistHelper {
                 opp.FarolChecklistDocumento__c = 'Vermelho';
             } else if (deliveredMandatoryCount == totalMandatoryCount &&
                        deliveredMandatoryCount + deliveredOptionalCount < totalMandatoryCount + totalOptionalCount) {
-                        System.debug('Verde');
                 opp.FarolChecklistDocumento__c = 'Verde';
             } else if (deliveredMandatoryCount + deliveredOptionalCount == totalMandatoryCount + totalOptionalCount) {
-                System.debug('Azul');
                 opp.FarolChecklistDocumento__c = 'Azul';
             }
     

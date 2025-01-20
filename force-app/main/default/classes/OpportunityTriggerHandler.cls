@@ -1,17 +1,24 @@
 public with sharing class OpportunityTriggerHandler extends TriggerHandler {
 
     public override void beforeInsert() {
-        // OpportunityHelper.setDefaultChecklistStatus((List<Opportunity>) Trigger.new);
+        OpportunityHelper.setDefaultChecklistStatus((List<Opportunity>) Trigger.new);
         OpportunityHelper.addDaysToCloseDateOnCreation((List<Opportunity>) Trigger.new);
     }
     
     public override void beforeUpdate() {
         OpportunityHelper.validateTransitionToFichaCadastral((List<Opportunity>) Trigger.new, (Map<Id, Opportunity>) Trigger.oldMap);
         OpportunityHelper.handleBeforeUpdate((List<Opportunity>) Trigger.new, (Map<Id, Opportunity>) Trigger.oldMap);
+        OpportunityHelper.handleOpportunityCancelation((List<Opportunity>) Trigger.new, (Map<Id, Opportunity>) Trigger.oldMap);
+        // OpportunityHelper.handleOpportunityUpdate((List<Opportunity>) Trigger.new, (Map<Id, Opportunity>) Trigger.oldMap);
         OpportunityHelper.handleStageFichaCadastralChangeFarolColor((List<Opportunity>)Trigger.new, (Map<Id, Opportunity>)Trigger.oldMap);
     }
 
-    public override void afterUpdate() {
-        OpportunityHelper.handleStageFichaCadastral((List<Opportunity>) Trigger.new);
-    }
+/*       public override void afterInsert() {
+        OpportunityScheduledJob.scheduleJobsForOpportunities((List<Opportunity>) Trigger.new);
+    } */
+
+/*     public override void afterUpdate() {
+        OpportunityScheduledJob.scheduleJobsForOpportunities((List<Opportunity>) Trigger.new);
+    } */
+
 }

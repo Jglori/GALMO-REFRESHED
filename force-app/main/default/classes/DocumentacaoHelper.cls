@@ -232,8 +232,12 @@ public class DocumentacaoHelper {
         List<OpportunityContactRole> contactRoles = [
             SELECT ContactId, Role, Contact.Name
             FROM OpportunityContactRole
-            WHERE OpportunityId = :oppId
+            WHERE OpportunityId = :oppId AND Role != null
         ];
+
+        if(contactRoles.isEmpty()) {
+            return null;
+        }
     
         for (OpportunityContactRole cr : contactRoles) {
             Map<String, Object> contactData = new Map<String, Object>();
@@ -252,7 +256,7 @@ public class DocumentacaoHelper {
     
             for (Documento__mdt docMdt : listOfMtdDocuments) {
                 List<Documentacao__c> existingDocs = [
-                    SELECT Name, Contato__c, Obrigatorio__c, Entregue__c
+                    SELECT Name, Contato__c, Obrigatorio__c, Entregue__c, DataEntrega__c
                     FROM Documentacao__c
                     WHERE Contato__c = :cr.ContactId AND Name = :docMdt.Nome_do_Documento__c
                     LIMIT 1

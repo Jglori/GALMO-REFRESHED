@@ -121,14 +121,21 @@ public with sharing class OpportunityHelper {
         Map<Id, List<String>> oppToRolesMap = new Map<Id, List<String>>();
         for (OpportunityContactRole cr : [
             SELECT OpportunityId, Role FROM OpportunityContactRole 
-            WHERE OpportunityId IN :oppIdsToProcess
+            WHERE OpportunityId IN :oppIdsToProcess AND Role != null
         ]) {
             if (!oppToRolesMap.containsKey(cr.OpportunityId)) {
                 oppToRolesMap.put(cr.OpportunityId, new List<String>());
             }
             oppToRolesMap.get(cr.OpportunityId).add(cr.Role);
         }
-    
+
+        if(oppToRolesMap.isEmpty()) {
+            for (Opportunity opp : newOpps) {
+                opp.FarolChecklistDocumento__c = 'Vermelho';
+            }
+        }
+
+
         Map<String, List<Documento__mdt>> roleToDocumentsMap = new Map<String, List<Documento__mdt>>();
         for (Documento__mdt doc : [
             SELECT Nome_do_Documento__c, Obrigatorio__c, Papel__c FROM Documento__mdt
@@ -197,6 +204,12 @@ public with sharing class OpportunityHelper {
         }
     }    
 
+    public static void setDefaultChecklistStatus(List<Opportunity> opportunities) {
+        for (Opportunity opp : opportunities) {
+            opp.FarolChecklistDocumento__c = 'Vermelho';
+        }
+    }
+
     
     public static void handleStageFichaCadastral(List<Opportunity> newOpps) {
         if (newOpps == null || newOpps.isEmpty()) throw new IllegalArgumentException('A lista de Opportunidade não deve ser nula ou vazia.');
@@ -218,4 +231,229 @@ public with sharing class OpportunityHelper {
         return opps;
     }
 
+
+    public static void handleOpportunityCancelation(List<Opportunity> newOpps, Map<Id, Opportunity> oldOpps) {
+        List<Opportunity> opportunitiesToNotify = new List<Opportunity>();
+        Set<Id> oppIds = new Set<Id>();
+    
+        for (Opportunity opp : newOpps) {
+            Opportunity oldOpp = oldOpps.get(opp.Id);
+    
+            if (opp.StageName == 'Cancelado' && (oldOpp == null || oldOpp.StageName != 'Cancelado')) {
+                if (String.isBlank(opp.MotivoCancelamento__c)) {
+                    opp.addError('O campo Motivo de Cancelamento é obrigatório.');
+                } else if (opp.MotivoCancelamento__c == 'Outros' && String.isBlank(opp.Observacao__c)) {
+                    opp.addError('O campo Observação é obrigatório quando o motivo de cancelamento for "Outros".');
+                } else {
+                    opportunitiesToNotify.add(opp);
+                    oppIds.add(opp.Id);
+                }
+            }
+        }
+    
+        if (!opportunitiesToNotify.isEmpty()) {
+            List<Opportunity> oppsWithDetails = [
+                SELECT Id, Name, MotivoCancelamento__c, Produto__c, Produto__r.Name,
+                       Contato__r.Name, Contato__r.Email, Contato__r.UsuarioCorretor__r.Name,
+                       Contato__r.UsuarioCorretor__r.Email
+                FROM Opportunity
+                WHERE Id IN :oppIds
+            ];
+    
+            Map<Id, Opportunity> oppDetailsMap = new Map<Id, Opportunity>(oppsWithDetails);
+    
+            for (Opportunity opp : opportunitiesToNotify) {
+                if (oppDetailsMap.containsKey(opp.Id)) {
+                    Opportunity detailedOpp = oppDetailsMap.get(opp.Id);
+                    opp.Produto__c = detailedOpp.Produto__c;
+                    opp.Produto__r = detailedOpp.Produto__r;
+                    opp.Contato__r = detailedOpp.Contato__r;
+                }
+            }
+    
+            sendCancelNotification(opportunitiesToNotify);
+        }
+    }
+    
+    
+    private static void sendCancelNotification(List<Opportunity> opportunitiesToNotify) {
+        List<Messaging.SingleEmailMessage> emailsToSend = new List<Messaging.SingleEmailMessage>();
+        List<FeedItem> chatterFeedItems = new List<FeedItem>();
+    
+        for (Opportunity opp : opportunitiesToNotify) {
+            String subject = 'Notificação de Cancelamento da Oportunidade: ' + opp.Name;
+    
+            String body = '<html>'
+                        + '<body>'
+                        + '<h2 style="color:#D9534F;">Oportunidade Cancelada</h2>'
+                        + '<p><strong>Oportunidade:</strong> ' + opp.Name + '</p>'
+                        + '<p><strong>Produto:</strong> ' + opp.Produto__r.Name + '</p>'
+                        + '<p><strong>Motivo do Cancelamento:</strong> ' + opp.MotivoCancelamento__c + '</p>'
+                        + '<p><strong>Observação:</strong> ' + (opp.Observacao__c != null ? opp.Observacao__c : 'N/A') + '</p>'
+                        + '<p>Infelizmente, a oportunidade foi cancelada devido ao motivo acima.</p>'
+                        + '<hr>'
+                        + '<p><strong>Atenciosamente,</strong><br/>Equipe de Vendas</p>'
+                        + '</body>'
+                        + '</html>';
+    
+            FeedItem feedItem = new FeedItem();
+            feedItem.ParentId = opp.Id;
+            feedItem.Body = 'A Oportunidade ' + opp.Name + ' desistiu do produto ' 
+                            + (opp.Produto__r != null ? opp.Produto__r.Name : 'N/A') 
+                            + ' pelo motivo ' + opp.MotivoCancelamento__c 
+                            + '. Observação: ' + (opp.Observacao__c != null ? opp.Observacao__c : 'N/A') + '.';
+            chatterFeedItems.add(feedItem);
+    
+            if (opp.Contato__r != null && opp.Contato__r.UsuarioCorretor__r != null 
+                && opp.Contato__r.UsuarioCorretor__r.Email != null) {
+                Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
+                email.setToAddresses(new String[] {opp.Contato__r.UsuarioCorretor__r.Email});
+                email.setSubject(subject);
+                email.setHtmlBody(body);
+    
+                emailsToSend.add(email);
+            }
+    
+            if (opp.Contato__r != null && opp.Contato__r.Email != null) {
+                Messaging.SingleEmailMessage emailToContact = new Messaging.SingleEmailMessage();
+                emailToContact.setToAddresses(new String[] {opp.Contato__r.Email});
+                emailToContact.setSubject(subject);
+                emailToContact.setHtmlBody(body);
+    
+                emailsToSend.add(emailToContact);
+            }
+        }
+    
+        if (!emailsToSend.isEmpty()) {
+            try {
+                Messaging.sendEmail(emailsToSend);
+            } catch (Exception e) {
+                System.debug('Erro ao enviar e-mails: ' + e.getMessage());
+            }
+        }
+    
+        if (!chatterFeedItems.isEmpty()) {
+            try {
+                insert chatterFeedItems;
+            } catch (Exception e) {
+                System.debug('Erro ao inserir mensagens no Chatter: ' + e.getMessage());
+            }
+        }
+    }
+    
+
+ 
+ public static void handleOpportunityUpdate(List<Opportunity> updatedOpportunities) {
+    List<Opportunity> opportunitiesToUpdate = new List<Opportunity>();
+    Date today = System.today();
+
+    for (Opportunity opp : updatedOpportunities) {
+       
+        if (opp.StageName == 'Conferência') {
+          
+            if (opp.Data_Assinatura_Contrato__c != null && opp.Dias_Apos_Assinatura__c != null) {
+                Date assinaturaData = opp.Data_Assinatura_Contrato__c;
+                Integer diasAposAssinatura = Integer.valueOf(opp.Dias_Apos_Assinatura__c);  
+
+            
+                Date dataLimite = assinaturaData.addDays(diasAposAssinatura);
+
+             
+                if (dataLimite <= today) {
+                    opp.StageName = 'Ganho';
+                    opportunitiesToUpdate.add(opp);
+                }
+            }
+        }
+    }
+
+    if (!opportunitiesToUpdate.isEmpty()) {
+        try {
+            update opportunitiesToUpdate;
+            System.debug('Oportunidades movidas para "Ganho".');
+            sendWinNotification(opportunitiesToUpdate);  
+        } catch (Exception e) {
+            System.debug('Erro ao atualizar oportunidades: ' + e.getMessage());
+        }
+    }
+}
+
+
+    public static void sendWinNotification(List<Opportunity> opportunitiesToNotify) {
+        List<Messaging.SingleEmailMessage> emailsToSend = new List<Messaging.SingleEmailMessage>();
+        List<FeedItem> chatterFeedItems = new List<FeedItem>();
+    
+        Set<Id> oppIds = new Set<Id>();
+        for (Opportunity opp : opportunitiesToNotify) {
+            oppIds.add(opp.Id);
+        }
+    
+        List<Opportunity> oppsWithDetails = [
+            SELECT Id, Name, Produto__r.Name, 
+                   Contato__r.Name, Contato__r.Email, Contato__r.Owner.Name,
+                   Contato__r.Owner.Email, Contato__r.UsuarioCorretor__r.Email
+            FROM Opportunity
+            WHERE Id IN :oppIds
+        ];
+    
+        for (Opportunity opp : oppsWithDetails) {
+            String subject = 'Notificação de Vitória da Oportunidade: ' + opp.Name;
+    
+            String body = '<html>'
+                        + '<body>'
+                        + '<h2 style="color:#5BC0DE;">Oportunidade Ganha</h2>'
+                        + '<p><strong>Oportunidade:</strong> ' + opp.Name + '</p>'
+                        + '<p><strong>Produto:</strong> ' + (opp.Produto__r != null ? opp.Produto__r.Name : 'Não informado') + '</p>'
+                        + '<p>Parabéns! A oportunidade foi ganha.</p>'
+                        + '<hr>'
+                        + '<p><strong>Atenciosamente,</strong><br/>Equipe de Vendas</p>'
+                        + '</body>'
+                        + '</html>';
+    
+            FeedItem feedItem = new FeedItem();
+            feedItem.ParentId = opp.Id;
+            feedItem.Body = 'A Oportunidade ' + opp.Name + ' foi ganha para o produto ' + (opp.Produto__r != null ? opp.Produto__r.Name : 'Não informado') + '.';
+            chatterFeedItems.add(feedItem);
+    
+          
+            if (opp.Contato__r != null && opp.Contato__r.UsuarioCorretor__r != null 
+                && opp.Contato__r.UsuarioCorretor__r.Email != null) {
+                Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
+                email.setToAddresses(new String[] {opp.Contato__r.UsuarioCorretor__r.Email});
+                email.setSubject(subject);
+                email.setHtmlBody(body);
+    
+                emailsToSend.add(email);
+            }
+    
+            
+            if (opp.Contato__r != null && opp.Contato__r.Email != null) {
+                Messaging.SingleEmailMessage emailToContact = new Messaging.SingleEmailMessage();
+                emailToContact.setToAddresses(new String[] {opp.Contato__r.Email});
+                emailToContact.setSubject(subject);
+                emailToContact.setHtmlBody(body);
+    
+                emailsToSend.add(emailToContact);
+            }
+        }
+    
+      
+        if (!emailsToSend.isEmpty()) {
+            try {
+                Messaging.sendEmail(emailsToSend);
+            } catch (Exception e) {
+                System.debug('Erro ao enviar os e-mails: ' + e.getMessage());
+            }
+        }
+    
+      
+        if (!chatterFeedItems.isEmpty()) {
+            try {
+                insert chatterFeedItems;
+            } catch (Exception e) {
+                System.debug('Erro ao inserir os itens no feed do Chatter: ' + e.getMessage());
+            }
+        }
+    }
+    
 }
