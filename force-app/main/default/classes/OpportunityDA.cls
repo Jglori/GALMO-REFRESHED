@@ -60,17 +60,17 @@ public with sharing class OpportunityDA {
         ];
     }
     
-    public static List<Opportunity> obterOportunidadePorIdProduto(Set<Id> idProduto) {
-        return [
-            SELECT  
-                id, name, AccountId, Account.name, Account.PersonEmail, Contato__c, Contato__r.name, Contato__r.OwnerId, 
-                Contato__r.Owner.name, Contato__r.Email, Contato__r.Owner.Reportase__c, Contato__r.Owner.Reportase__r.Name,
-                Produto__c, Produto__r.name, Produto__r.Status__c
-            FROM Opportunity 
-            WHERE Produto__c = :idProduto
-        ];
+    // public static List<Opportunity> obterOportunidadePorIdProduto(Set<Id> idProduto) {
+    //     return [
+    //         SELECT  
+    //             id, name, AccountId, Account.name, Account.PersonEmail, Contato__c, Contato__r.name, Contato__r.OwnerId, 
+    //             Contato__r.Owner.name, Contato__r.Email, Contato__r.Owner.Reportase__c, Contato__r.Owner.Reportase__r.Name,
+    //             Produto__c, Produto__r.name, Produto__r.Status__c
+    //         FROM Opportunity 
+    //         WHERE Produto__c = :idProduto
+    //     ];
         
-    }
+    // }
     
     // Método para obter o mapa de contagem de análises de crédito por oportunidade
     public static Map<Id, Integer> getAnaliseCreditoCountByOpportunity(Set<Id> opportunityIds) {
