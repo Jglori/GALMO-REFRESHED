@@ -9,4 +9,13 @@ public without sharing class UserSelector {
     public static List<User> getUserPorIds(List<Id> userIds){
         return [Select Id, Reportase__c from User where id In: userIds];
     }
+
+    public static List<User> obterUsuarios(){
+        return[
+            SELECT 
+                Id, Email, Username , Reportase__r.Id, Reportase__r.Username
+            FROM 
+                User
+        ];
+    }
 }
