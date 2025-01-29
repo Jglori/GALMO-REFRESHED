@@ -1,5 +1,32 @@
 public with sharing class DocumentController {
 
+    @AuraEnabled
+    public static List<Documentacao__c> validateDocument(Id id){
+        try {
+            return DocumentacaoHelper.validateDocuments(new Set<Id>{ id });
+        } catch (Exception e) {
+            throw new AuraHandledException(e.getMessage());
+        }
+    }
+
+    @AuraEnabled
+    public static List<Documentacao__c> invalidateDocument(Id id){
+        try {
+            return DocumentacaoHelper.invalidateDocuments(new Set<Id>{ id });
+        } catch (Exception e) {
+            throw new AuraHandledException(e.getMessage());
+        }
+    }
+    
+
+    @AuraEnabled(cacheable=true)
+    public static List<Documentacao__c> getDocumentosByAnaliseCredito(Id analiseCreditoId){
+        try {
+            return DocumentacaoHelper.getByAnaliseCredito(analiseCreditoId);
+        } catch (Exception e) {
+            throw new AuraHandledException('Erro ao buscar documentos: '+ e.getMessage());
+        }
+    }
 
     @AuraEnabled(cacheable=true)
     public static List<Documentacao__c> getByOpportunity(Id opportunityId) {

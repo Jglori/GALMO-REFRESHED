@@ -6,6 +6,7 @@ public class ChecklistDA {
 
         return [
             SELECT Id, Oportunidade__c, Documenta_o__c, 
+                Documenta_o__r.Contato__c,
                 Documenta_o__r.Obrigatorio__c, 
                 Documenta_o__r.Entregue__c,
                 Documenta_o__r.Validado__c,

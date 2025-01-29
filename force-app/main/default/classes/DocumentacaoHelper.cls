@@ -121,32 +121,33 @@ public class DocumentacaoHelper {
     public static void deleteById(Id id) {
         Documentacao__c doc = DocumentacaoDA.getById(id);
         if (doc == null) throw new IllegalArgumentException('Id inválido. Documento não encontrado.');
-        
-        List<ContentDocument> contentDoc = [
-            SELECT Id
-            FROM ContentDocument
-            WHERE Id = :doc.ContentDocumentId_c__c
-        ];
-        if (contentDoc != null && !contentDoc.isEmpty()) delete contentDoc;
-        
-        List<ContentDocumentLink> contentDocLink = [
-            SELECT Id
-            FROM ContentDocumentLink
-            WHERE ContentDocumentId = :doc.ContentDocumentId_c__c
-        ];
-        if (contentDocLink != null && !contentDocLink.isEmpty()) delete contentDocLink;
-
+    
+        if (doc.ContentDocumentId_c__c != null) {
+            List<ContentDocument> contentDoc = [
+                SELECT Id
+                FROM ContentDocument
+                WHERE Id = :doc.ContentDocumentId_c__c
+            ];
+            if (!contentDoc.isEmpty()) delete contentDoc;
+    
+            List<ContentDocumentLink> contentDocLink = [
+                SELECT Id
+                FROM ContentDocumentLink
+                WHERE ContentDocumentId = :doc.ContentDocumentId_c__c
+            ];
+            if (!contentDocLink.isEmpty()) delete contentDocLink;
+        }
+    
         List<Checklist_de_Documentos__c> cklistDocs = [
             SELECT Id, Oportunidade__c
             FROM Checklist_de_Documentos__c
             WHERE Documenta_o__c = :doc.Id
         ];
-        if (cklistDocs != null && !cklistDocs.isEmpty()) delete cklistDocs;
-
-        System.debug(cklistDocs);
-
-        ChecklistHelper.updateOpportunityChecklistStatus(new List<Checklist_de_Documentos__c>(cklistDocs));
-
+        if (!cklistDocs.isEmpty()) {
+            delete cklistDocs;
+            ChecklistHelper.updateOpportunityChecklistStatus(new List<Checklist_de_Documentos__c>(cklistDocs));
+        }
+    
         delete doc;
     }
 
@@ -159,7 +160,9 @@ public class DocumentacaoHelper {
             SELECT Id, VersionData, PathOnClient
             FROM ContentVersion
             WHERE ContentDocumentId = :doc.ContentDocumentId_c__c
+            LIMIT 1
         ];
+
         if (version == null) throw new IllegalArgumentException('Versão mais recente do documento não encontrada.');
 
         // Obter o Blob da versão mais recente

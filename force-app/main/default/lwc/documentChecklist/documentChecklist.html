@@ -40,8 +40,7 @@
 
                                                     <lightning-button-icon icon-name="utility:preview"
                                                         alternative-text="View" title="Visualizar Documento"
-                                                        data-id={doc.Id}
-                                                        data-contact-id={contact.ContactId}
+                                                        data-id={doc.Id} data-contact-id={contact.ContactId}
                                                         onclick={handleViewClick}></lightning-button-icon>
 
                                                     <lightning-button-icon icon-name="utility:download"
@@ -54,10 +53,8 @@
                                                         <lightning-helptext content="Somente Aceitos Arquivos PNG e JPG"
                                                             class="help-text"></lightning-helptext>
                                                         <lightning-button-icon icon-name="utility:upload"
-                                                            alternative-text="Upload" title="Upload" 
-                                                            data-id={doc.Id}
-                                                            data-contact-id={contact.ContactId}
-                                                            data-nome-id={doc.Name} 
+                                                            alternative-text="Upload" title="Upload" data-id={doc.Id}
+                                                            data-contact-id={contact.ContactId} data-nome-id={doc.Name}
                                                             data-completed="true"
                                                             onclick={handleUploadClick}></lightning-button-icon>
                                                     </div>
@@ -89,7 +86,14 @@
                                         <div class="document-row">
                                             <lightning-icon icon-name="doctype:unknown" alternative-text="unknown"
                                                 size="large" title="unknown"></lightning-icon>
-                                            <span>{doc.Name}</span>
+                                            <span>
+                                                <div>
+                                                    <p>{doc.Name}</p>
+                                                    <template if:true={doc.Entregue__c}>
+                                                        <p>{doc.DataEntrega__c}</p>
+                                                    </template>
+                                                </div>
+                                            </span>
                                             <!-- Botões e ícones -->
                                             <div class="icon-and-buttons-container">
                                                 <template if:true={doc.Entregue__c}>
@@ -99,8 +103,7 @@
 
                                                     <lightning-button-icon icon-name="utility:preview"
                                                         alternative-text="View" title="Visualizar Documento"
-                                                        data-id={doc.Id}
-                                                        data-contact-id={contact.ContactId}
+                                                        data-id={doc.Id} data-contact-id={contact.ContactId}
                                                         onclick={handleViewClick}></lightning-button-icon>
 
                                                     <lightning-button-icon icon-name="utility:download"
@@ -113,10 +116,8 @@
                                                         <lightning-helptext content="Somente Aceitos Arquivos PNG e JPG"
                                                             class="help-text"></lightning-helptext>
                                                         <lightning-button-icon icon-name="utility:upload"
-                                                            alternative-text="Upload" title="Upload" 
-                                                            data-id={doc.Id}
-                                                            data-contact-id={contact.ContactId}
-                                                            data-nome-id={doc.Name} 
+                                                            alternative-text="Upload" title="Upload" data-id={doc.Id}
+                                                            data-contact-id={contact.ContactId} data-nome-id={doc.Name}
                                                             data-completed="true"
                                                             onclick={handleUploadClick}></lightning-button-icon>
                                                     </div>

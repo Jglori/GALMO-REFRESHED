@@ -280,50 +280,62 @@ public with sharing class OpportunityHelper {
         List<Messaging.SingleEmailMessage> emailsToSend = new List<Messaging.SingleEmailMessage>();
         List<FeedItem> chatterFeedItems = new List<FeedItem>();
     
+       
+        EmailTemplate emailTemplate = [SELECT Id, Name, HtmlValue FROM EmailTemplate WHERE Name = 'Template Cancelamento da Oportunidade' LIMIT 1];
+    
+        Set<Id> ownerIds = new Set<Id>();
+        for (Opportunity opp : opportunitiesToNotify) {
+            if (opp.OwnerId != null) {
+                ownerIds.add(opp.OwnerId);
+            }
+        }
+    
+        Map<Id, User> ownersMap = new Map<Id, User>([SELECT Id, Name, Email FROM User WHERE Id IN :ownerIds]);
+    
         for (Opportunity opp : opportunitiesToNotify) {
             String subject = 'Notificação de Cancelamento da Oportunidade: ' + opp.Name;
     
-            String body = '<html>'
-                        + '<body>'
-                        + '<h2 style="color:#D9534F;">Oportunidade Cancelada</h2>'
-                        + '<p><strong>Oportunidade:</strong> ' + opp.Name + '</p>'
-                        + '<p><strong>Produto:</strong> ' + opp.Produto__r.Name + '</p>'
-                        + '<p><strong>Motivo do Cancelamento:</strong> ' + opp.MotivoCancelamento__c + '</p>'
-                        + '<p><strong>Observação:</strong> ' + (opp.Observacao__c != null ? opp.Observacao__c : 'N/A') + '</p>'
-                        + '<p>Infelizmente, a oportunidade foi cancelada devido ao motivo acima.</p>'
-                        + '<hr>'
-                        + '<p><strong>Atenciosamente,</strong><br/>Equipe de Vendas</p>'
-                        + '</body>'
-                        + '</html>';
-    
+           
             FeedItem feedItem = new FeedItem();
             feedItem.ParentId = opp.Id;
-            feedItem.Body = 'A Oportunidade ' + opp.Name + ' desistiu do produto ' 
-                            + (opp.Produto__r != null ? opp.Produto__r.Name : 'N/A') 
-                            + ' pelo motivo ' + opp.MotivoCancelamento__c 
+            feedItem.Body = 'A Oportunidade ' + opp.Name + ' desistiu do produto '
+                            + (opp.Produto__r != null ? opp.Produto__r.Name : 'N/A')
+                            + ' pelo motivo ' + opp.MotivoCancelamento__c
                             + '. Observação: ' + (opp.Observacao__c != null ? opp.Observacao__c : 'N/A') + '.';
             chatterFeedItems.add(feedItem);
     
-            if (opp.Contato__r != null && opp.Contato__r.UsuarioCorretor__r != null 
-                && opp.Contato__r.UsuarioCorretor__r.Email != null) {
-                Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
-                email.setToAddresses(new String[] {opp.Contato__r.UsuarioCorretor__r.Email});
-                email.setSubject(subject);
-                email.setHtmlBody(body);
-    
-                emailsToSend.add(email);
+           
+            String htmlBody = emailTemplate.HtmlValue;
+            if (htmlBody != null) {
+                htmlBody = htmlBody.replace('{{{Opportunity.Name}}}', opp.Name != null ? opp.Name : 'N/A');
+                htmlBody = htmlBody.replace('{{{Product2.Name}}}', opp.Produto__r != null ? opp.Produto__r.Name : 'N/A');
+                htmlBody = htmlBody.replace('{{{Opportunity.MotivoCancelamento__c}}}', opp.MotivoCancelamento__c != null ? opp.MotivoCancelamento__c : 'N/A');
+                htmlBody = htmlBody.replace('{{{Opportunity.Observacao__c}}}', opp.Observacao__c != null ? opp.Observacao__c : 'N/A');
+            }
+     
+            
+            if (opp.OwnerId != null && ownersMap.containsKey(opp.OwnerId)) {
+                User owner = ownersMap.get(opp.OwnerId);
+                if (owner.Email != null) {
+                    Messaging.SingleEmailMessage emailToOwner = new Messaging.SingleEmailMessage();
+                    emailToOwner.setToAddresses(new String[] {owner.Email});
+                    emailToOwner.setSubject(subject);
+                    emailToOwner.setHtmlBody(htmlBody); 
+                    emailsToSend.add(emailToOwner);
+                }
             }
     
+      
             if (opp.Contato__r != null && opp.Contato__r.Email != null) {
                 Messaging.SingleEmailMessage emailToContact = new Messaging.SingleEmailMessage();
                 emailToContact.setToAddresses(new String[] {opp.Contato__r.Email});
                 emailToContact.setSubject(subject);
-                emailToContact.setHtmlBody(body);
-    
+                emailToContact.setHtmlBody(htmlBody); 
                 emailsToSend.add(emailToContact);
             }
         }
     
+        
         if (!emailsToSend.isEmpty()) {
             try {
                 Messaging.sendEmail(emailsToSend);
@@ -332,6 +344,7 @@ public with sharing class OpportunityHelper {
             }
         }
     
+       
         if (!chatterFeedItems.isEmpty()) {
             try {
                 insert chatterFeedItems;
@@ -341,119 +354,133 @@ public with sharing class OpportunityHelper {
         }
     }
     
+    
+    
 
  
- public static void handleOpportunityUpdate(List<Opportunity> updatedOpportunities) {
-    List<Opportunity> opportunitiesToUpdate = new List<Opportunity>();
-    Date today = System.today();
-
-    for (Opportunity opp : updatedOpportunities) {
-       
-        if (opp.StageName == 'Conferência') {
-          
-            if (opp.Data_Assinatura_Contrato__c != null && opp.Dias_Apos_Assinatura__c != null) {
-                Date assinaturaData = opp.Data_Assinatura_Contrato__c;
-                Integer diasAposAssinatura = Integer.valueOf(opp.Dias_Apos_Assinatura__c);  
-
-            
-                Date dataLimite = assinaturaData.addDays(diasAposAssinatura);
-
-             
-                if (dataLimite <= today) {
-                    opp.StageName = 'Ganho';
-                    opportunitiesToUpdate.add(opp);
+    public static void handleOpportunityUpdate(List<Opportunity> updatedOpportunities) {
+        List<Opportunity> opportunitiesToUpdate = new List<Opportunity>();
+        Date today = System.today();
+    
+        for (Opportunity opp : updatedOpportunities) {
+            if (opp.StageName == 'Conferência') {
+                if (opp.Data_Assinatura_Contrato__c != null && opp.Dias_Apos_Assinatura__c != null) {
+                    Date assinaturaData = opp.Data_Assinatura_Contrato__c;
+                    Integer diasAposAssinatura = Integer.valueOf(opp.Dias_Apos_Assinatura__c);  
+                    Date dataLimite = assinaturaData.addDays(diasAposAssinatura);
+    
+                    if (dataLimite <= today) {
+                        Opportunity oppToUpdate = new Opportunity(Id = opp.Id, StageName = 'Ganho');
+                        opportunitiesToUpdate.add(oppToUpdate);
+                    }
                 }
             }
         }
-    }
-
-    if (!opportunitiesToUpdate.isEmpty()) {
-        try {
-            update opportunitiesToUpdate;
-            System.debug('Oportunidades movidas para "Ganho".');
-            sendWinNotification(opportunitiesToUpdate);  
-        } catch (Exception e) {
-            System.debug('Erro ao atualizar oportunidades: ' + e.getMessage());
+    
+        
+        if (!opportunitiesToUpdate.isEmpty()) {
+            try {
+                update opportunitiesToUpdate;
+                System.debug('Oportunidades movidas para "Ganho".');
+                sendVictoryNotification(opportunitiesToUpdate);
+            } catch (Exception e) {
+                System.debug('Erro ao atualizar oportunidades: ' + e.getMessage());
+            }
         }
     }
-}
-
-
-    public static void sendWinNotification(List<Opportunity> opportunitiesToNotify) {
+    
+    private static void sendVictoryNotification(List<Opportunity> opportunitiesToNotify) {
         List<Messaging.SingleEmailMessage> emailsToSend = new List<Messaging.SingleEmailMessage>();
         List<FeedItem> chatterFeedItems = new List<FeedItem>();
     
-        Set<Id> oppIds = new Set<Id>();
-        for (Opportunity opp : opportunitiesToNotify) {
-            oppIds.add(opp.Id);
+      
+        EmailTemplate emailTemplate = [SELECT Id, Name, HtmlValue FROM EmailTemplate WHERE Name = 'Template Vitoria da Oportunidade' LIMIT 1];
+    
+        if (emailTemplate == null) {
+            System.debug('Template de E-mail não encontrado.');
+            return; 
         }
     
-        List<Opportunity> oppsWithDetails = [
-            SELECT Id, Name, Produto__r.Name, 
-                   Contato__r.Name, Contato__r.Email, Contato__r.Owner.Name,
-                   Contato__r.Owner.Email, Contato__r.UsuarioCorretor__r.Email
-            FROM Opportunity
-            WHERE Id IN :oppIds
+        Set<Id> opportunityIds = new Set<Id>();
+        for (Opportunity opp : opportunitiesToNotify) {
+            opportunityIds.add(opp.Id);
+        }
+    
+      
+        List<Opportunity> opportunitiesWithDetails = [
+            SELECT Id, Name, Produto__r.Name, Observacao__c, OwnerId, Contato__r.Email 
+            FROM Opportunity 
+            WHERE Id IN :opportunityIds
         ];
     
-        for (Opportunity opp : oppsWithDetails) {
+        Set<Id> ownerIds = new Set<Id>();
+        for (Opportunity opp : opportunitiesWithDetails) {
+            if (opp.OwnerId != null) {
+                ownerIds.add(opp.OwnerId);
+            }
+        }
+    
+        Map<Id, User> ownersMap = new Map<Id, User>([SELECT Id, Name, Email FROM User WHERE Id IN :ownerIds]);
+    
+        for (Opportunity opp : opportunitiesWithDetails) {
             String subject = 'Notificação de Vitória da Oportunidade: ' + opp.Name;
     
-            String body = '<html>'
-                        + '<body>'
-                        + '<h2 style="color:#5BC0DE;">Oportunidade Ganha</h2>'
-                        + '<p><strong>Oportunidade:</strong> ' + opp.Name + '</p>'
-                        + '<p><strong>Produto:</strong> ' + (opp.Produto__r != null ? opp.Produto__r.Name : 'Não informado') + '</p>'
-                        + '<p>Parabéns! A oportunidade foi ganha.</p>'
-                        + '<hr>'
-                        + '<p><strong>Atenciosamente,</strong><br/>Equipe de Vendas</p>'
-                        + '</body>'
-                        + '</html>';
-    
+           
             FeedItem feedItem = new FeedItem();
             feedItem.ParentId = opp.Id;
-            feedItem.Body = 'A Oportunidade ' + opp.Name + ' foi ganha para o produto ' + (opp.Produto__r != null ? opp.Produto__r.Name : 'Não informado') + '.';
+            feedItem.Body = 'A Oportunidade ' + opp.Name + ' foi vencida com o produto '
+                            + (opp.Produto__r != null ? opp.Produto__r.Name : 'N/A')
+                            + '. Observação: ' + (opp.Observacao__c != null ? opp.Observacao__c : 'N/A') + '.';
             chatterFeedItems.add(feedItem);
     
           
-            if (opp.Contato__r != null && opp.Contato__r.UsuarioCorretor__r != null 
-                && opp.Contato__r.UsuarioCorretor__r.Email != null) {
-                Messaging.SingleEmailMessage email = new Messaging.SingleEmailMessage();
-                email.setToAddresses(new String[] {opp.Contato__r.UsuarioCorretor__r.Email});
-                email.setSubject(subject);
-                email.setHtmlBody(body);
-    
-                emailsToSend.add(email);
+            String htmlBody = emailTemplate.HtmlValue;
+            if (htmlBody != null) {
+                htmlBody = htmlBody.replace('{{{Opportunity.Name}}}', opp.Name != null ? opp.Name : 'N/A');
+                htmlBody = htmlBody.replace('{{{Product2.Name}}}', opp.Produto__r != null ? opp.Produto__r.Name : 'N/A');
+                htmlBody = htmlBody.replace('{{{Opportunity.Observacao__c}}}', opp.Observacao__c != null ? opp.Observacao__c : 'N/A');
             }
     
-            
+         
+            if (opp.OwnerId != null && ownersMap.containsKey(opp.OwnerId)) {
+                User owner = ownersMap.get(opp.OwnerId);
+                if (owner.Email != null) {
+                    Messaging.SingleEmailMessage emailToOwner = new Messaging.SingleEmailMessage();
+                    emailToOwner.setToAddresses(new String[] {owner.Email});
+                    emailToOwner.setSubject(subject);
+                    emailToOwner.setHtmlBody(htmlBody); 
+                    emailsToSend.add(emailToOwner);
+                }
+            }
+    
+          
             if (opp.Contato__r != null && opp.Contato__r.Email != null) {
                 Messaging.SingleEmailMessage emailToContact = new Messaging.SingleEmailMessage();
                 emailToContact.setToAddresses(new String[] {opp.Contato__r.Email});
                 emailToContact.setSubject(subject);
-                emailToContact.setHtmlBody(body);
-    
+                emailToContact.setHtmlBody(htmlBody); 
                 emailsToSend.add(emailToContact);
             }
         }
     
-      
+    
         if (!emailsToSend.isEmpty()) {
             try {
                 Messaging.sendEmail(emailsToSend);
+                System.debug('E-mails enviados com sucesso.');
             } catch (Exception e) {
-                System.debug('Erro ao enviar os e-mails: ' + e.getMessage());
+                System.debug('Erro ao enviar e-mails: ' + e.getMessage());
             }
         }
     
-      
+        
         if (!chatterFeedItems.isEmpty()) {
             try {
                 insert chatterFeedItems;
+                System.debug('Mensagens no Chatter inseridas com sucesso.');
             } catch (Exception e) {
-                System.debug('Erro ao inserir os itens no feed do Chatter: ' + e.getMessage());
+                System.debug('Erro ao inserir mensagens no Chatter: ' + e.getMessage());
             }
         }
     }
-    
 }

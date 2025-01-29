@@ -10,6 +10,7 @@ public with sharing class OpportunityTriggerHandler extends TriggerHandler {
         OpportunityHelper.handleBeforeUpdate((List<Opportunity>) Trigger.new, (Map<Id, Opportunity>) Trigger.oldMap);
         OpportunityHelper.handleOpportunityCancelation((List<Opportunity>) Trigger.new, (Map<Id, Opportunity>) Trigger.oldMap);
         // OpportunityHelper.handleOpportunityUpdate((List<Opportunity>) Trigger.new, (Map<Id, Opportunity>) Trigger.oldMap);
+        // OpportunityHelper.handleOpportunityUpdate((List<Opportunity>) Trigger.new);
         OpportunityHelper.handleStageFichaCadastralChangeFarolColor((List<Opportunity>)Trigger.new, (Map<Id, Opportunity>)Trigger.oldMap);
     }
 
@@ -17,8 +18,8 @@ public with sharing class OpportunityTriggerHandler extends TriggerHandler {
         OpportunityScheduledJob.scheduleJobsForOpportunities((List<Opportunity>) Trigger.new);
     } */
 
-/*     public override void afterUpdate() {
-        OpportunityScheduledJob.scheduleJobsForOpportunities((List<Opportunity>) Trigger.new);
-    } */
+    public override void afterUpdate() {
+        OpportunityHelper.handleOpportunityUpdate((List<Opportunity>) Trigger.new);
+    }
 
 }
