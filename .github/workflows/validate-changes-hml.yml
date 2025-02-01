@@ -1,19 +1,19 @@
 name: Validate Pull Request - HML
-
 on:
   pull_request:
     branches:
-      - hml
+      - qa
     paths:
       - 'force-app/**'
+      - 'manifest/package.xml'  
 jobs:
   validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Validate on HML
-        uses: jawills/sf-deploy@v1.0
-        with:
-          SFDX_AUTH_URL: ${{ secrets.AUTH_URL_HML }}
-          DRY_RUN: true
-          TEST_LEVEL: NoTestRun
+      - name: Authenticate to Salesforce
+        run: echo ${{ secrets.AUTH_URL_HML }} > sfdx-auth-url.txt
+      - name: Validate on QA
+        run: |
+          sf org login sfdx-url -f sfdx-auth-url.txt --alias qa
+          sf project deploy start --dry-run --test-level NoTestRun -x manifest/package.xml
