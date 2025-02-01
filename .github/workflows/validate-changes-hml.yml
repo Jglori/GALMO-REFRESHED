@@ -26,4 +26,4 @@ jobs:
         run: sf org login sfdx-url -f sfdx-auth-url.txt --alias hml
       
       - name: Validar Deploy (Dry Run)
-        run: sf project deploy start --dry-run --test-level NoTestRun -x manifest/package.xml
+        run: sf project deploy start --dry-run --test-level NoTestRun -x manifest/package.xml -o hml
