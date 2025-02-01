@@ -1,8 +1,6 @@
-name:  Validate Pull Request - QA
-# Trigger apenas quando um PR para a branch hml for fechado
+name: Validate Pull Request - HML
 on:
   pull_request:
-    types: [closed]
     branches:
       - hml
     paths:
@@ -10,13 +8,11 @@ on:
       - 'manifest/**'
 
 jobs:
-  merge_job:
-    # Executa apenas se o PR foi mesclado
-    if: github.event.pull_request.merged == true
+  validate_job:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Instalar dependências
         run: |
           sudo apt-get update
@@ -29,13 +25,5 @@ jobs:
       - name: Conectar ao Salesforce
         run: sf org login sfdx-url -f sfdx-auth-url.txt --alias hml
       
-      - name: Executar Deploy (Dry Run)
+      - name: Validar Deploy (Dry Run)
         run: sf project deploy start --dry-run --test-level NoTestRun -x manifest/package.xml
-
-  close_job:
-    # Executa apenas se o PR foi fechado sem merge
-    if: github.event.pull_request.merged == false
-    runs-on: ubuntu-latest
-    steps:
-      - run: |
-          echo PR #${{ github.event.number }} foi fechada sem realizar o merge
