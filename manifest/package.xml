@@ -55,6 +55,7 @@ DocumentDATest</description>
         <members>ContractTrigger</members>
         <members>QuoteLineItemTrigger</members>
         <members>QuoteSyncTrigger</members>
+		<members>LeadConversionTrigger</members>
         <members>QuoteTrigger</members>
         <name>ApexTrigger</name>
     </types>
