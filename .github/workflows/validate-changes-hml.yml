@@ -1,4 +1,4 @@
-name: Deploy on hml
+name:  Validate Pull Request - QA
 # Trigger apenas quando um PR para a branch hml for fechado
 on:
   pull_request:
