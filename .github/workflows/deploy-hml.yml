@@ -22,7 +22,7 @@ jobs:
         run: sf org login sfdx-url -f sfdx-auth-url.txt --alias hml
 
       - name: Executar Deploy na HML
-        run: sf project deploy start --test-level NoTestRun -x manifest/package.xml
+        run: sf project deploy start --test-level NoTestRun -x manifest/package.xml -o hml
 
   close_job:
     if: github.event.pull_request.merged == false
