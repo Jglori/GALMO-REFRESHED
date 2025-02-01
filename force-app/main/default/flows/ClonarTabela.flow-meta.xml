@@ -7,15 +7,19 @@
         <locationY>1106</locationY>
         <actionName>c:navigateToRecord</actionName>
         <actionType>component</actionType>
+        <flowTransactionModel>CurrentTransaction</flowTransactionModel>
         <inputParameters>
             <name>recordId</name>
             <value>
                 <elementReference>CriarTabela</elementReference>
             </value>
         </inputParameters>
+        <nameSegment>c:navigateToRecord</nameSegment>
+        <offset>0</offset>
         <storeOutputAutomatically>true</storeOutputAutomatically>
     </actionCalls>
     <apiVersion>62.0</apiVersion>
+    <environments>Default</environments>
     <interviewLabel>Clonar Tabela {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Clonar Tabela</label>
     <processMetadataValues>
@@ -233,6 +237,7 @@
                     </defaultValue>
                     <fieldText>Nome da Tabela</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isDisabled>
                         <booleanValue>false</booleanValue>
                     </isDisabled>
@@ -249,6 +254,7 @@
                     </defaultValue>
                     <fieldText>Coeficiente da Tabela (%)</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isDisabled>
                         <booleanValue>false</booleanValue>
                     </isDisabled>
@@ -277,6 +283,7 @@
                     </defaultValue>
                     <fieldText>Desconto Nominal (%)</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isDisabled>
                         <booleanValue>false</booleanValue>
                     </isDisabled>
@@ -294,6 +301,7 @@
                     </defaultValue>
                     <fieldText>Acrescimo sobre Valor Total</fieldText>
                     <fieldType>InputField</fieldType>
+                    <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isDisabled>
                         <booleanValue>false</booleanValue>
                     </isDisabled>
@@ -312,6 +320,7 @@
                 <isRequired>false</isRequired>
             </fields>
             <isRequired>false</isRequired>
+            <regionContainerType>SectionWithHeader</regionContainerType>
         </fields>
         <showFooter>true</showFooter>
         <showHeader>true</showHeader>
@@ -324,6 +333,235 @@
         </connector>
     </start>
     <status>Active</status>
+    <transforms>
+        <name>Transformar_em_novas_s_ries</name>
+        <label>Transformar em novas séries</label>
+        <locationX>176</locationX>
+        <locationY>566</locationY>
+        <connector>
+            <targetReference>InserirSeries</targetReference>
+        </connector>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <objectType>SeriePagamentos__c</objectType>
+        <scale>0</scale>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+        <transformValues>
+            <transformValueActions>
+                <outputFieldApiName>CreatedDate</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>ObterSeriesPagamentos[$EachItem].CreatedDate</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>CreatedById</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>ObterSeriesPagamentos[$EachItem].CreatedById</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>InicioPagamento__c</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>ObterSeriesPagamentos[$EachItem].InicioPagamento__c</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>IsDeleted</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>ObterSeriesPagamentos[$EachItem].IsDeleted</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>LastActivityDate</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>ObterSeriesPagamentos[$EachItem].LastActivityDate</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>LastModifiedById</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>ObterSeriesPagamentos[$EachItem].LastModifiedById</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>LastModifiedDate</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>ObterSeriesPagamentos[$EachItem].LastModifiedDate</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>Name</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>ObterSeriesPagamentos[$EachItem].Name</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>OwnerId</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>ObterSeriesPagamentos[$EachItem].OwnerId</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>QuantidadeParcelas__c</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>ObterSeriesPagamentos[$EachItem].QuantidadeParcelas__c</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>SystemModstamp</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>ObterSeriesPagamentos[$EachItem].SystemModstamp</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>TipoCondicao__c</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>ObterSeriesPagamentos[$EachItem].TipoCondicao__c</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>ValorTotal__c</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>ObterSeriesPagamentos[$EachItem].ValorTotal__c</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>TabelaVenda__c</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>CriarTabela</elementReference>
+                </value>
+            </transformValueActions>
+        </transformValues>
+    </transforms>
+    <transforms>
+        <name>TransformarUnidades</name>
+        <label>Transformar em novas Unidades</label>
+        <locationX>176</locationX>
+        <locationY>890</locationY>
+        <connector>
+            <targetReference>Inserir_Unidades</targetReference>
+        </connector>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <objectType>UnidadeTabelaVendas__c</objectType>
+        <scale>0</scale>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+        <transformValues>
+            <transformValueActions>
+                <outputFieldApiName>CoeficienteTabela__c</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>ObterUnidadesTabela[$EachItem].CoeficienteTabela__c</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>CreatedById</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>ObterUnidadesTabela[$EachItem].CreatedById</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>CreatedDate</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>ObterUnidadesTabela[$EachItem].CreatedDate</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>IsDeleted</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>ObterUnidadesTabela[$EachItem].IsDeleted</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>LastModifiedById</outputFieldApiName>
+                <transformType>Map</transformType>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>LastModifiedDate</outputFieldApiName>
+                <transformType>Map</transformType>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>MetragemUnidade__c</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>ObterUnidadesTabela[$EachItem].MetragemUnidade__c</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>Name</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>ObterUnidadesTabela[$EachItem].Name</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>OwnerId</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>ObterUnidadesTabela[$EachItem].OwnerId</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>PrecoLista__c</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>ObterUnidadesTabela[$EachItem].PrecoLista__c</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>SystemModstamp</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>ObterUnidadesTabela[$EachItem].SystemModstamp</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>Unidade__c</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>ObterUnidadesTabela[$EachItem].Unidade__c</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>TabelaVenda__c</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>CriarTabela</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>ValorMetroQuadradoTabela__c</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>ObterUnidadesTabela[$EachItem].ValorMetroQuadradoTabela__c</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>ValorVenda__c</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>ObterUnidadesTabela[$EachItem].ValorVenda__c</elementReference>
+                </value>
+            </transformValueActions>
+        </transformValues>
+    </transforms>
     <variables>
         <name>Record_ID</name>
         <dataType>String</dataType>

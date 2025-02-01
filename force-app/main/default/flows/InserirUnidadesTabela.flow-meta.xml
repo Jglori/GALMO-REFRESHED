@@ -33,6 +33,7 @@
             <targetReference>CriarUnidadesTabela</targetReference>
         </connector>
     </assignments>
+    <environments>Default</environments>
     <interviewLabel>Inserir Unidades da tabela {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Inserir Unidades da tabela</label>
     <processMetadataValues>
@@ -220,6 +221,7 @@
                     <booleanValue>true</booleanValue>
                 </value>
             </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <storeOutputAutomatically>true</storeOutputAutomatically>
         </fields>
@@ -297,6 +299,7 @@
                     <stringValue>[{&quot;apiName&quot;:&quot;Name&quot;,&quot;guid&quot;:&quot;column-c0cc&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:0,&quot;label&quot;:&quot;Nome do produto&quot;,&quot;type&quot;:&quot;text&quot;},{&quot;apiName&quot;:&quot;MetragemTotal__c&quot;,&quot;guid&quot;:&quot;column-5d64&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:1,&quot;label&quot;:&quot;Metragem total&quot;,&quot;type&quot;:&quot;number&quot;},{&quot;apiName&quot;:&quot;PrecoLista__c&quot;,&quot;guid&quot;:&quot;column-b06d&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:2,&quot;label&quot;:&quot;Preço de lista&quot;,&quot;type&quot;:&quot;currency&quot;},{&quot;apiName&quot;:&quot;Andar__c&quot;,&quot;guid&quot;:&quot;column-98cb&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:3,&quot;label&quot;:&quot;Andar&quot;,&quot;type&quot;:&quot;number&quot;},{&quot;apiName&quot;:&quot;ValorM2__c&quot;,&quot;guid&quot;:&quot;column-6e0b&quot;,&quot;editable&quot;:false,&quot;hasCustomHeaderLabel&quot;:false,&quot;customHeaderLabel&quot;:&quot;&quot;,&quot;wrapText&quot;:true,&quot;order&quot;:4,&quot;label&quot;:&quot;Valor (m²)&quot;,&quot;type&quot;:&quot;currency&quot;}]</stringValue>
                 </value>
             </inputParameters>
+            <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
             <isRequired>true</isRequired>
             <storeOutputAutomatically>true</storeOutputAutomatically>
         </fields>
@@ -311,6 +314,64 @@
         </connector>
     </start>
     <status>Active</status>
+    <transforms>
+        <name>TranformarUnidadeTabela</name>
+        <label>Tranformar para Unidade da Tabela</label>
+        <locationX>176</locationX>
+        <locationY>782</locationY>
+        <connector>
+            <targetReference>AtribuirUnidadesParaCriar</targetReference>
+        </connector>
+        <dataType>SObject</dataType>
+        <isCollection>true</isCollection>
+        <objectType>UnidadeTabelaVendas__c</objectType>
+        <scale>0</scale>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+        <transformValues>
+            <transformValueActions>
+                <outputFieldApiName>Unidade__c</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>UnidadesEscolhidas[$EachItem].Id</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>TabelaVenda__c</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>recordId</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>Name</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>UnidadesEscolhidas[$EachItem].Name</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>MetragemUnidade__c</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>UnidadesEscolhidas[$EachItem].MetragemTotal__c</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>PrecoLista__c</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>UnidadesEscolhidas[$EachItem].PrecoLista__c</elementReference>
+                </value>
+            </transformValueActions>
+            <transformValueActions>
+                <outputFieldApiName>ValorMetroQuadradoTabela__c</outputFieldApiName>
+                <transformType>Map</transformType>
+                <value>
+                    <elementReference>UnidadesEscolhidas[$EachItem].ValorM2__c</elementReference>
+                </value>
+            </transformValueActions>
+        </transformValues>
+    </transforms>
     <variables>
         <name>recordId</name>
         <dataType>String</dataType>

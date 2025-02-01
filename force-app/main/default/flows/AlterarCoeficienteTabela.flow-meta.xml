@@ -33,6 +33,7 @@
             <targetReference>AtribuirRegistros</targetReference>
         </connector>
     </assignments>
+    <environments>Default</environments>
     <interviewLabel>Alterar Coeficiente da Tabela {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Alterar Coeficiente da Tabela</label>
     <loops>

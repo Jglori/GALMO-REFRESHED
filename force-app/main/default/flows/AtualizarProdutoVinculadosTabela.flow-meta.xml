@@ -90,6 +90,7 @@
             <label>Publicada?</label>
         </rules>
     </decisions>
+    <environments>Default</environments>
     <interviewLabel>Atualizar Produto Vinculados a Tabela {!$Flow.CurrentDateTime}</interviewLabel>
     <label>Atualizar Produto Vinculados a Tabela</label>
     <loops>
