@@ -118,6 +118,9 @@ DocumentDATest</description>
         <members>SeriePagamentos__c-Layout de Série de Pagamentos</members>
         <members>TabelaVendas__c-Layout de Tabela de Venda</members>
         <members>UnidadeTabelaVendas__c-Layout de Unidade da Tabela de Vendas</members>
+		<members>Opportunity-Layout da Oportunidade - Comunidade</members>
+		<members>Opportunity-Layout da Oportunidade - Locação</members>
+		<members>Opportunity-Layout da Oportunidade - Venda</members>
         <name>Layout</name>
     </types>
     <version>50.0</version>
