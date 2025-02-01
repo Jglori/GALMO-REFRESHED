@@ -1,29 +1,26 @@
 name: Deploy das alterações para HML
-
 # only trigger on pull request closed events
 on:
   pull_request:
     types: [closed]
     branches:
-      - hml
+      - qa
     paths:
       - 'force-app/**'
+      - 'manifest/package.xml' 
 jobs:
   merge_job:
-    # this job will only run if the PR has been merged
     if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Deploy - HML
-        uses: jawills/sf-deploy@v1.0
-        with:
-          SFDX_AUTH_URL: ${{ secrets.AUTH_URL_HML }}
-          DRY_RUN: false
-          TEST_LEVEL: RunLocalTests
-
+      - name: Authenticate to Salesforce
+        run: echo ${{ secrets.AUTH_URL_HML }} > sfdx-auth-url.txt
+      - name: Deploy - QA
+        run: |
+          sf org login sfdx-url -f sfdx-auth-url.txt --alias qa
+          sf project deploy start --test-level NoTestRun -x manifest/package.xml
   close_job:
-    # this job will only run if the PR has been closed without being merged
     if: github.event.pull_request.merged == false
     runs-on: ubuntu-latest
     steps:
