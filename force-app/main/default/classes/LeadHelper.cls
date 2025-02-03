@@ -101,7 +101,7 @@ public with sharing class LeadHelper {
                     Lead lead = leads.get(task.WhoId);
                     if (isTaskCreationNotAllowedForTentativaContato(lead.Status, task.Subject)) {
 
-                        if(task.Subject == 'Reiteração'){
+                        if(task.Subject == 'Reiteração' || task.Subject.contains('Email')){
                             continue;
                         }
                         task.addError('Só é permitido criar uma tarefa  quando o lead está nas fases Tentativa de Contato ou Contato Realizado.');
