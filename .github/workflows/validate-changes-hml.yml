@@ -31,8 +31,14 @@ jobs:
           TEST_CLASSES=$(grep -oP '(?<=<members>)[^<]+(?=Test</members>)' manifest/package.xml | tr '\n' ',' | sed 's/,$//')
           echo "::set-output name=test_classes::$TEST_CLASSES"
 
-      - name: Validar Deploy (Dry Run) com testes
+      - name: Executar testes
         run: |
-          echo "Iniciando validação do deploy com testes..."
-          sf project deploy start --dry-run --test-level RunSpecifiedTests -r ${{ steps.list_tests.outputs.test_classes }} -x manifest/package.xml -o hml
-          echo "Validação do deploy concluída."
+          echo "Executando testes..."
+          sf project deploy start --test-level RunSpecifiedTests -r ${{ steps.list_tests.outputs.test_classes }} -x manifest/package.xml -o hml
+          echo "Testes concluídos."
+
+      - name: Validar Deploy (Dry Run)
+        run: |
+          echo "Validando metadados..."
+          sf project deploy start --dry-run --test-level NoTestRun -x manifest/package.xml -o hml
+          echo "Validação dos metadados concluída."
