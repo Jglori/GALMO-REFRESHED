@@ -30,6 +30,8 @@
         <members>DocumentacaoDATest</members>
         <members>DocumentacaoHelper</members>
         <members>DocumentacaoHelperTest</members>
+        <members>OpportunityHelper</members>
+        <members>OpportunityHelperTest</members>
         <members>EmailManager</members>
         <members>QueryHelper</members>
         <members>QueryHelperTest</members>
