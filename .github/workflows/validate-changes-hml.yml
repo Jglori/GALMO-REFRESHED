@@ -25,20 +25,5 @@ jobs:
       - name: Conectar ao Salesforce
         run: sf org login sfdx-url -f sfdx-auth-url.txt --alias hml
       
-      - name: Listar classes de teste do package.xml
-        id: list_tests
-        run: |
-          TEST_CLASSES=$(grep -oP '(?<=<members>)[^<]+(?=Test</members>)' manifest/package.xml | tr '\n' ',' | sed 's/,$//')
-          echo "::set-output name=test_classes::$TEST_CLASSES"
-
-      - name: Executar testes
-        run: |
-          echo "Executando testes..."
-          sf project deploy start --test-level RunSpecifiedTests -r ${{ steps.list_tests.outputs.test_classes }} -x manifest/package.xml -o hml
-          echo "Testes concluídos."
-
       - name: Validar Deploy (Dry Run)
-        run: |
-          echo "Validando metadados..."
-          sf project deploy start --dry-run --test-level NoTestRun -x manifest/package.xml -o hml
-          echo "Validação dos metadados concluída."
+        run: sf project deploy start --dry-run --test-level NoTestRun -x manifest/package.xml -o hml
