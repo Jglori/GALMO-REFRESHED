@@ -5,7 +5,7 @@ public with sharing class SalesTeamController {
 
         // Query para obter o usuário a partir do campo Corretor__c da Oportunidade
         Opportunity opp = [SELECT Corretor__c FROM Opportunity WHERE Id = :opportunityId LIMIT 1];
-        
+
         if (opp.Corretor__c != null) {
             User startUser = [SELECT Id, Name, Cargo__c, Reportase__c, Coordenador__c FROM User WHERE Id = :opp.Corretor__c LIMIT 1];
 
