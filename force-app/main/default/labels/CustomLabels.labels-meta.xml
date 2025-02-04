@@ -119,6 +119,6 @@
         <language>en_US</language>
         <protected>false</protected>
         <shortDescription>TentativaContato_LEAD</shortDescription>
-        <value>Para avançar de Tentativa de Contato para Contato Realizado, crie e mantenha aberta uma tarefa do tipo e-mail, WhatsApp ou chamada.</value>
+        <value>Para avançar de Tentativa de Contato para Contato Realizado, conclua uma tarefa do tipo e-mail, WhatsApp ou chamada.</value>
     </labels>
 </CustomLabels>

@@ -179,10 +179,7 @@ public without sharing class ConciergeService {
             System.debug('Corretor associado: ' + corretor);
         }
     
-        if (!String.isBlank(idRoletaLeads)) {
-            lead.RoletaLeads__c = idRoletaLeads;
-            System.debug('Roleta Leads associada: ' + idRoletaLeads);
-        }
+        
         try {
             insert lead;
             System.debug('Lead criado com sucesso: ' + lead.Id);
