@@ -79,3 +79,14 @@ jobs:
         with:
           name: ${{ steps.set-artifact-name.outputs.DEPLOY_LOG_ARTIFACT }}
           path: deploy/deploy_output.log
+
+      - name: Commit e Push dos artifacts gerados
+        run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "github-actions@github.com"
+          git checkout -b artifacts-branch
+          cp deploy/package/package.xml ./artifact-package.xml
+          cp deploy/deploy_output.log ./artifact-deploy-output.log
+          git add artifact-package.xml artifact-deploy-output.log
+          git commit -m "Add artifacts for deployment"
+          git push origin artifacts-branch
