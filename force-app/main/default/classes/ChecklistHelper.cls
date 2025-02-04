@@ -4,8 +4,7 @@ public class ChecklistHelper {
         if (checklists == null || checklists.isEmpty()) {
             return;
         }
-    
-        // Obter os IDs das oportunidades relacionadas aos checklists
+
         Set<Id> opportunityIds = new Set<Id>();
         for (Checklist_de_Documentos__c checklist : checklists) {
             if (checklist.Oportunidade__c != null) {
@@ -13,18 +12,12 @@ public class ChecklistHelper {
             }
         }
     
-        if (opportunityIds.isEmpty()) {
-            return;
-        }
-    
-        // Buscar as oportunidades relacionadas
         Map<Id, Opportunity> opportunities = new Map<Id, Opportunity>(
             [SELECT Id, StageName, FarolChecklistDocumento__c
              FROM Opportunity
              WHERE Id IN :opportunityIds]
         );
     
-        // Obter os papéis dos contatos nas oportunidades
         Map<Id, List<String>> oppToRolesMap = new Map<Id, List<String>>();
         for (OpportunityContactRole contactRole : [
             SELECT OpportunityId, Role 
@@ -37,7 +30,6 @@ public class ChecklistHelper {
             oppToRolesMap.get(contactRole.OpportunityId).add(contactRole.Role);
         }
     
-        // Buscar os documentos obrigatórios e opcionais por papel
         Map<String, List<Documento__mdt>> roleToDocumentsMap = new Map<String, List<Documento__mdt>>();
         for (Documento__mdt doc : [SELECT Nome_do_Documento__c, Obrigatorio__c, Papel__c FROM Documento__mdt]) {
             if (!roleToDocumentsMap.containsKey(doc.Papel__c)) {
@@ -45,8 +37,7 @@ public class ChecklistHelper {
             }
             roleToDocumentsMap.get(doc.Papel__c).add(doc);
         }
-    
-        // Obter os documentos entregues para as oportunidades relacionadas
+
         Map<Id, List<Checklist_de_Documentos__c>> oppToDocumentsMap = new Map<Id, List<Checklist_de_Documentos__c>>();
         List<Checklist_de_Documentos__c> relatedChecklists = [
             SELECT Oportunidade__c, Documenta_o__r.Obrigatorio__c, Documenta_o__r.Entregue__c
@@ -61,7 +52,6 @@ public class ChecklistHelper {
             oppToDocumentsMap.get(checklist.Oportunidade__c).add(checklist);
         }
     
-        // Atualizar o FarolChecklistDocumento__c de cada oportunidade
         List<Opportunity> opportunitiesToUpdate = new List<Opportunity>();
     
         for (Id oppId : opportunityIds) {
@@ -70,13 +60,11 @@ public class ChecklistHelper {
     
             if (opp == null || documents == null || documents.isEmpty()) continue;
     
-            // Contadores de documentos
             Integer totalMandatoryCount = 0;
             Integer totalOptionalCount = 0;
             Integer deliveredMandatoryCount = 0;
             Integer deliveredOptionalCount = 0;
     
-            // Determinar os papéis associados à oportunidade
             List<String> roles = oppToRolesMap.get(oppId);
             if (roles != null) {
                 for (String role : roles) {
@@ -93,7 +81,6 @@ public class ChecklistHelper {
                 }
             }
     
-            // Contar os documentos entregues
             for (Checklist_de_Documentos__c checklist : documents) {
                 if (checklist.Documenta_o__r == null) continue;
     
@@ -107,23 +94,13 @@ public class ChecklistHelper {
                     }
                 }
             }
-
-            System.debug('Trigger');
-            System.debug(totalMandatoryCount);
-            System.debug(totalOptionalCount);
-
-            System.debug(deliveredMandatoryCount);
-            System.debug(deliveredOptionalCount);
-    
-            // Determinar a cor do FarolChecklistDocumento__c
+            
             if (deliveredMandatoryCount < totalMandatoryCount) {
                 opp.FarolChecklistDocumento__c = 'Vermelho';
             } else if (deliveredMandatoryCount == totalMandatoryCount &&
                        deliveredMandatoryCount + deliveredOptionalCount < totalMandatoryCount + totalOptionalCount) {
-                        System.debug('Verde');
                 opp.FarolChecklistDocumento__c = 'Verde';
             } else if (deliveredMandatoryCount + deliveredOptionalCount == totalMandatoryCount + totalOptionalCount) {
-                System.debug('Azul');
                 opp.FarolChecklistDocumento__c = 'Azul';
             }
     

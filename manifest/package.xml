@@ -31,6 +31,10 @@ ParametrizarCriterioControllerTest</description>
         <members>EspelhoVendasControllerTest</members>
         <members>EspelhoVendasService</members>
         <members>EspelhoVendasServiceTest</members>
+		 <members>DocumentacaoDA</members>
+        <members>DocumentacaoDATest</members>
+		 <members>ChecklistHelper</members>
+        <members>ChecklistHelperTest</members>
         <members>ExtratoTabelaService</members>
         <members>ExtratoTabelaServiceTest</members>
         <members>ProdutoSelector</members>
