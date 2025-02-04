@@ -1,0 +1,1153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>61.0</apiVersion>
+    <assignments>
+        <description>Atribuição da fila e definição de prioridadade</description>
+        <name>AtribuicaoFilaAdmFinanLocacao</name>
+        <label>Atribuiçao fila Adm Finan Locação</label>
+        <locationX>2074</locationX>
+        <locationY>350</locationY>
+        <assignmentItems>
+            <assignToReference>NomeFilaEscolhida</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>AdmFinanLocacaoCasos</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>caseRecord.Priority</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>High</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>VerificarAssuntoEmail</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>AtribuicaoFilaAdmLocacao</name>
+        <label>Atribuição fila Adm Locação</label>
+        <locationX>50</locationX>
+        <locationY>350</locationY>
+        <assignmentItems>
+            <assignToReference>NomeFilaEscolhida</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>AdmLocacaoCasos</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>caseRecord.Priority</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>High</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>VerificarAssuntoEmail</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Atribuição da fila e definição de prioridadade</description>
+        <name>AtribuicaoFilaAdmLocacaoClassificacaoAdmFinanLocacao</name>
+        <label>Atribuiçao fila Adm Locação com Classificação Adm Finan Locação</label>
+        <locationX>2338</locationX>
+        <locationY>350</locationY>
+        <assignmentItems>
+            <assignToReference>NomeFilaEscolhida</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>AdmLocacaoCasos</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>caseRecord.Priority</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>High</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>VerificarAssuntoEmail</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>AtribuicaoFilaAssistenciaTecnica</name>
+        <label>Atribuiçao fila Assistencia Técnica</label>
+        <locationX>1810</locationX>
+        <locationY>242</locationY>
+        <assignmentItems>
+            <assignToReference>NomeFilaEscolhida</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>AssistenciatecnicaCasos</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>caseRecord.Priority</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>High</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>VerificarAssuntoEmail</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>AtribuicaoFilaCompras</name>
+        <label>Atribuiçao fila Compras</label>
+        <locationX>2778</locationX>
+        <locationY>350</locationY>
+        <assignmentItems>
+            <assignToReference>NomeFilaEscolhida</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>ComprasCasos</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>caseRecord.Priority</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>High</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>VerificarAssuntoEmail</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>AtribuicaoFilaDiretoriaIncorporacao</name>
+        <label>Atribuiçao fila Diretoria de Incorporação</label>
+        <locationX>1370</locationX>
+        <locationY>350</locationY>
+        <assignmentItems>
+            <assignToReference>NomeFilaEscolhida</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>DiretoriaIncorporacaoCasos</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>caseRecord.Priority</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>High</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>VerificarAssuntoEmail</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>AtribuicaoFilaEngenharia</name>
+        <label>Atribuiçao fila Engenharia</label>
+        <locationX>3658</locationX>
+        <locationY>350</locationY>
+        <assignmentItems>
+            <assignToReference>NomeFilaEscolhida</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>EngenhariaCasos</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>caseRecord.Priority</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>High</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>VerificarAssuntoEmail</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>AtribuicaoFilaFaleConosco</name>
+        <label>Atribuição fila Fale Conosco</label>
+        <locationX>4098</locationX>
+        <locationY>242</locationY>
+        <assignmentItems>
+            <assignToReference>NomeFilaEscolhida</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>FaleConoscoCasos</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>caseRecord.Priority</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>High</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>VerificarAssuntoEmail</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>AtribuicaoFilaFaturamento</name>
+        <label>Atribuição fila Faturamento</label>
+        <locationX>490</locationX>
+        <locationY>350</locationY>
+        <assignmentItems>
+            <assignToReference>NomeFilaEscolhida</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>FaturamentoCasos</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>caseRecord.Priority</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>High</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>VerificarAssuntoEmail</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>AtribuicaoFilaMarketing</name>
+        <label>Atribuiçao fila Marketing</label>
+        <locationX>930</locationX>
+        <locationY>350</locationY>
+        <assignmentItems>
+            <assignToReference>NomeFilaEscolhida</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>MarketingCasos</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>caseRecord.Priority</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>High</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>VerificarAssuntoEmail</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>AtribuicaoFilaRH</name>
+        <label>Atribuiçao fila RH</label>
+        <locationX>3218</locationX>
+        <locationY>350</locationY>
+        <assignmentItems>
+            <assignToReference>NomeFilaEscolhida</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>RHCasos</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>caseRecord.Priority</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Medium</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>VerificarAssuntoEmail</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>AtribuindoClassificacaoAssistenciaTecnica</name>
+        <label>Atribuindo Classificação Assistência Técnica</label>
+        <locationX>2140</locationX>
+        <locationY>734</locationY>
+        <assignmentItems>
+            <assignToReference>caseRecord.Classificacao__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Assistência técnica</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>caseRecord.Subclassificacao__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Outros</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>NomeFilaEscolhida</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>AssistenciatecnicaCasos</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>BuscaFilaCorrespondente</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>AtribuindoClassificacaoCompras</name>
+        <label>Atribuindo Classificação Compras</label>
+        <locationX>1876</locationX>
+        <locationY>734</locationY>
+        <assignmentItems>
+            <assignToReference>caseRecord.Classificacao__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Compras</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>caseRecord.Subclassificacao__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Solicitações</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>NomeFilaEscolhida</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>ComprasCasos</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>BuscaFilaCorrespondente</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>AtribuindoClassificacaoDiretoriaIncorporacao</name>
+        <label>Atribuindo Classificação Diretoria de Incorporação</label>
+        <locationX>2404</locationX>
+        <locationY>734</locationY>
+        <assignmentItems>
+            <assignToReference>caseRecord.Classificacao__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Diretoria de Incorporação</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>caseRecord.Subclassificacao__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Outros</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>NomeFilaEscolhida</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>DiretoriaIncorporacaoCasos</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>BuscaFilaCorrespondente</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>AtribuindoClassificacaoMarketing</name>
+        <label>Atribuindo Classificação Marketing</label>
+        <locationX>2668</locationX>
+        <locationY>734</locationY>
+        <assignmentItems>
+            <assignToReference>caseRecord.Classificacao__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Marketing</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>caseRecord.Subclassificacao__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Outros</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>NomeFilaEscolhida</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>MarketingCasos</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>BuscaFilaCorrespondente</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <name>AtribuindoClassificacaoRH</name>
+        <label>Atribuindo Classificação RH</label>
+        <locationX>1612</locationX>
+        <locationY>734</locationY>
+        <assignmentItems>
+            <assignToReference>caseRecord.Classificacao__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>RH</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>caseRecord.Subclassificacao__c</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>Envio De Currículo</stringValue>
+            </value>
+        </assignmentItems>
+        <assignmentItems>
+            <assignToReference>NomeFilaEscolhida</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <stringValue>RHCasos</stringValue>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>BuscaFilaCorrespondente</targetReference>
+        </connector>
+    </assignments>
+    <assignments>
+        <description>Atribuição de valores</description>
+        <name>AtribuindoValorIdFilaOwnerId</name>
+        <label>Atribuindo o valor do id da fila ao OwnerId</label>
+        <locationX>2272</locationX>
+        <locationY>1034</locationY>
+        <assignmentItems>
+            <assignToReference>caseRecord.OwnerId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>BuscaFilaCorrespondente.Id</elementReference>
+            </value>
+        </assignmentItems>
+        <connector>
+            <targetReference>AtualizCasoOwnerIdCorrespondente</targetReference>
+        </connector>
+    </assignments>
+    <decisions>
+        <description>Validação da Classificação e da Subclassificação selecionadas pelo usuário</description>
+        <name>RoteamentoCasosClassificacaoxSubclassificacao</name>
+        <label>Roteamento de Casos (Classificação x Subclassificação)</label>
+        <locationX>2272</locationX>
+        <locationY>134</locationY>
+        <defaultConnector>
+            <targetReference>VerificarAssuntoEmail</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Resultado padrão</defaultConnectorLabel>
+        <rules>
+            <name>CaseClassificacaoAdmLocacao</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>caseRecord.Classificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Administrativo Locação</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>ValidacaofilaAdmLocacao</targetReference>
+            </connector>
+            <label>Case Classificação é Adm Locação</label>
+        </rules>
+        <rules>
+            <name>CaseClassificacaoFaturamento</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>caseRecord.Classificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Faturamento</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>ValidacaooporFilaFaturamento</targetReference>
+            </connector>
+            <label>Case Classificação é Faturamento</label>
+        </rules>
+        <rules>
+            <name>CaseClassificacaoMarketing</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>caseRecord.Classificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Marketing</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>ValidacaoFilaMarketing</targetReference>
+            </connector>
+            <label>Case Classificação é Marketing</label>
+        </rules>
+        <rules>
+            <name>CaseClassificacaoDiretoriaIncorporacao</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>caseRecord.Classificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Diretoria de Incorporação</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>ValidacaoFilaDiretoriaIncorporacao</targetReference>
+            </connector>
+            <label>Case Classificação é Diretoria de Incorporação</label>
+        </rules>
+        <rules>
+            <name>CaseClassificacaoAssistenciaTecnica</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>caseRecord.Classificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Assistência técnica</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>AtribuicaoFilaAssistenciaTecnica</targetReference>
+            </connector>
+            <label>Case Classificação é Assistencia Técnica</label>
+        </rules>
+        <rules>
+            <name>CaseClassificacaoAdmFinanLocacao</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>caseRecord.Classificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Administrativo Financeiro Locação</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>ValidacaoFilaAdmFinanLocacao</targetReference>
+            </connector>
+            <label>Case Classificação é Adm Finan Locação</label>
+        </rules>
+        <rules>
+            <name>CaseClassificacaoCompras</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>caseRecord.Classificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Compras</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>ValidacaoFilaCompras</targetReference>
+            </connector>
+            <label>Case Classificação é Compras</label>
+        </rules>
+        <rules>
+            <name>CaseClassificacaoRH</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>caseRecord.Classificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Recursos Humanos</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>ValidacaoFilaRH</targetReference>
+            </connector>
+            <label>Case Classificação é RH</label>
+        </rules>
+        <rules>
+            <name>CaseClassificacaoEngenharia</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>caseRecord.Classificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Engenharia</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>ValidacaoFilaEngenharia</targetReference>
+            </connector>
+            <label>Case Classificação é Engenharia</label>
+        </rules>
+        <rules>
+            <name>CaseClassificacaoVazia</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>caseRecord.Classificacao__c</leftValueReference>
+                <operator>IsBlank</operator>
+                <rightValue>
+                    <booleanValue>true</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>AtribuicaoFilaFaleConosco</targetReference>
+            </connector>
+            <label>Case Classificação está vazia</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>ValidacaoFilaAdmFinanLocacao</name>
+        <label>Validação por Fila Adm Finan Locação</label>
+        <locationX>2338</locationX>
+        <locationY>242</locationY>
+        <defaultConnector>
+            <targetReference>VerificarAssuntoEmail</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Resultado padrão</defaultConnectorLabel>
+        <rules>
+            <name>ClassificacaoAdmFinanLocacaoFilaAdmFinanLocacao</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>caseRecord.Subclassificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Solicitação De Extrato De Repasse</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>caseRecord.Subclassificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Alteração De Dados Bancários</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>caseRecord.Subclassificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>IR</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>caseRecord.Subclassificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Segunda Via Do Boleto - Mudança Data De Venct</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>caseRecord.Subclassificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Segunda Via Do Boleto - Perda</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>AtribuicaoFilaAdmFinanLocacao</targetReference>
+            </connector>
+            <label>Classificação é Adm Finan Locação e fila é Adm Finan Locação</label>
+        </rules>
+        <rules>
+            <name>ClassificacaoAdmFinanLocacaoFilaAdmLocacao</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>caseRecord.Subclassificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Reembolso Fundo de Reserva</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>AtribuicaoFilaAdmLocacaoClassificacaoAdmFinanLocacao</targetReference>
+            </connector>
+            <label>Classificação é Adm Finan Locação e fila é Adm Locação</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>ValidacaofilaAdmLocacao</name>
+        <label>Validação por Fila Adm Locação</label>
+        <locationX>182</locationX>
+        <locationY>242</locationY>
+        <defaultConnector>
+            <targetReference>VerificarAssuntoEmail</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Resultado padrão</defaultConnectorLabel>
+        <rules>
+            <name>ClassificacaoAdmLocacaoFilaAdmLocacao</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>caseRecord.Subclassificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Solicitação De Benfeitorias Pelo Inquilino</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>caseRecord.Subclassificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Pedido De Renegociação Do Aluguel</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>caseRecord.Subclassificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Mudança Cadastral</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>caseRecord.Subclassificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Solicitação De Benfeitorias</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>caseRecord.Subclassificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Contestação De Vistoria</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>caseRecord.Subclassificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Negociação De Contrato</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>caseRecord.Subclassificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Renovação De Seguro</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>caseRecord.Subclassificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Carnê/Pagamento IPTU</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>caseRecord.Subclassificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Notificação Desocupação</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>caseRecord.Subclassificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Solicitação Vistoria final</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>caseRecord.Subclassificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Projetos/Manual ocupante/Seguro Obra</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>caseRecord.Subclassificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Carnê IPTU</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>AtribuicaoFilaAdmLocacao</targetReference>
+            </connector>
+            <label>Classificação é Adm Locação e fila é Adm Locação</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>ValidacaoFilaCompras</name>
+        <label>Validação por Fila Compras</label>
+        <locationX>2910</locationX>
+        <locationY>242</locationY>
+        <defaultConnector>
+            <targetReference>VerificarAssuntoEmail</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Resultado padrão</defaultConnectorLabel>
+        <rules>
+            <name>ClassificacaoComprasFilaCompras</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>caseRecord.Subclassificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Solicitações</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>AtribuicaoFilaCompras</targetReference>
+            </connector>
+            <label>Classificação é Compras e fila é Compras</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>ValidacaoFilaDiretoriaIncorporacao</name>
+        <label>Validação por Fila Diretoria de Incorporação</label>
+        <locationX>1502</locationX>
+        <locationY>242</locationY>
+        <defaultConnector>
+            <targetReference>VerificarAssuntoEmail</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Resultado padrão</defaultConnectorLabel>
+        <rules>
+            <name>ClassificacaoDiretoriaIncorporacaoFilaDiretoriaIncorporacao</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>caseRecord.Subclassificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Venda De Terreno</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>caseRecord.Subclassificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Angariação</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>caseRecord.Subclassificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Solicitação Documentos da unidade</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>AtribuicaoFilaDiretoriaIncorporacao</targetReference>
+            </connector>
+            <label>Classificação é Diretoria de Incorporação e fila é Diretoria de Incorporação</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>ValidacaoFilaEngenharia</name>
+        <label>Validação por Fila Engenharia</label>
+        <locationX>3790</locationX>
+        <locationY>242</locationY>
+        <defaultConnector>
+            <targetReference>VerificarAssuntoEmail</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Resultado padrão</defaultConnectorLabel>
+        <rules>
+            <name>ClassificacaoEngenhariaFilaEngenharia</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>caseRecord.Subclassificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Solicitação Planta Técnica</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>caseRecord.Subclassificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Solicitação Personalização</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>caseRecord.Subclassificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Engenharia - Pós Obras (Garantia)</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>AtribuicaoFilaEngenharia</targetReference>
+            </connector>
+            <label>Classificação é Engenharia e fila Engenharia</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>ValidacaoFilaMarketing</name>
+        <label>Validação por Fila Marketing</label>
+        <locationX>1062</locationX>
+        <locationY>242</locationY>
+        <defaultConnector>
+            <targetReference>VerificarAssuntoEmail</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Resultado padrão</defaultConnectorLabel>
+        <rules>
+            <name>ClassificacaoMarketingFilaMarketing</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>caseRecord.Subclassificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Solicitações</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>caseRecord.Subclassificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Comprar Ou Alugar</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>AtribuicaoFilaMarketing</targetReference>
+            </connector>
+            <label>Classificação é Marketing e fila é Marketing</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>ValidacaoFilaRH</name>
+        <label>Validação por Fila RH</label>
+        <locationX>3350</locationX>
+        <locationY>242</locationY>
+        <defaultConnector>
+            <targetReference>VerificarAssuntoEmail</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Resultado padrão</defaultConnectorLabel>
+        <rules>
+            <name>ClassificacaoRHFilaRH</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>caseRecord.Subclassificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Envio De Currículo</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>AtribuicaoFilaRH</targetReference>
+            </connector>
+            <label>Classificação é RH e fila é RH</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>ValidacaooporFilaFaturamento</name>
+        <label>Validação por Fila Faturamento</label>
+        <locationX>622</locationX>
+        <locationY>242</locationY>
+        <defaultConnector>
+            <targetReference>VerificarAssuntoEmail</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Resultado padrão</defaultConnectorLabel>
+        <rules>
+            <name>ClassificacaoFaturamentoFilaFaturamento</name>
+            <conditionLogic>or</conditionLogic>
+            <conditions>
+                <leftValueReference>caseRecord.Subclassificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Segunda Via Do Boleto - Mudança Data De Venct</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>caseRecord.Subclassificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Segunda Via Do Boleto - Perda</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>caseRecord.Subclassificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Segunda Via Do Boleto - Renegociação</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>caseRecord.Subclassificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Mudança Cadastral</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>caseRecord.Subclassificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>IR</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>caseRecord.Subclassificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Solicitação do extrato do cliente</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>caseRecord.Subclassificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Cobrança - Parcelas em aberto do cliente</stringValue>
+                </rightValue>
+            </conditions>
+            <conditions>
+                <leftValueReference>caseRecord.Subclassificacao__c</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Solicitação de Distrato - Cliente</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>AtribuicaoFilaFaturamento</targetReference>
+            </connector>
+            <label>Classificação é Faturamento e fila é Faturamento</label>
+        </rules>
+    </decisions>
+    <decisions>
+        <name>VerificarAssuntoEmail</name>
+        <label>Verificar Assunto do Email</label>
+        <locationX>2272</locationX>
+        <locationY>626</locationY>
+        <defaultConnector>
+            <targetReference>BuscaFilaCorrespondente</targetReference>
+        </defaultConnector>
+        <defaultConnectorLabel>Resultado padrão</defaultConnectorLabel>
+        <rules>
+            <name>FormularioTrabalheConosco</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>caseRecord.Subject</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Formulário - Trabalhe Conosco</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>AtribuindoClassificacaoRH</targetReference>
+            </connector>
+            <label>Formulário - Trabalhe Conosco</label>
+        </rules>
+        <rules>
+            <name>FormularioCadastroFornecedor</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>caseRecord.Subject</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Formulário - Cadastro de Fornecedor</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>AtribuindoClassificacaoCompras</targetReference>
+            </connector>
+            <label>Formulário - Cadastro de Fornecedor</label>
+        </rules>
+        <rules>
+            <name>FormularioAssistenciaTecnica</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>caseRecord.Subject</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Formulário - Assistência Técnica</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>AtribuindoClassificacaoAssistenciaTecnica</targetReference>
+            </connector>
+            <label>Formulário - Assistência Técnica</label>
+        </rules>
+        <rules>
+            <name>FormularioVendaSeuTerreno</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>caseRecord.Subject</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Formulário - Venda seu Terreno</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>AtribuindoClassificacaoDiretoriaIncorporacao</targetReference>
+            </connector>
+            <label>Formulário - Venda seu Terreno</label>
+        </rules>
+        <rules>
+            <name>FormularioQueroComprarOuAlugar</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>caseRecord.Subject</leftValueReference>
+                <operator>EqualTo</operator>
+                <rightValue>
+                    <stringValue>Formulário - Quero Comprar ou Alugar</stringValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>AtribuindoClassificacaoMarketing</targetReference>
+            </connector>
+            <label>Formulário - Quero Comprar ou Alugar</label>
+        </rules>
+    </decisions>
+    <description>V2 - Árvore de Classificação - Definitiva
+apiVersion: 61</description>
+    <environments>Default</environments>
+    <interviewLabel>Case - Subflow Atribuição Filas {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Case - Subflow Atribuição Filas</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <description>Busca da fila correspondente de acordo com o DeveloperName da Fila.</description>
+        <name>BuscaFilaCorrespondente</name>
+        <label>Busca Fila Correspondente</label>
+        <locationX>2272</locationX>
+        <locationY>926</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>AtribuindoValorIdFilaOwnerId</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>DeveloperName</field>
+            <operator>EqualTo</operator>
+            <value>
+                <elementReference>NomeFilaEscolhida</elementReference>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Group</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <recordUpdates>
+        <name>AtualizCasoOwnerIdCorrespondente</name>
+        <label>Atualização Caso com OwnerId correspondente</label>
+        <locationX>2272</locationX>
+        <locationY>1142</locationY>
+        <inputReference>caseRecord</inputReference>
+    </recordUpdates>
+    <start>
+        <locationX>2146</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>RoteamentoCasosClassificacaoxSubclassificacao</targetReference>
+        </connector>
+    </start>
+    <status>Active</status>
+    <variables>
+        <name>caseRecord</name>
+        <dataType>SObject</dataType>
+        <isCollection>false</isCollection>
+        <isInput>true</isInput>
+        <isOutput>false</isOutput>
+        <objectType>Case</objectType>
+    </variables>
+    <variables>
+        <description>DevelopeName da fila do caso</description>
+        <name>NomeFilaEscolhida</name>
+        <dataType>String</dataType>
+        <isCollection>false</isCollection>
+        <isInput>false</isInput>
+        <isOutput>false</isOutput>
+    </variables>
+</Flow>

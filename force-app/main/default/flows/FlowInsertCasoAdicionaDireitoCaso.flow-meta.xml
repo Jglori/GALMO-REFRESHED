@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>61.0</apiVersion>
+    <assignments>
+        <description>Atribuo o Entitlement ID ao caso.</description>
+        <name>AtribuiEntitlementIDCaso</name>
+        <label>Atribui Entitlement ID ao Caso</label>
+        <locationX>50</locationX>
+        <locationY>503</locationY>
+        <assignmentItems>
+            <assignToReference>$Record.EntitlementId</assignToReference>
+            <operator>Assign</operator>
+            <value>
+                <elementReference>PesquisaEntitlementPadrao.Id</elementReference>
+            </value>
+        </assignmentItems>
+    </assignments>
+    <decisions>
+        <description>Verifica se o entitlement foi encontrado, caso positivo, preenche o valor do ID no mesmo no campo EntitlementId do caso.</description>
+        <name>VerificaSeEntitlementEncontrado</name>
+        <label>Verifica se o Entitlement foi encontrado</label>
+        <locationX>182</locationX>
+        <locationY>395</locationY>
+        <defaultConnectorLabel>Entitlement não encontrado</defaultConnectorLabel>
+        <rules>
+            <name>ResultadoEntitlementEncontrado</name>
+            <conditionLogic>and</conditionLogic>
+            <conditions>
+                <leftValueReference>PesquisaEntitlementPadrao.Id</leftValueReference>
+                <operator>IsNull</operator>
+                <rightValue>
+                    <booleanValue>false</booleanValue>
+                </rightValue>
+            </conditions>
+            <connector>
+                <targetReference>AtribuiEntitlementIDCaso</targetReference>
+            </connector>
+            <label>Entitlement encontrado</label>
+        </rules>
+    </decisions>
+    <description>Flow responsável por adicionar o Entitlement padrão ao Caso, para que seja iniciado o SLA.</description>
+    <environments>Default</environments>
+    <interviewLabel>Flow - Insert - Caso - Adiciona EntitlementID {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Flow - Insert - Caso - Adiciona Direito ao Caso</label>
+    <processMetadataValues>
+        <name>BuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>CanvasMode</name>
+        <value>
+            <stringValue>AUTO_LAYOUT_CANVAS</stringValue>
+        </value>
+    </processMetadataValues>
+    <processMetadataValues>
+        <name>OriginBuilderType</name>
+        <value>
+            <stringValue>LightningFlowBuilder</stringValue>
+        </value>
+    </processMetadataValues>
+    <processType>AutoLaunchedFlow</processType>
+    <recordLookups>
+        <description>Faz a busca na organização pelo entitlement padrão para adicionar ao caso.</description>
+        <name>PesquisaEntitlementPadrao</name>
+        <label>Pesquisa pelo Entitlement Padrão</label>
+        <locationX>182</locationX>
+        <locationY>287</locationY>
+        <assignNullValuesIfNoRecordsFound>false</assignNullValuesIfNoRecordsFound>
+        <connector>
+            <targetReference>VerificaSeEntitlementEncontrado</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>Name</field>
+            <operator>EqualTo</operator>
+            <value>
+                <stringValue>Direito - Padrão</stringValue>
+            </value>
+        </filters>
+        <getFirstRecordOnly>true</getFirstRecordOnly>
+        <object>Entitlement</object>
+        <storeOutputAutomatically>true</storeOutputAutomatically>
+    </recordLookups>
+    <start>
+        <locationX>56</locationX>
+        <locationY>0</locationY>
+        <connector>
+            <targetReference>PesquisaEntitlementPadrao</targetReference>
+        </connector>
+        <filterLogic>and</filterLogic>
+        <filters>
+            <field>EntitlementId</field>
+            <operator>IsNull</operator>
+            <value>
+                <booleanValue>true</booleanValue>
+            </value>
+        </filters>
+        <object>Case</object>
+        <recordTriggerType>Create</recordTriggerType>
+        <triggerType>RecordBeforeSave</triggerType>
+    </start>
+    <status>Active</status>
+</Flow>
