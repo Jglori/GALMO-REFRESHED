@@ -5,7 +5,7 @@ on:
       - hml
     paths:
       - 'force-app/**'
-     
+
 jobs:
   validate:
     runs-on: ubuntu-latest
@@ -13,8 +13,8 @@ jobs:
       - name: Checkout do repositório
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  
-          
+          fetch-depth: 0
+
       - name: Instalar dependências do sistema e do Salesforce CLI
         run: |
           sudo apt-get update
@@ -45,6 +45,14 @@ jobs:
       - name: Implantar usando o pacote delta gerado
         run: |
           sf project deploy start --manifest deploy/package/package.xml --dry-run --test-level NoTestRun --target-org hml > deploy/deploy_output.log || true
+
+      - name: Verificar falhas de componentes no log de deploy
+        run: |
+          if grep -i "Component Failures" deploy/deploy_output.log; then
+            echo "Falhas de componente detectadas! O deploy falhou."
+            cat deploy/deploy_output.log
+            exit 1
+          fi
 
       - name: Exibir o Log de Deploy diretamente no console
         run: |
