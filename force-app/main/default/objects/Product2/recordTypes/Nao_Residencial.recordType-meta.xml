@@ -2,6 +2,7 @@
 <RecordType xmlns="http://soap.sforce.com/2006/04/metadata">
     <fullName>Nao_Residencial</fullName>
     <active>true</active>
+    <compactLayoutAssignment>LayoutCompactoProduto</compactLayoutAssignment>
     <label>Não Residencial (NR)</label>
     <picklistValues>
         <picklist>AgenteFinanceiro__c</picklist>
@@ -77,6 +78,10 @@
     <picklistValues>
         <picklist>Situacao__c</picklist>
         <values>
+            <fullName>Disponivel</fullName>
+            <default>false</default>
+        </values>
+        <values>
             <fullName>Reservada</fullName>
             <default>false</default>
         </values>
@@ -95,7 +100,7 @@
     <picklistValues>
         <picklist>Status__c</picklist>
         <values>
-            <fullName>Livre</fullName>
+            <fullName>Disponivel</fullName>
             <default>false</default>
         </values>
         <values>

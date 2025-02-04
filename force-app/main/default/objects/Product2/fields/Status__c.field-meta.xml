@@ -5,16 +5,16 @@
     <externalId>false</externalId>
     <label>Status</label>
     <required>true</required>
-    <trackHistory>false</trackHistory>
+    <trackHistory>true</trackHistory>
     <type>Picklist</type>
     <valueSet>
         <restricted>true</restricted>
         <valueSetDefinition>
             <sorted>false</sorted>
             <value>
-                <fullName>Livre</fullName>
-                <default>false</default>
-                <label>Livre</label>
+                <fullName>Disponivel</fullName>
+                <default>true</default>
+                <label>Disponivel</label>
             </value>
             <value>
                 <fullName>Reservada</fullName>
@@ -31,6 +31,12 @@
                 <default>false</default>
                 <isActive>false</isActive>
                 <label>&lt;&lt;LISTAR STATUS&gt;&gt;</label>
+            </value>
+            <value>
+                <fullName>Livre</fullName>
+                <default>false</default>
+                <isActive>false</isActive>
+                <label>Livre</label>
             </value>
         </valueSetDefinition>
     </valueSet>
