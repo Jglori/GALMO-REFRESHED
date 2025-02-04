@@ -38,6 +38,11 @@ ParametrizarCriterioControllerTest</description>
         <members>SeriePagamentoSelector</members>
         <members>SeriePagamentoSelectorTest</members>
         <members>SeriePagamentosService</members>
+		<members>OpportunityHelper</members>
+		<members>OpportunityHelperTest</members>
+		<members>OpportunityDA</members>
+		<members>OpportunityDATest</members>
+        <members>SeriePagamentosService</members>
         <members>SeriePagamentosServiceTest</members>
         <members>SeriePagamentosTriggerHandler</members>
         <members>SeriePagamentosTriggerHandlerTest</members>
