@@ -41,6 +41,9 @@ ParametrizarCriterioControllerTest</description>
 		<members>OpportunityHelper</members>
 		<members>OpportunityHelperTest</members>
 		<members>OpportunityDA</members>
+		<members>QuoteHelper</members>
+		<members>QuoteHelperTest</members>
+		<members>OpportunityDA</members>
 		<members>OpportunityDATest</members>
         <members>SeriePagamentosService</members>
         <members>SeriePagamentosServiceTest</members>
