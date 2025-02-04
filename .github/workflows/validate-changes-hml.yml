@@ -5,6 +5,16 @@ on:
       - hml
     paths:
       - 'force-app/**'
+  workflow_dispatch:
+    inputs:
+      deploy_strategy:
+        description: 'Escolha a estratégia de deploy'
+        required: true
+        default: 'delta'
+        type: choice
+        options:
+          - delta
+          - full
 
 jobs:
   validate:
@@ -18,7 +28,7 @@ jobs:
       - name: Instalar dependências do sistema e do Salesforce CLI
         run: |
           sudo apt-get update
-          sudo apt-get install -y wget curl jq
+          sudo apt-get install -y wget curl jq yq
           npm install @salesforce/cli --global
 
       - name: Autenticar com a org HML
@@ -29,22 +39,30 @@ jobs:
       - name: Instalar plugin sfdx-git-delta
         run: echo "y" | sf plugins install sfdx-git-delta
 
+      - name: Definir estratégia de deploy
+        run: |
+          STRATEGY="${{ github.event.inputs.deploy_strategy }}"
+          echo "Estratégia de deploy: $STRATEGY"
+          echo "DEPLOY_STRATEGY=$STRATEGY" >> $GITHUB_ENV
+
       - name: Criar diretório de saída para o pacote delta
+        if: env.DEPLOY_STRATEGY == 'delta'
         run: mkdir -p deploy
 
       - name: Gerar pacote delta no diretório deploy
+        if: env.DEPLOY_STRATEGY == 'delta'
         run: |
           sf sgd source delta --from origin/hml --to HEAD --output-dir deploy
 
-      - name: Listar conteúdo do diretório deploy
-        run: ls -R deploy
-
-      - name: Exibir conteúdo do package.xml
-        run: cat deploy/package/package.xml
-
       - name: Implantar usando o pacote delta gerado
+        if: env.DEPLOY_STRATEGY == 'delta'
         run: |
           sf project deploy start --manifest deploy/package/package.xml --dry-run --test-level NoTestRun --target-org hml > deploy/deploy_output.log || true
+
+      - name: Implantar tudo (Full Deploy)
+        if: env.DEPLOY_STRATEGY == 'full'
+        run: |
+          sf project deploy start --source-dir force-app --dry-run --test-level NoTestRun --target-org hml > deploy/deploy_output.log || true
 
       - name: Verificar falhas de componentes no log de deploy
         run: |
@@ -69,6 +87,7 @@ jobs:
           echo "DEPLOY_LOG_ARTIFACT=${ORG_NAME}_Validade_log_${TIMESTAMP}" >> $GITHUB_OUTPUT
 
       - name: Salvar package.xml
+        if: env.DEPLOY_STRATEGY == 'delta'
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.set-artifact-name.outputs.PACKAGE_XML_ARTIFACT }}
