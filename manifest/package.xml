@@ -3,6 +3,8 @@
     <types>
         <members>Contract.DataAssinaturaClienteDocuSign__c</members>
         <members>Contract.DataEnvioAssinatura__c</members>
+		<members>Product2.AgenteFinanceiro__c</members>
+        <members>Product2.Agente_Financeiro__c</members>
 		<members>Contract.PrazoAssinatura__c</members>
         <name>CustomField</name>
     </types>
