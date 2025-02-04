@@ -14,31 +14,43 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0  
+          
       - name: Instalar dependências do sistema e do Salesforce CLI
         run: |
           sudo apt-get update
           sudo apt-get install -y wget curl jq
           npm install @salesforce/cli --global
+
       - name: Autenticar com a org HML
         run: |
           echo "${{ secrets.AUTH_URL_HML }}" > sfdx-auth-url.txt
           sf org login sfdx-url -f sfdx-auth-url.txt --alias hml
+
       - name: Instalar plugin sfdx-git-delta
         run: echo "y" | sf plugins install sfdx-git-delta
+
       - name: Criar diretório de saída para o pacote delta
         run: mkdir -p deploy
+
       - name: Gerar pacote delta no diretório deploy
         run: |
           sf sgd source delta --from origin/hml --to HEAD --output-dir deploy
+
       - name: Listar conteúdo do diretório deploy
         run: ls -R deploy
+
       - name: Exibir conteúdo do package.xml
         run: cat deploy/package/package.xml
-      - name: Validar metadados no pacote delta
+
+      - name: Implantar usando o pacote delta gerado
         run: |
-          sf project deploy validate --manifest deploy/package/package.xml --dry-run --test-level NoTestRun --target-org hml > deploy/deploy_output.log || true
-      - name: Exibir o log de validação
-        run: cat deploy/deploy_output.log
+          sf project deploy start --manifest deploy/package/package.xml --dry-run --test-level NoTestRun --target-org hml > deploy/deploy_output.log || true
+
+      - name: Exibir o Log de Deploy diretamente no console
+        run: |
+          echo "Log de Deploy - Erros e Detalhes"
+          cat deploy/deploy_output.log
+
       - name: Definir nome do artefato com org, data e hora
         id: set-artifact-name
         run: |
@@ -47,11 +59,13 @@ jobs:
           TIMESTAMP=$(date +'%d-%m-%Y--%H-%M-%S')  # Gera o timestamp no fuso horário do Brasil
           echo "PACKAGE_XML_ARTIFACT=${ORG_NAME}_Package_xml_${TIMESTAMP}" >> $GITHUB_OUTPUT
           echo "DEPLOY_LOG_ARTIFACT=${ORG_NAME}_Validade_log_${TIMESTAMP}" >> $GITHUB_OUTPUT
+
       - name: Salvar package.xml
         uses: actions/upload-artifact@v4
         with:
           name: ${{ steps.set-artifact-name.outputs.PACKAGE_XML_ARTIFACT }}
           path: deploy/package/package.xml
+
       - name: Salvar o Log de Deploy
         uses: actions/upload-artifact@v4
         with:
