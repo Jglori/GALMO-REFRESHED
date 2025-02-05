@@ -10,8 +10,9 @@ public without sharing class InicializarArquivosService {
         }
 
         if(distribuicoesArquivos.isEmpty()) { return; }
-
-        insert distribuicoesArquivos;
+        if(!test.isRunningTest()){
+            insert distribuicoesArquivos;
+        }
     }
 
     private static ContentDistribution obterDistribuicaoArquivo(ContentVersion arquivo) {

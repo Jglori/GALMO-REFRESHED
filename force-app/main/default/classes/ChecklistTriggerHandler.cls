@@ -7,4 +7,5 @@ public class ChecklistTriggerHandler extends TriggerHandler {
     public override void afterUpdate() {
         ChecklistHelper.updateOpportunityChecklistStatus(Trigger.new);
     }
+
 }

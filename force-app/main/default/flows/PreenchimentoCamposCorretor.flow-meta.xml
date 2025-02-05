@@ -596,7 +596,7 @@
             <label>CPF existe no sistema</label>
         </rules>
     </decisions>
-    <description>Pós Deploy inserção do ID do Tipo de Registro para Corretor</description>
+    <description>ajustes</description>
     <dynamicChoiceSets>
         <name>HorarioContato</name>
         <dataType>Picklist</dataType>
@@ -699,7 +699,7 @@ NOT( REGEX( {!CelularAdicional.value}, &quot;[0-9]{11}&quot;))</expression>
     <formulas>
         <name>formulaCreci</name>
         <dataType>Boolean</dataType>
-        <expression>LEN({!CRECI}) = 6</expression>
+        <expression>LEN({!CRECI}) &gt;= 5</expression>
     </formulas>
     <formulas>
         <name>FormulaDataCasamentoDataNascimento</name>
@@ -1423,7 +1423,7 @@ ISBLANK({!DataInscricaoCreci})),
                     <inputsOnNextNavToAssocScrn>UseStoredValues</inputsOnNextNavToAssocScrn>
                     <isRequired>false</isRequired>
                     <validationRule>
-                        <errorMessage>&lt;p&gt;&lt;span style=&quot;color: rgb(255, 0, 0);&quot;&gt;O CRECI deve ter somente 6 números.&lt;/span&gt;&lt;/p&gt;</errorMessage>
+                        <errorMessage>&lt;p&gt;&lt;span style=&quot;color: rgb(255, 0, 0);&quot;&gt;O CRECI deve ter somente 5 números.&lt;/span&gt;&lt;/p&gt;</errorMessage>
                         <formulaExpression>{!formulaCreci}</formulaExpression>
                     </validationRule>
                 </fields>
@@ -2678,7 +2678,7 @@ ISBLANK({!DataInscricaoCreci})),
         <isInput>true</isInput>
         <isOutput>true</isOutput>
         <value>
-            <stringValue>012Ha000000PhxsIAC</stringValue>
+            <stringValue>012bL0000003pajQAA</stringValue>
         </value>
     </variables>
     <variables>

@@ -3,6 +3,8 @@ public class ContentDocumentLinkSelectorTest {
 
     @isTest
     static void testObterLinksPorIdsRegistrosRelacionados() {
+
+
         // Criar um ContentVersion de teste
         ContentVersion contentVersion = new ContentVersion(
             Title = 'Arquivo de Teste',
@@ -16,7 +18,7 @@ public class ContentDocumentLinkSelectorTest {
         ContentDocument contentDocument = [
             SELECT Id 
             FROM ContentDocument 
-            WHERE Id = :contentVersion.ContentDocumentId
+            LIMIT 1
         ];
 
         // Criar um registro de teste para vincular com ContentDocument

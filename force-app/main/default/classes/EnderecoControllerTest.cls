@@ -40,6 +40,13 @@ public class EnderecoControllerTest {
         EnderecoDTO endereco = (EnderecoDTO) JSON.deserialize(resultado, EnderecoDTO.class);
 
         Assert.areEqual(enderecoEsperado.logradouro, endereco.logradouro, 'Logradouro obtido via CEP.');
+
+        EnderecoService.EnderecoRequest req =  new EnderecoService.EnderecoRequest();
+        req.cep = '13332121';
+        
+        EnderecoService.buscarEnderecoInvocable(new List<EnderecoService.EnderecoRequest>{req});
+
+
     }
 
     @isTest

@@ -2,7 +2,7 @@
 public class LeadTriggerHandlerTest {
     @TestSetup
     static void makeData(){
-        Empreendimento__c  empreendimento = new Empreendimento__c (Name = 'Teste empreendimento');
+        Empreendimento__c  empreendimento = new Empreendimento__c (Name = 'Teste empreendimento',CNPJEmpreendimento__c = '36658601000133');
         insert empreendimento;
         Lead testLead = new Lead(
             LastName = 'Will',
@@ -17,38 +17,14 @@ public class LeadTriggerHandlerTest {
         insert testLead;
 
 
-        Task task = new Task(
-            Subject = 'Chamada',
-            Status = 'Completed',
-            WhoId = testLead.Id
-        );
+        // Task task = new Task(
+        //     Subject = 'Chamada',
+        //     Status = 'Completed',
+        //     WhoId = testLead.Id
+        // );
 
-        insert task;
+        // insert task;
 
-        Task taskOpen = new Task(
-            Subject = 'Chamada',
-            Status = 'Open',
-            WhoId = testLead.Id
-        );
-
-        
-        insert taskOpen;
-
-        Task taskWhatsapp = new Task(
-            Subject = 'WhatsApp',
-            Status = 'Open',
-            WhoId = testLead.Id
-        );
-
-        insert taskWhatsapp;
-
-        Task taskEmail = new Task(
-            Subject = 'Email',
-            Status = 'Open',
-            WhoId = testLead.Id
-        );
-
-        insert taskEmail;
 
         Lead leadSemTask = new Lead(
             LastName = 'Eduardo Verri',
@@ -78,6 +54,30 @@ public class LeadTriggerHandlerTest {
         Lead testLead = [SELECT Id, Status FROM Lead WHERE Status = 'Novo' LIMIT 1];
         testLead.Status = 'Tentativa de Contato';
         update testLead;
+
+        Task taskOpen = new Task(
+            Subject = 'Chamada',
+            Status = 'Open',
+            WhoId = testLead.Id
+        );
+        insert taskOpen;
+
+        Task taskWhatsapp = new Task(
+            Subject = 'WhatsApp',
+            Status = 'Open',
+            WhoId = testLead.Id
+        );
+
+        insert taskWhatsapp;
+
+        Task taskEmail = new Task(
+            Subject = 'Email',
+            Status = 'Open',
+            WhoId = testLead.Id
+        );
+
+        insert taskEmail;
+
         testLead.Status = 'Agendamento de Visita';
         Test.startTest();
         update testLead;
@@ -91,6 +91,30 @@ public class LeadTriggerHandlerTest {
         Lead testLead = [SELECT Id, Status FROM Lead WHERE Status = 'Novo' LIMIT 1];
         testLead.Status = 'Tentativa de Contato';
         update testLead;
+
+        Task taskOpen = new Task(
+            Subject = 'Chamada',
+            Status = 'Open',
+            WhoId = testLead.Id
+        );
+        insert taskOpen;
+
+        Task taskWhatsapp = new Task(
+            Subject = 'WhatsApp',
+            Status = 'Open',
+            WhoId = testLead.Id
+        );
+
+        insert taskWhatsapp;
+
+        Task taskEmail = new Task(
+            Subject = 'Email',
+            Status = 'Open',
+            WhoId = testLead.Id
+        );
+
+        insert taskEmail;
+
         testLead.Status = 'Agendamento de Visita';
         Test.startTest();
         update testLead;
@@ -103,6 +127,7 @@ public class LeadTriggerHandlerTest {
         testLead.Status = 'Novo';
         update testLead;
         testLead.Status = 'Agendamento de Visita';
+
         Test.startTest();
         update testLead;
         Test.stopTest();
@@ -118,7 +143,7 @@ public class LeadTriggerHandlerTest {
             LeadSource = 'Telefone',
             CanalAtendimento__c = 'Chat',
             MobilePhone = '11837434754',
-            Status = 'Tentativa de Contato'
+            Status = 'Novo'
         );
         insert newLead;
 
@@ -146,10 +171,13 @@ public class LeadTriggerHandlerTest {
             LeadSource = 'Telefone',
             CanalAtendimento__c = 'Chat',
             MobilePhone = '11847543201',
-            Status = 'Tentativa de Contato'
+            Status = 'Novo'
         );
-
+        
         insert testLead;
+
+        testLead.Status = 'Tentativa de Contato';
+        update testLead;
 
         Task task = new Task(
             Subject = 'Chamada',
@@ -167,11 +195,11 @@ public class LeadTriggerHandlerTest {
     public static void beforeUpdateTest() {
         Lead lead = [SELECT Id, Status FROM Lead LIMIT 1];
 
-        Task task = new Task(
-            Subject = 'Email',
-            WhoId = lead.Id
-        );
-        insert task;
+        // Task task = new Task(
+        //     Subject = 'Email',
+        //     WhoId = lead.Id
+        // );
+        // insert task;
         
         Test.startTest();
         lead.Status = 'Prospecção';

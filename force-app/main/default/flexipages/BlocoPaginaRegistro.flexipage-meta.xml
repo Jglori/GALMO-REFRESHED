@@ -31,17 +31,13 @@
         <type>Region</type>
     </flexiPageRegions>
     <flexiPageRegions>
-        <name>subheader</name>
-        <type>Region</type>
-    </flexiPageRegions>
-    <flexiPageRegions>
         <itemInstances>
             <componentInstance>
                 <componentName>force:detailPanel</componentName>
                 <identifier>force_detailPanel</identifier>
             </componentInstance>
         </itemInstances>
-        <name>sidebar</name>
+        <name>leftcol</name>
         <type>Region</type>
     </flexiPageRegions>
     <flexiPageRegions>
@@ -71,13 +67,13 @@
                 <identifier>force_relatedListSingleContainer</identifier>
             </componentInstance>
         </itemInstances>
-        <name>main</name>
+        <name>rightcol</name>
         <type>Region</type>
     </flexiPageRegions>
     <masterLabel>Bloco Página de registro</masterLabel>
     <sobjectType>Bloco__c</sobjectType>
     <template>
-        <name>flexipage:recordHomeWithSubheaderLeftSidebarTemplateDesktop</name>
+        <name>flexipage:recordHomeTwoColEqualHeaderTemplateDesktop</name>
         <properties>
             <name>enablePageActionConfig</name>
             <value>true</value>

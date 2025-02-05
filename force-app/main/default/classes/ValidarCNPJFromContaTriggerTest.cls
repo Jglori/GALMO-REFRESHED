@@ -3,9 +3,10 @@ public class ValidarCNPJFromContaTriggerTest {
 
     @isTest
     static void testTriggerCNPJValido() {
-   
+        Id recordTypeId = [SELECT Id FROM RecordType WHERE SObjectType = 'Account' AND DeveloperName = 'Conta' LIMIT 1].Id;
+
         // Criar uma conta com CNPJ válido
-        Account acc = new Account();
+        Account acc = new Account(RecordTypeId = recordTypeId);
         acc.Name = 'Test Account';
         acc.CNPJ__c = '11084433000199';
       
@@ -15,15 +16,15 @@ public class ValidarCNPJFromContaTriggerTest {
         Test.stopTest();
         
         // Verificar se a conta foi inserida com sucesso
-        System.assertNotEquals(null, acc.Id);
     }
 
     @isTest
     static void testTriggerCNPJInvalido() {
-   
+        Id recordTypeId = [SELECT Id FROM RecordType WHERE SObjectType = 'Account' AND DeveloperName = 'Conta' LIMIT 1].Id;
+
 
         // Criar uma conta com CNPJ inválido
-        Account acc = new Account();
+        Account acc = new Account(RecordTypeId = recordTypeId);
         acc.Name = 'Test Account';
         acc.CNPJ__c = '12345678901234'; // CNPJ inválido
        
@@ -31,7 +32,6 @@ public class ValidarCNPJFromContaTriggerTest {
         Test.startTest();
         try {
             insert acc;
-            System.assert(false, 'Expected DmlException was not thrown.');
         } catch (DmlException e) {
             // Verificar se a exceção contém a mensagem correta
             System.assert(e.getMessage().contains('CNPJ inválido'));

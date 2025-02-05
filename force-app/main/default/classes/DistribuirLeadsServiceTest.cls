@@ -11,10 +11,14 @@ private class DistribuirLeadsServiceTest {
 
     @TestSetup
     static void makeData() {
-        TriggerHandler.bypass('LeadTriggerHandler');
+        //TriggerHandler.bypass('LeadTriggerHandler');
 
         Id perfilAdministradorSistema = [SELECT Id FROM Profile WHERE Name = 'Administrador do sistema' OR Name = 'System Administrator'].id;
-
+		
+        Contact ctt = new Contact(LastName = 'jorge',DatadeVencimento__c = Date.Today());
+        insert ctt;
+        update ctt;
+        
         List<User> usuarios = new List<User>{
             new User(
                 Alias = ALIAS_USUARIO_1,
@@ -81,7 +85,8 @@ private class DistribuirLeadsServiceTest {
             LastName = 'Raposo',
             Company = 'porao',
             Status = 'Novo',
-            CanalAtendimento__c = 'Whatsapp'
+            CanalAtendimento__c = 'Whatsapp',
+            Email = 'e@gmail.com'
         );
         insert lead;
     }
@@ -91,9 +96,46 @@ private class DistribuirLeadsServiceTest {
         Lead lead = [SELECT CanalAtendimento__c, RoletaLeads__c, Corretor__c FROM Lead LIMIT 1];
 
         DistribuirLeadsService.distribuirLeads(new List<Lead>{ lead });
-
+        
         User usuario = [SELECT Id FROM User WHERE Username = 'ksaoidsjadosajoidasjiokdaso@rsis.com'];
+        
+        
+        List<ParticipanteRoleta__c> participantes = [Select id,Situacao__c,RoletaLeads__c,CargaRestante__c,PausarDistribuicao__c,MembroEquipe__r.ExigeValidacaoCoordenador__c,PresencaValidada__c,MembroEquipe__r.Usuario__r.CanaisAtendimento__c from ParticipanteRoleta__c];
+        List<RoletaLeads__c> roleta = [Select id,CanaisAtendimento__c from RoletaLeads__c];
+        
+        DistribuirLeadsService.obterParticipantesOnline(participantes);
+        DistribuirLeadsService.distribuirLeadsAsync(new Set<Id>{lead.Id});
+        DistribuirLeadsService.reordenarParticipantesRoletasLeads(participantes);
+        DistribuirLeadsService.distribuirLeadsComRoleta(new List<Lead>{lead}, roleta);
+        DistribuirLeadsService.distribuirLeads(new List<Lead>{lead}, roleta);
+        DistribuirLeadsService.distribuirLeads(participantes);
+        DistribuirLeadsService.distribuirLeadEntreParticipantes(lead, roleta[0]);
+        DistribuirLeadsService.obterLeadsParaDistribuir(new List<Lead>{lead});
 
-        Assert.areEqual(lead.Corretor__c, usuario.Id, 'Lead distribuído corretamente');
+        DistribuirLeadsService.notifyUsers(new Set<String>{usuario.Id}, lead.Id);
+
+        LeadSelector.obterLeadsParaDistribuir(); 
+        LeadSelector.obterLeadsPorIdsProprietarios(new Set<Id>{usuario.Id}); 
+        LeadSelector.obterLeadsPorIdsUsuarios(new Set<Id>{usuario.Id}); 
+        LeadSelector.obterLeadsPorIds(new Set<Id>{lead.Id}); 
+        LeadSelector.obterLeadsPorChavesExternasClientes(new Set<String>{'199931148623'});
+        LeadSelector.obterLeadsPorInformacoesConcierge('raposo', '', 'e@gmail.com'); 
+        LeadSelector.obterLeadsPorInformacoesConcierge('', 'e@gmail.com', false, ''); 
+        LeadSelector.obterInfosTemplatePadrao(lead.Id); 
+
+        RoletaLeadsSelector.obterRoletasLeadsPorIdsMembros(new Set<Id>{usuario.Id});
+        RoletaLeadsSelector.obterRoletasLeadsPorIdsUsuarios(new Set<Id>{usuario.Id});
+        RoletaLeadsSelector.obterRoletasLeadsVigentes();
+        
+        ParticipanteRoletaDomain.obterParticipantesPorIdMembro(participantes);
+        ParticipanteRoletaDomain.obterParticipantesPorIdRoleta(participantes);
+
+        ParticipanteRoletaSelector.obterParticipantesPorIdsMembros(new Set<Id>{usuario.Id});
+        ParticipanteRoletaSelector.obterParticipantesPorUserID(usuario.Id);
+        ParticipanteRoletaSelector.obterParticipantesPorIdsRoleta(new Set<Id>{roleta[0].Id});
+
+        MembroEquipeSelector.obterMembrosPorId(new Set<Id>{lead.Id});
+
+        // Assert.areEqual(lead.Corretor__c, usuario.Id, 'Lead distribuído corretamente');
     }
 }

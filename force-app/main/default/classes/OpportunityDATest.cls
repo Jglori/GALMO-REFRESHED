@@ -12,8 +12,17 @@ private class OpportunityDATest {
         insert testOpportunity;
 
         Product2 testProduct = new Product2(
-            Name='Test Product',
-            IsActive=true
+            Name = 'produtoTeste', 
+            NumeroDaUnidade__c = 35, 
+            AgenteFinanceiro__c = 'FII', 
+            Enquadramento__c = 'HIS', 
+            Status__c = 'Disponivel', 
+            Andar__c = 10, 
+            ValorM2__c = 700.00, 
+            Coeficiente__c = 0,
+            NumeroQuartos__c = 2, 
+            NumeroDeSuites__c = 1, 
+            NumeroDeVagasIncorporadas__c = 1
         );
         insert testProduct;
 
@@ -57,9 +66,6 @@ private class OpportunityDATest {
 
         Map<Id,Opportunity> results = OpportunityDA.getOpportunitiesWithQuote(oppIds);
 
-      
-        
-
         Test.stopTest();
     }
 
@@ -95,7 +101,8 @@ private class OpportunityDATest {
         Test.stopTest();
         System.assertEquals(1, roles.size(), 'Deve retornar exatamente um OpportunityContactRole');
     }
-     @isTest
+
+    @isTest
     static void testHasSyncedQuote() {
         Test.startTest();
         
@@ -135,6 +142,152 @@ private class OpportunityDATest {
         System.assertEquals(false, hasNoQuote, 'Não deveria ter uma Cotação sincronizada');
 
         Test.stopTest();
+    }
+
+
+    @isTest
+    static void testGetAllById () {
+        Opportunity testOpportunity2 = new Opportunity(
+            Name='Teste',
+            StageName='Negociação',
+            CloseDate=System.today().addMonths(1)
+        );
+        insert testOpportunity2;
+
+        Set<Id> idOpp = new Set<Id>();
+
+        idOpp.add(testOpportunity2.Id);
+
+        List<Opportunity> opp = OpportunityDA.getAllById(idOpp);
+
+        Opportunity opp2 = OpportunityDA.getById(testOpportunity2.id);
+
+        Test.startTest();
+
+            System.assertEquals(1, opp.size(), 'Deve retornar exatamente uma Oportunidade');
+
+        Test.stopTest();
+
+    }
+
+    @isTest
+    static void testTetProductsById() {
+        Opportunity testOpportunity2 = new Opportunity(
+            Name='Teste',
+            StageName='Negociação',
+            CloseDate=System.today().addMonths(1)
+        );
+        insert testOpportunity2;
+
+        List<OpportunityLineItem> items = OpportunityDA.getProductsById(testOpportunity2.Id);
+
+        Test.startTest();
+
+        System.assertEquals(0, items.size());
+
+        Test.stopTest();
+    }
+
+    @isTest
+    static void testGetAnaliseCreditoCountByOpportunity() {
+        Opportunity testOpportunity2 = new Opportunity(
+            Name='Teste',
+            StageName='Negociação',
+            CloseDate=System.today().addMonths(1)
+        );
+        insert testOpportunity2;
+
+        Set<Id> opportunityIds = new Set<Id>{testOpportunity2.Id};
+
+        Map<Id, Integer> mapAnalisesRelacionadas = OpportunityDA.getAnaliseCreditoCountByOpportunity(opportunityIds);
+
+        Test.startTest();
+
+        System.assertEquals(0, mapAnalisesRelacionadas.size());
+
+        Test.stopTest();
+    }
+
+    @isTest
+    static void testGetAllByAnaliseCreditoId(){
+        Opportunity testOpportunity2 = new Opportunity(
+            Name='Teste',
+            StageName='Negociação',
+            CloseDate=System.today().addMonths(1)
+        );
+        insert testOpportunity2;
+
+        Set<Id> idsAnalise = new Set<Id>{testOpportunity2.Id};
+
+        List<Opportunity> opp = OpportunityDA.getAllByAnaliseCreditoId(idsAnalise);
+
+        Test.startTest();
+
+        System.assertEquals(0, opp.size());
+
+        Test.stopTest();
+    }
+
+
+    @isTest
+    static void testGetByAnaliseCreditoId(){
+        Opportunity testOpportunity2 = new Opportunity(
+            Name='Teste',
+            StageName='Negociação',
+            CloseDate=System.today().addMonths(1)
+        );
+        insert testOpportunity2;
+
+        List<Opportunity> opp = OpportunityDA.getByAnaliseCreditoId(testOpportunity2.Id);
+
+        Test.startTest();
+
+        System.assertEquals(0, opp.size());
+
+        Test.stopTest();
+    }
+
+
+    @isTest
+    static void testGetOpportunityContactRolesPercent() {
+        Opportunity testOpportunity2 = new Opportunity(
+            Name='Teste',
+            StageName='Negociação',
+            CloseDate=System.today().addMonths(1)
+        );
+        insert testOpportunity2;
+
+        List<OpportunityContactRole> roles = OpportunityDA.getOpportunityContactRolesPercent(testOpportunity2.Id);
+
+        Test.startTest();
+
+        System.assertEquals(0, roles.size());
+
+        Test.stopTest();
+    }
+
+    @IsTest
+    static void testGetOpportunitiesWithChecklistAproval() {
+
+        Opportunity testOpportunity2 = new Opportunity(
+            Name='Teste',
+            StageName='Negociação',
+            CloseDate=System.today().addMonths(1)
+        );
+        insert testOpportunity2;
+
+        Opportunity opp = [
+            SELECT Id
+            FROM Opportunity
+            WHERE Name = 'Teste'
+            LIMIT 1
+        ];
+
+        Test.startTest();
+        Boolean result = OpportunityDA.getOpportunityWithChecklistApproval(opp.Id);
+        Test.stopTest();
+
+        System.assertEquals(false, result);
     }
 
 }

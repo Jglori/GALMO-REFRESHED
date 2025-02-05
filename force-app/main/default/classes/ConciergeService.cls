@@ -30,13 +30,13 @@ public without sharing class ConciergeService {
     }
     
 
-    public static String obterRoletasLeadsVigentes() {
-        List<RoletaLeadsDTO> roletasLeadsDTO = new List<RoletaLeadsDTO>();
-        for(RoletaLeads__c roletaLeads : RoletaLeadsSelector.obterRoletasLeadsVigentes()) {
+   public static String obterRoletasLeadsVigentes() {
+      List<RoletaLeadsDTO> roletasLeadsDTO = new List<RoletaLeadsDTO>();
+       for(RoletaLeads__c roletaLeads : RoletaLeadsSelector.obterRoletasLeadsVigentes()) {
             roletasLeadsDTO.add(new RoletaLeadsDTO(roletaLeads));
-        }
-        return JSON.serialize(roletasLeadsDTO);
-    }
+   }
+        return JSON.serialize(roletasLeadsDTO); 
+   }
 
     public static void atualizarLead(List<Map<String, Object>> formulario) {
         
@@ -101,8 +101,7 @@ public without sharing class ConciergeService {
         // Verifica se os campos obrigatórios para o tipo de pessoa estão preenchidos
         Boolean camposObrigatoriosPreenchidos = true;
     
-        if (String.isBlank(nome) || String.isBlank(email) || String.isBlank(origem) || String.isBlank(canal)) {
-            camposObrigatoriosPreenchidos = false;
+        if (String.isBlank(nome) || String.isBlank(email) || String.isBlank(origem) || String.isBlank(canal)) {camposObrigatoriosPreenchidos = false;
             System.debug('Campos obrigatórios gerais estão faltando.');
         }
     
@@ -179,10 +178,6 @@ public without sharing class ConciergeService {
             System.debug('Corretor associado: ' + corretor);
         }
     
-        if (!String.isBlank(idRoletaLeads)) {
-            lead.RoletaLeads__c = idRoletaLeads;
-            System.debug('Roleta Leads associada: ' + idRoletaLeads);
-        }
         try {
             insert lead;
             System.debug('Lead criado com sucesso: ' + lead.Id);
@@ -195,7 +190,7 @@ public without sharing class ConciergeService {
     
     
     
-    
+    @TestVisible
     private static void criarTarefaReiteracaoSeNecessario(Lead novoLead) {
         Lead leadExistente = [SELECT Id, LastName, MobilePhone, Email, LeadSource, EmpreendimentoInteresse__r.Name, QuantidadeDeReiteracoes__c
                               FROM Lead
@@ -236,6 +231,8 @@ public without sharing class ConciergeService {
         }
     }
 
+    
+       @TestVisible
     private static Map<String, String> separarNomes(String nome) {
         return nome.contains(' ') 
             ? new Map<String, String>{
@@ -257,9 +254,7 @@ public without sharing class ConciergeService {
         System.debug('Parâmetros recebidos: ' + params);
     
         // Verifica se os parâmetros estão corretos
-        if (params == null || !params.containsKey('lead')) {
-            throw new AuraHandledException('Dados inválidos.');
-        }
+        if (params == null || !params.containsKey('lead')) { throw new AuraHandledException('Dados inválidos.');}
     
         // Extrai os dados do lead
         Map<String, Object> leadData = (Map<String, Object>) params.get('lead');
@@ -269,29 +264,23 @@ public without sharing class ConciergeService {
         
         // Verificação e processamento dos dados do lead
         String leadId = (String) leadData.get('id');
-        if (String.isEmpty(leadId)) {
-            throw new AuraHandledException('ID do lead não pode estar vazio.');
+        if (String.isEmpty(leadId)) {throw new AuraHandledException('ID do lead não pode estar vazio.');
         }
     
         Lead lead;
         try {
             lead = [SELECT Id, LastName, MobilePhone, Email, EmpreendimentoInteresse__c, LeadSource, QuantidadeDeReiteracoes__c
                     FROM Lead WHERE Id = :leadId LIMIT 1];
-        } catch (QueryException e) {
-            throw new AuraHandledException('Lead não encontrado com o ID fornecido.');
-        }
+        } catch (QueryException e) {throw new AuraHandledException('Lead não encontrado com o ID fornecido.');}
     
-        if (lead == null) {
-            throw new AuraHandledException('Lead não encontrado.');
-        }
+        if (lead == null) {throw new AuraHandledException('Lead não encontrado.');}
     
         DateTime tomorrow = System.now().addDays(1);
     
         // Obtém o empreendimento de interesse ou define como 'Não informado'
         String empreendimentoInteresse = (String) leadData.get('empreendimentoInteresse');
-        if (String.isEmpty(empreendimentoInteresse)) {
-            empreendimentoInteresse = 'Não informado';
-        }
+        if (String.isEmpty(empreendimentoInteresse)) {empreendimentoInteresse = 'Não informado';
+ }
     
         // Monta a descrição da tarefa de reiteração
         String descricao = 'Reiteração do Lead. Nome: ' + (lead.LastName != null ? lead.LastName : 'Não informado')
@@ -325,8 +314,7 @@ public without sharing class ConciergeService {
     
             // Insere a tarefa de reiteração
             insert tarefaReiteracao;
-        } catch (DmlException e) {
-            throw new AuraHandledException('Erro ao criar a tarefa: ' + e.getMessage());
+        } catch (DmlException e) {throw new AuraHandledException('Erro ao criar a tarefa: ' + e.getMessage());
         }
     }
     
@@ -341,9 +329,7 @@ public without sharing class ConciergeService {
  
  
          // Verifica se o 'lead' está presente e é um mapa
-         if (params == null || !params.containsKey('lead') || !(params.get('lead') instanceof Map<String, Object>)) {
-             throw new AuraHandledException('Dados do lead inválidos.');
-         }
+         if (params == null || !params.containsKey('lead') || !(params.get('lead') instanceof Map<String, Object>)) { throw new AuraHandledException('Dados do lead inválidos.');}
  
          // Extrai o mapa de dados do lead
          Map<String, Object> leadData = (Map<String, Object>) params.get('lead');
@@ -353,20 +339,17 @@ public without sharing class ConciergeService {
          String nomeCorretor = leadData.containsKey('nomeCorretor') ? (String) leadData.get('nomeCorretor') : null;
  
          // Verificação e processamento dos dados do lead
-         if (String.isEmpty(leadId)) {
-             throw new AuraHandledException('ID do lead não pode estar vazio.');
+         if (String.isEmpty(leadId)) {throw new AuraHandledException('ID do lead não pode estar vazio.');
          }
  
          Lead lead;
          try {
              lead = [SELECT Id, LastName, MobilePhone, Email, EmpreendimentoInteresse__c, LeadSource, QuantidadeDeReiteracoes__c
                      FROM Lead WHERE Id = :leadId LIMIT 1];
-         } catch (QueryException e) {
-             throw new AuraHandledException('Lead não encontrado com o ID fornecido.');
+         } catch (QueryException e) {throw new AuraHandledException('Lead não encontrado com o ID fornecido.');
          }
  
-         if (lead == null) {
-             throw new AuraHandledException('Lead não encontrado.');
+         if (lead == null) {throw new AuraHandledException('Lead não encontrado.');
          }
  
          DateTime tomorrow = System.now().addDays(1);
@@ -407,10 +390,7 @@ public without sharing class ConciergeService {
         
             // Insere a tarefa de reiteração
             insert tarefaReiteracao;
-        } catch (DmlException e) {
-            // Lança uma exceção tratada com a mensagem de erro
-            throw new AuraHandledException('Erro ao criar a tarefa: ' + e.getMessage());
-        }
+        } catch (DmlException e) {throw new AuraHandledException('Erro ao criar a tarefa: ' + e.getMessage()); }
     }
     
     

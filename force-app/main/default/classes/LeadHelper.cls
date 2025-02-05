@@ -45,7 +45,7 @@ public with sharing class LeadHelper {
             }
         }
     }
-    
+   
     private static Map<Id, List<Task>> getContactTasksMap(Set<Id> leadsId, Boolean isCompleted){
         List<Task> tasks = TaskDA.getContactTasksByWhoId(leadsId, isCompleted);
         Map<Id, List<Task>> taskMap = new Map<Id, List<Task>>();
@@ -86,7 +86,7 @@ public with sharing class LeadHelper {
             }
         }
     }
-    
+   
     public static void validateTaskCreation(List<Task> newTasks) {
         Set<Id> leadIds = new Set<Id>();
         for (Task task : newTasks) {
@@ -101,56 +101,56 @@ public with sharing class LeadHelper {
                     Lead lead = leads.get(task.WhoId);
                     if (isTaskCreationNotAllowedForTentativaContato(lead.Status, task.Subject)) {
 
-                        if(task.Subject == 'Reiteração'){
+                        if(task.Subject == 'Reiteração' || task.Subject.contains('Email')){
                             continue;
                         }
-                        task.addError('Só é permitido criar uma tarefa  quando o lead está nas fases Tentativa de Contato ou Contato Realizado.');
+                      //  task.addError('Só é permitido criar uma tarefa  quando o lead está nas fases Tentativa de Contato ou Contato Realizado.');
                     }
                 }
             }
         }
     }
-    
+   
     private static Boolean isTaskCreationNotAllowedForTentativaContato(String leadStatus, String taskSubject) {
         Set<String> disallowedStatuses = new Set<String>{'Descartado', 'Lead Perdido(não trabalho)', 'Novo', 'Nutrindo','Agendamento de Visita','Qualificação'};
 
         if (disallowedStatuses.contains(leadStatus)) {
-            return true; 
+            return true;
         }
 
         Set<String> allowedTaskTypes = new Set<String>{'Chamada', 'Email', 'Whatsapp','Enviar cotação','Visita','Outros'};
         return !allowedTaskTypes.contains(taskSubject);
     }
 
-    
+   
 
 
 
     public static void updateLeadStatusOnTaskCompletion(List<SObject> newTasks, Map<Id, SObject> oldTasks) {
         Set<Id> leadIdsToUpdate = new Set<Id>();
-    
+   
         List<Task> newTaskList = (List<Task>)newTasks;
         Map<Id, Task> oldTaskMap = (Map<Id, Task>)oldTasks;
-    
+   
         for (Task newTask : newTaskList) {
             Task oldTask = oldTaskMap.get(newTask.Id);
-    
-          
+   
+         
             if (newTask.Status == 'Completed' && oldTask.Status != 'Completed' &&
             (newTask.Subject == 'Email' || newTask.Subject == 'Whatsapp' || newTask.Subject == 'Chamada')){
                 leadIdsToUpdate.add(newTask.WhoId);
             }
         }
-    
+   
         if (!leadIdsToUpdate.isEmpty()) {
             List<Lead> leadsToUpdate = LeadDA.getLeadsByIds(leadIdsToUpdate);
-    
+   
             for (Lead lead : leadsToUpdate) {
                 if (lead.Status == 'Tentativa de contato') {
                     lead.Status = 'Contato Realizado';
                 }
             }
-    
+   
             update leadsToUpdate;
         }
     }
@@ -167,7 +167,7 @@ public with sharing class LeadHelper {
     }
 
 
-    
+   
 
     public static Boolean isEventCreatedForVisits(Id leadId) {
         List<Event> events = EventDA.getAllEventByLead(new Set<Id>{leadId});    
@@ -175,7 +175,7 @@ public with sharing class LeadHelper {
     }
 
     // setPrimeiraIteracao
-    
+   
     public static void setPrimeiraIteracao(List<Lead> newLeads, Map<Id, Lead> oldLeads) {
         for (Lead lead : newLeads) {
             if (lead.PrimeiraInteracao__c == null) {
@@ -191,7 +191,7 @@ public with sharing class LeadHelper {
             }
         }
     }
-    
+   
     // public static void checkAndUpdateLeadsWithTasks(List<Lead> newLeads, Map<Id, Lead> oldLeadMap) {
     //     List<Id> leadsWithTasks = new List<Id>();
     //     Map<Id, List<Task>> mapTaskByWho = getMapTaskByWho(new Map<Id, Lead>(newLeads).keySet());
@@ -238,12 +238,12 @@ public with sharing class LeadHelper {
     }
 
     public static void verificarCampanhas(Id leadId){
-      
+     
        System.debug('Id do lead ' + leadId);
        CampaignMember campanha = TaskDA.buscarUltimaCampanha(leadId);
        System.debug('Camapanha ' + campanha);
     }
-    
+   
 
     private static void updateLeadFields(Lead lead, Map<String, Object> params) {
         if (lead.QuantidadeDeReiteracoes__c == null) {
@@ -296,11 +296,11 @@ public with sharing class LeadHelper {
                 Subject = 'Reiteração',
                 Status = 'Open',
                 ActivityDate = System.today().addDays(1),
-                Description = 'Reiteração do Lead. Nome: ' + lead.LastName 
-                    + ', Telefone: ' + lead.MobilePhone 
-                    + ', Email: ' + lead.Email 
-                    + ', Empreendimento de Interesse: ' + nomeEmpreendimento 
-                    + ', Origem do Lead: ' + lead.LeadSource 
+                Description = 'Reiteração do Lead. Nome: ' + lead.LastName
+                    + ', Telefone: ' + lead.MobilePhone
+                    + ', Email: ' + lead.Email
+                    + ', Empreendimento de Interesse: ' + nomeEmpreendimento
+                    + ', Origem do Lead: ' + lead.LeadSource
                     + ', Data e horário da interação: ' + lead.ltima_Reitera_o__c
             );
 
@@ -309,7 +309,7 @@ public with sharing class LeadHelper {
             quantidadeDeReiteracoes += 1;
         }
     }
-  
+ 
 
     public static void setLeadSource(List<Lead> newLeads) {
         for (Lead newLead : newLeads) {
@@ -357,9 +357,9 @@ public with sharing class LeadHelper {
     //         }
     //     }
     // }
-        
-    
-    
+       
+   
+   
     public static void SetQuantidadeDeReiteracoes(List<Lead> leads){
         for(Lead lead : leads){
             if(lead.QuantidadeDeReiteracoes__c == null){
@@ -427,7 +427,7 @@ public with sharing class LeadHelper {
                     } else if(ld.CorretorContato__c <> null && !ld.CorretorContato__c.equals(oldLead.CorretorContato__c)){
                         setUsersToNotify.put(ld.OwnerId, ld.Id);
                     }
-                } 
+                }
             }
             else {
                 if(ld.Corretor__c <> null){

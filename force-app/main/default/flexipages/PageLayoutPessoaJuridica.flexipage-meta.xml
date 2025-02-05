@@ -59,12 +59,36 @@
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
-        <name>Facet-75afb0a3-c5db-4ace-acbe-4016d9ff443b</name>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>showLegacyActivityComposer</name>
+                    <value>false</value>
+                </componentInstanceProperties>
+                <componentName>runtime_sales_activities:activityPanel</componentName>
+                <identifier>runtime_sales_activities_activityPanel</identifier>
+            </componentInstance>
+        </itemInstances>
+        <name>Facet-9a23c245-cf4e-4ab0-bbd9-9c1664a8fdd4</name>
         <type>Facet</type>
     </flexiPageRegions>
     <flexiPageRegions>
         <itemInstances>
             <componentInstance>
+                <componentName>forceChatter:recordFeedContainer</componentName>
+                <identifier>forceChatter_recordFeedContainer</identifier>
+            </componentInstance>
+        </itemInstances>
+        <name>Facet-obc6k97sz59</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>active</name>
+                    <value>true</value>
+                </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>body</name>
                     <value>Facet-f6c49eaa-3114-47ef-9dc7-231407838eb9</value>
@@ -80,19 +104,29 @@
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
-                    <name>active</name>
-                    <value>true</value>
-                </componentInstanceProperties>
-                <componentInstanceProperties>
                     <name>body</name>
-                    <value>Facet-75afb0a3-c5db-4ace-acbe-4016d9ff443b</value>
+                    <value>Facet-9a23c245-cf4e-4ab0-bbd9-9c1664a8fdd4</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>title</name>
-                    <value>Standard.Tab.relatedLists</value>
+                    <value>Standard.Tab.activity</value>
                 </componentInstanceProperties>
                 <componentName>flexipage:tab</componentName>
                 <identifier>flexipage_tab</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-obc6k97sz59</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>title</name>
+                    <value>Standard.Tab.collaborate</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:tab</componentName>
+                <identifier>flexipage_tab5</identifier>
             </componentInstance>
         </itemInstances>
         <name>Facet-8c26a365-f9d2-4ce2-b327-d3467c597510</name>
@@ -116,6 +150,38 @@
         <itemInstances>
             <componentInstance>
                 <componentInstanceProperties>
+                    <name>displayOption</name>
+                    <value>BOTH</value>
+                </componentInstanceProperties>
+                <componentName>runtime_sales_merge:mergeCandidatesPreviewCard</componentName>
+                <identifier>runtime_sales_merge_mergeCandidatesPreviewCard</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>relatedListComponentOverride</name>
+                    <value>NONE</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>rowsToDisplay</name>
+                    <value>10</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>showActionBar</name>
+                    <value>true</value>
+                </componentInstanceProperties>
+                <componentName>force:relatedListContainer</componentName>
+                <identifier>force_relatedListContainer</identifier>
+            </componentInstance>
+        </itemInstances>
+        <name>Facet-7380d507-0494-451b-99bf-c2b5dfbe6400</name>
+        <type>Facet</type>
+    </flexiPageRegions>
+    <flexiPageRegions>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
                     <name>apresentarBotaoSalvar</name>
                     <value>true</value>
                 </componentInstanceProperties>
@@ -125,34 +191,34 @@
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>campoBairro</name>
-                    <value>Bairro__c</value>
+                    <value>BairroComercial__c</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>campoCEP</name>
-                    <value>CEP__c</value>
+                    <value>CEP_Comercial__c</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>campoCidade</name>
-                    <value>Cidade__c</value>
+                    <value>CidadeComercial__c</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>campoComplemento</name>
-                    <value>Complemento__c</value>
+                    <value>ComplementoComercial__c</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>campoLogradouro</name>
-                    <value>Logradouro__c</value>
+                    <value>LogradouroComercial__c</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>campoNumero</name>
-                    <value>Numero__c</value>
+                    <value>NumeroComercial__c</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>campoPais</name>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>campoUF</name>
-                    <value>UF__c</value>
+                    <value>UFComercial__c</value>
                 </componentInstanceProperties>
                 <componentName>endereco</componentName>
                 <identifier>c_endereco</identifier>
@@ -167,6 +233,24 @@
                 <componentInstanceProperties>
                     <name>active</name>
                     <value>true</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>body</name>
+                    <value>Facet-7380d507-0494-451b-99bf-c2b5dfbe6400</value>
+                </componentInstanceProperties>
+                <componentInstanceProperties>
+                    <name>title</name>
+                    <value>Standard.Tab.relatedLists</value>
+                </componentInstanceProperties>
+                <componentName>flexipage:tab</componentName>
+                <identifier>flexipage_tab4</identifier>
+            </componentInstance>
+        </itemInstances>
+        <itemInstances>
+            <componentInstance>
+                <componentInstanceProperties>
+                    <name>active</name>
+                    <value>false</value>
                 </componentInstanceProperties>
                 <componentInstanceProperties>
                     <name>body</name>

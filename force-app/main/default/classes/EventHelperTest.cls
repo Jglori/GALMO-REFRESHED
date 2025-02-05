@@ -7,6 +7,7 @@ public class EventHelperTest {
     private static void doCreateData(){
         Empreendimento__c empreendimento = new Empreendimento__c();
         empreendimento.Name = 'Empreendimento de Teste';
+        empreendimento.CNPJEmpreendimento__c = '36658601000133';
         insert empreendimento;
     
         List<Lead> leads = new List<Lead>{
@@ -17,7 +18,7 @@ public class EventHelperTest {
                 LeadSource = 'Telefone',
                 CanalAtendimento__c = 'Chat',
                 MobilePhone = '11960387699',
-                Status = 'Agendamento de Visita',
+                Status = 'Novo',
                 EmpreendimentoInteresse__c = empreendimento.Id 
             ),
             new Lead(
@@ -27,7 +28,7 @@ public class EventHelperTest {
                 LeadSource = 'Telefone',
                 CanalAtendimento__c = 'Chat',
                 MobilePhone = '11960387699',
-                Status = 'Agendamento de Visita',
+                Status = 'Novo',
                 EmpreendimentoInteresse__c = empreendimento.Id 
             )
         };
@@ -75,14 +76,14 @@ public class EventHelperTest {
                 ActivityDateTime = Datetime.now(),
                 WhoId = leads.get(1).Id,
                 Status_do_Compromisso__c = 'Não Realizada',
-                Motivo_da_visita_n_o_realizada__c = 'Status',
+                Motivo_da_visita_n_o_realizada__c = 'Fora da cidade',
                 Location = 'teste'
             )
         };
 
         
         insert events;
-        List<Event> ev = [SELECT WhoId, Type, DurationInMinutes, Status_do_Compromisso__c, ActivityDate, Motivo_da_visita_n_o_realizada__c, EndDateTime FROM Event];
+        List<Event> ev = [SELECT Subject,WhoId, Type, DurationInMinutes, Status_do_Compromisso__c, ActivityDate, Motivo_da_visita_n_o_realizada__c, EndDateTime FROM Event];
 
         System.debug('lista ev: ' + ev);
         Test.startTest();
@@ -95,11 +96,6 @@ public class EventHelperTest {
         Test.stopTest();
 
         System.assert(!ev.get(0).hasErrors());
-
-        
-      	
-        Test.stopTest();
-
 
     }
     

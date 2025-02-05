@@ -33,6 +33,7 @@ public without sharing class DistribuirLeadsService {
      * - Não exigência de validação ou presença validada pelo coordenador
      * - Canal de atendimento configurado
      */
+    @TestVisible
     private static List<ParticipanteRoleta__c> obterParticipantesOnline(List<ParticipanteRoleta__c> participantes) {
         List<ParticipanteRoleta__c> participantesOnline = new List<ParticipanteRoleta__c>();
         for(ParticipanteRoleta__c participante : participantes) {
@@ -74,6 +75,7 @@ public without sharing class DistribuirLeadsService {
      * Método responsável pela distribuição de leads de forma assíncrona quando
      * ainda não estiver sendo executado em contexto assíncrono.
      */
+    @TestVisible
     @Future
     private static void distribuirLeadsAsync(Set<Id> idsLeads) {
         List<Lead> leads = LeadSelector.obterLeadsPorIds(idsLeads);
@@ -128,6 +130,7 @@ public without sharing class DistribuirLeadsService {
      * 
      * Obs.: Apenas leads com roleta atribuída são distribuídos.
      */
+    @TestVisible
     private static List<Lead> distribuirLeadsComRoleta(List<Lead> leads, List<RoletaLeads__c> roletasLeads) {
         Map<Id, RoletaLeads__c> roletasLeadsPorId = new Map<Id, RoletaLeads__c>(roletasLeads);
         Map<Id, List<ParticipanteRoleta__c>> participantesPorIdRoleta = new Map<Id, List<ParticipanteRoleta__c>>();
@@ -162,6 +165,7 @@ public without sharing class DistribuirLeadsService {
      * 
      * Obs.: Apenas leads sem corretor e roleta atribuídos são distribuídos.
      */
+    @TestVisible
     private static List<Lead> distribuirLeads(List<Lead> leads, List<RoletaLeads__c> roletasLeads) {
         Map<String, List<RoletaLeads__c>> roletasLeadsPorCanalAtendimento = RoletaLeadsDomain.obterRoletasLeadsPorCanalAtendimento(roletasLeads);
         Map<Id, List<ParticipanteRoleta__c>> participantesPorIdRoleta = new Map<Id, List<ParticipanteRoleta__c>>();
@@ -220,6 +224,7 @@ public without sharing class DistribuirLeadsService {
      * Método responsável pela distribuição do lead entre participantes da roleta
      * de leads, verificando capacidade de atendimento caso canal não seja bypass.
      */
+    @TestVisible
     private static Map<Id, List<ParticipanteRoleta__c>> distribuirLeadEntreParticipantes(Lead lead, RoletaLeads__c roletaLeads) {
         Map<Id, List<ParticipanteRoleta__c>> participantesPorIdRoleta = new Map<Id, List<ParticipanteRoleta__c>>();
         for(Integer i = 0; i < roletaLeads.ParticipantesRoleta__r.size(); i++) {
@@ -270,6 +275,7 @@ public without sharing class DistribuirLeadsService {
      * Método responsável pela obtenção de leads pendentes de distribuição, ou seja,
      * sem corretor atribuído.
      */
+    @testVisible
     private static List<Lead> obterLeadsParaDistribuir(List<Lead> leads) {
         List<Lead> leadsParaDistribuir = new List<Lead>();
         for(Lead lead : leads) {

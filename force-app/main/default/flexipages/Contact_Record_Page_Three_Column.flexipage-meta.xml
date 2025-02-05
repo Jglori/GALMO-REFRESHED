@@ -311,7 +311,7 @@
                     <name>uiBehavior</name>
                     <value>none</value>
                 </fieldInstanceProperties>
-                <fieldItem>Record.MidiaDeOrigem__c</fieldItem>
+                <fieldItem>Record.MidiaOrigem__c</fieldItem>
                 <identifier>RecordMidiaDeOrigem__cField</identifier>
             </fieldInstance>
         </itemInstances>

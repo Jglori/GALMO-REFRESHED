@@ -26,7 +26,9 @@ public class TaskHelperTest {
             LastName = 'Teste',
             Description = 'Teste',
             Status = 'Novo',
-            ConfiguracaoDeSLA__c = configs.get(0).Id
+            Email = 'l@gm.com',
+            ConfiguracaoDeSLA__c = configs.get(0).Id,
+            CanalAtendimento__c = 'Whatsapp'
             
         );
         insert lead;

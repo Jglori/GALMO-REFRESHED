@@ -7,6 +7,9 @@ public class ValidarCPFFromTriggerTest {
         lead.FirstName = 'Test';
         lead.LastName = 'Lead';
         lead.CPF__c = '12345678909'; // CPF válido
+        lead.CanalAtendimento__c = 'Whatsapp';
+        lead.Email = 'g@d.com';
+
         insert Lead;
         System.assertNotEquals(null, lead.Id);
     }
@@ -15,8 +18,10 @@ public class ValidarCPFFromTriggerTest {
     static void testTriggerCPFInvalido() {
         Lead lead = new Lead();
         lead.FirstName = 'Test';
+        lead.email = 'Lead@g.com';
         lead.LastName = 'Lead';
         lead.CPF__c = '12345678901'; // CPF inválido
+        lead.CanalAtendimento__c = 'Whatsapp';
         Test.startTest();
         try {
             insert lead;

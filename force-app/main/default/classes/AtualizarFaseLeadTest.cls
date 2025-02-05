@@ -6,6 +6,8 @@ public class AtualizarFaseLeadTest {
         // Criar um Empreendimento para associar ao Lead
         Empreendimento__c empreendimento = new Empreendimento__c(Name = 'Teste Empreendimento', CNPJEmpreendimento__c = '07135796000139');
         insert empreendimento;
+
+        update empreendimento;
         
         // Criar um Lead com Status 'Novo'
         Lead lead = new Lead(
@@ -26,8 +28,8 @@ public class AtualizarFaseLeadTest {
 
         // Criar uma Tarefa concluída para o Lead
         Task completedTask = new Task(
-            Subject = 'WhatsApp',
-            Status = 'Open',
+            Subject = 'Whatsapp',
+            Status = 'Completed',
             WhoId = lead.Id
         );
         insert completedTask;
@@ -44,7 +46,7 @@ public class AtualizarFaseLeadTest {
         Event evento = new Event(
             WhoId = lead.Id,
             Subject = 'Visita',
-            Status_do_Compromisso__c = 'Pendente',
+            Status_do_Compromisso__c = 'Agendado',
             StartDateTime = DateTime.now(),
             EndDateTime = DateTime.now().addHours(1)
         );
@@ -58,7 +60,7 @@ public class AtualizarFaseLeadTest {
 
         // Atualizar o Evento sem mudar o Status_do_Compromisso__c para disparar o trigger
         Event evento = [SELECT Id, Status_do_Compromisso__c FROM Event WHERE WhoId = :lead.Id LIMIT 1];
-        evento.Status_do_Compromisso__c = 'Pendente';
+        evento.Status_do_Compromisso__c = 'Agendado';
         
         Test.startTest();
         update evento;

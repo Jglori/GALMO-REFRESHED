@@ -9,6 +9,7 @@ private class ObjectHelperTest {
     private static void doMakeData(){
         Empreendimento__c empreendimento = new Empreendimento__c();
         empreendimento.Name = 'Empreendimento de Teste';
+        empreendimento.CNPJEmpreendimento__c = '22416340000130';
         insert empreendimento;
 
         
@@ -16,7 +17,9 @@ private class ObjectHelperTest {
         insert new Lead(
                 LastName = 'Zika',
                 Company = 'Chave',
-                Status = 'New',
+                Status = 'Novo',
+                Email = 't@g.com',
+                CanalAtendimento__c = 'Loja',
                 EmpreendimentoInteresse__c = empreendimento.Id
             );
     }

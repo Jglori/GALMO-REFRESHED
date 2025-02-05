@@ -128,4 +128,15 @@ public without sharing class LeadSelector {
     
         return Database.query(query);
     }
+    
+      public static Lead obterInfosTemplatePadrao(String idLead){
+        return [
+            SELECT 
+                MobilePhone,
+                FirstName,
+                Owner.Name,
+                EmpreendimentoInteresse__c
+            FROM Lead WHERE Id = :idLead
+            ];
+    }
 }

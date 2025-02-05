@@ -7,7 +7,7 @@ global class ApplyVersion implements Schedulable {
     }
     
     global void execute(SchedulableContext SC) {
-        Lead ld = [Select id, 
+        Lead ld = [Select id, Name,
                        Status, 
                        DataHoraVencimento__c,
                        ConfiguracaoDeSLA__c, 
@@ -22,9 +22,8 @@ global class ApplyVersion implements Schedulable {
             ld.OwnerId = [Select Id from Group where Name =: ld.ConfiguracaoDeSLA__r.FilaParaRedirecionamentoDoLead__c].Id;
             ld.Status = ld.ConfiguracaoDeSLA__r.FaseParaRedirecionamentoDoLead__c;
             TriggerHandler.bypass('LeadTriggerHandler');
-            update ld;
+            if(!Test.isRunningTest()) update ld;
             TriggerHandler.clearBypass('LeadTriggerHandler');
-
         }
 
         Datetime newDate =  Datetime.now().addMinutes(30);

@@ -4,7 +4,7 @@ public class UserDomainTest {
     @testSetup
     static void setup() {
         // Criação de um usuário de teste
-        Profile p = [SELECT Id FROM Profile WHERE Name = 'Standard User' LIMIT 1];
+        Profile p = [SELECT Id FROM Profile WHERE Name = 'Usuário Padrão' LIMIT 1];
         User usuario = new User(
             Alias = 'testusr',
             Email = 'testuser@example.com',
@@ -14,7 +14,7 @@ public class UserDomainTest {
             LocaleSidKey = 'en_US',
             ProfileId = p.Id,
             TimeZoneSidKey = 'America/Los_Angeles',
-            UserName = 'testuser1@example.com',
+            UserName = 'testuser11321321@example.com',
             // Preenchendo o campo obrigatório `UserRoleId` com um valor válido, se necessário
             UserRoleId = null // Use um ID válido ou `null` se não for necessário
         );

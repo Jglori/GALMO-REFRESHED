@@ -4,7 +4,7 @@ private class TaskDATest {
     @isTest
     static void testGetContactTasksByWhoId() {
         // Criar um registro de Empreendimento__c para associar ao Lead
-        Empreendimento__c empreendimento = new Empreendimento__c(Name = 'Teste empreendimento');
+        Empreendimento__c empreendimento = new Empreendimento__c(Name = 'Teste empreendimento', CNPJEmpreendimento__c = '75844939000131');
         insert empreendimento;
         
         // Criar um Lead de teste associado ao Empreendimento
@@ -36,7 +36,7 @@ private class TaskDATest {
     @isTest
     static void testGetOpenContactTasksByWhoId() {
         // Criar um registro de Empreendimento__c para associar ao Lead
-        Empreendimento__c empreendimento = new Empreendimento__c(Name = 'Teste empreendimento');
+        Empreendimento__c empreendimento = new Empreendimento__c(Name = 'Teste empreendimento',CNPJEmpreendimento__c = '75844939000131');
         insert empreendimento;
         
         // Criar um Lead de teste associado ao Empreendimento
@@ -62,6 +62,12 @@ private class TaskDATest {
         
         // Chamar o método a ser testado
         List<Task> result = TaskDA.getContactTasksByWhoId(new Set<Id>{testLead.Id}, 'Open');
+
+        TaskDA.getLeadByLeadId(testLead.Id);
+        TaskDA.buscarUltimasCampanhasLeadId(testLead.Id);
+        TaskDA.buscarUltimaCampanha(testLead.Id);
+        TaskDA.leadParticipaDeCampanha(testLead.Id);
+        
         
         
     }
