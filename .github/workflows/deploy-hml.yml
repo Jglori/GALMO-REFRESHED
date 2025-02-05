@@ -1,9 +1,9 @@
-name: Deploy das alterações para HML
+name: Deploy das alterações para GalmoBox
 on:
   pull_request:
     types: [closed]
     branches:
-      - hml
+      - GalmoBox
     paths:
       - 'force-app/**'
 jobs:
@@ -22,7 +22,7 @@ jobs:
           sudo apt-get install -y wget curl jq
           npm install @salesforce/cli --global
 
-      - name: Autenticar com a org HML
+      - name: Autenticar com a org GalmoBox
         run: |
           echo "${{ secrets.AUTH_URL_HML }}" > sfdx-auth-url.txt
           sf org login sfdx-url -f sfdx-auth-url.txt --alias hml
@@ -40,7 +40,7 @@ jobs:
       - name: Definir nome do artefato com org, data e hora
         id: set-artifact-name
         run: |
-          ORG_NAME="HML"
+          ORG_NAME="GalmoBox"
           export TZ="America/Sao_Paulo"
           TIMESTAMP=$(date +'%d-%m-%Y--%H-%M-%S')
           echo "PACKAGE_XML_ARTIFACT=${ORG_NAME}_Package_xml_${TIMESTAMP}" >> $GITHUB_OUTPUT
