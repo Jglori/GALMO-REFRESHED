@@ -269,6 +269,7 @@ public static void handleOpportunityCancelation(List<Opportunity> newOpps, Map<I
     for (Opportunity opp : newOpps) {
         Opportunity oldOpp = oldOpps.get(opp.Id);
 
+        // Verifica se a oportunidade foi movida para a fase de "Cancelado"
         if (opp.StageName == 'Cancelado' && (oldOpp == null || oldOpp.StageName != 'Cancelado')) {
             if (String.isBlank(opp.MotivoCancelamento__c)) {
                 opp.addError('O campo Motivo de Cancelamento é obrigatório.');
@@ -284,10 +285,10 @@ public static void handleOpportunityCancelation(List<Opportunity> newOpps, Map<I
     if (!opportunitiesToNotify.isEmpty()) {
         List<Opportunity> oppsWithDetails = [
             SELECT Id, Name, MotivoCancelamento__c, Produto__c, Produto__r.Name,
-            Contato__r.Name, Contato__r.Email, Contato__r.OwnerId,
-            Contato__r.UsuarioCorretor__r.Name, Contato__r.UsuarioCorretor__r.Email
-     FROM Opportunity
-     WHERE Id IN :oppIds
+                   Contato__r.Name, Contato__r.Email, Contato__r.OwnerId,
+                   Contato__r.UsuarioCorretor__r.Name, Contato__r.UsuarioCorretor__r.Email
+             FROM Opportunity
+            WHERE Id IN :oppIds
         ];
 
         Map<Id, Opportunity> oppDetailsMap = new Map<Id, Opportunity>(oppsWithDetails);
@@ -302,6 +303,16 @@ public static void handleOpportunityCancelation(List<Opportunity> newOpps, Map<I
         }
 
         sendCancelNotification(opportunitiesToNotify);
+    }
+
+    // Impede mudanças de estágio para "Cancelado"
+    for (Opportunity opp : newOpps) {
+        Opportunity oldOpp = oldOpps.get(opp.Id);
+        
+        // Se a oportunidade já está em "Cancelado", impede a mudança para outra fase
+        if (oldOpp != null && oldOpp.StageName == 'Cancelado' && opp.StageName != 'Cancelado') {
+            opp.StageName.addError('A oportunidade está cancelada e não pode ser movida para outra fase.');
+        }
     }
 }
 
