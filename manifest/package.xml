@@ -1,36 +1,47 @@
-<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
+    <fullName>SimuladorVendasYou</fullName>
     <types>
-        <members>*</members>
-        <name>ApexClass</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>ApexComponent</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>ApexPage</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>ApexTestSuite</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>ApexTrigger</name>
-    </types>
-    <types>
-        <members>*</members>
-        <name>AuraDefinitionBundle</name>
-    </types>
-    <types>
-        <members>*</members>
+        <members>analiseCreditoDocumentosList</members>
+        <members>checklistDocumentos</members>
+		<members>documentChecklist</members>
+		<members>equipeVendasOpp</members>
+		<members>gerarContrato</members>
+        <members>geradorVariaveis</members>
+        <members>picklistPesquisavel</members>
+		<members>modal</members>
+        <members>customMultiPickList</members>
+        <members>espelhoDeVendas</members>
+        <members>espelhoDeVendasApartmentCards</members>
+        <members>espelhoDeVendasFiltros</members>
+        <members>espelhoDeVendasFundo</members>
+        <members>espelhoDeVendasHeader</members>
+        <members>espelhoDeVendasPipeline</members>
+        <members>espelhoVendasFiltrosExtras</members>
+        <members>lwcTooltip</members>
+        <members>seriePagamento</members>
+		<members>seriePagamentoPropostaCliente</members>
+		<members>seriePagamentoSerieMesAMes</members>
+        <members>simuladorDataTable</members>
+        <members>simuladorDeVendas</members>
+        <members>simuladorTelaExtrato</members>
+        <members>simuladorTelaExtratoAnaliseProposta</members>
+        <members>simuladorTelaExtratoPropostaCliente</members>
+        <members>simuladorTelaNegociacao</members>
+        <members>simuladorTelaNegociacaoInfoComplementares</members>
+        <members>simuladorTelaNegociacaoModalDesconto</members>
+        <members>simuladorTelaNegociacaoPropostaCliente</members>
+        <members>simuladorTelaNegociacaoTabelaVendas</members>
+        <members>unidadeCard</members>
+        <members>unidadeInfoDisplay</members>
+        <members>utils</members>
         <name>LightningComponentBundle</name>
     </types>
-    <types>
-        <members>*</members>
-        <name>StaticResource</name>
+       <types>
+        <members>ObjectHelper</members>
+        <members>ObjectHelperTest</members>
+        <members>ObjectController</members>
+        <members>ObjectControllerTest</members>
+        <name>ApexClass</name>
     </types>
-    <version>61.0</version>
+      <version>62.0</version>
 </Package>
