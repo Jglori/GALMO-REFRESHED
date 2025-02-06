@@ -25,13 +25,6 @@ export default class SimuladorTelaExtratoPropostaCliente extends LightningElemen
 
     propostaColunas = propostaColunas;
 
-    connectedCallback(){
-        console.log('Aqui nessa porra');
-        
-        console.log(JSON.stringify(this.condicoesPropostaCliente));
-        console.log(JSON.stringify(this.valoresMatrizProposta));
-    }
-
     get nominalProposta(){
         return this.valoresMatrizProposta.nominalProposta ? this.formatCurrency(this.valoresMatrizProposta.nominalProposta) : this.formatCurrency(0) 
     }
