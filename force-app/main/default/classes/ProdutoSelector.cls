@@ -61,4 +61,10 @@ public class ProdutoSelector {
         System.debug(unidadesMap);
         return unidadesMap;
     }
+
+    public static List<Product2> obterUnidadesPorSetId(Set<Id> id){
+        return[
+            SELECT Id, Name, Status__c, Enquadramento__c, DataDeReserva__c FROM Product2 WHERE Id = :id
+        ];
+    } 
 }

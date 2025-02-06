@@ -597,4 +597,193 @@ private static void notifyReporteesRecursively(User currentUser, Opportunity opp
         }
     } 
  }
+
+    public static void sendEmailNotificationForMissingDocs(List<Opportunity> opps) {
+        Map<Id, List<Documento__mdt>> missingDocs = ChecklistHelper.verifyMissingDocs(opps);
+
+        if (missingDocs == null || missingDocs.isEmpty()) {
+            System.debug('Não foi possível verificar os documentos');
+            return;
+        }
+
+        Set<Id> contactRolesIds = missingDocs.keySet();
+        Contact[] contacts = [SELECT Name FROM Contact WHERE Id IN :contactRolesIds];
+
+        EmailTemplate emailTemplate = [
+            SELECT Id, Body, Subject FROM EmailTemplate
+            WHERE DeveloperName = 'AprovacaoChecklistDocumentos' LIMIT 1
+        ];
+
+        String missingDocsContent = '';
+        for (Contact contact : contacts) {
+            List<Documento__mdt> docs = missingDocs.get(contact.Id);
+            missingDocsContent += contact.Name + ':\n\n';
+            for (Documento__mdt doc :docs) {
+                missingDocsContent += '- ' + doc.Nome_do_Documento__c + '\n';
+            }
+            missingDocsContent += '\n';
+        }
+
+
+        String emailBody = emailTemplate.Body.replace('{DOCUMENTOS_FALTANTES}', missingDocsContent);
+
+        for (Opportunity opp : opps) {
+
+            List<Opportunity> ownerList = [SELECT OwnerId FROM Opportunity WHERE Id = :opp.Id LIMIT 1];
+            if (ownerList.isEmpty()) {
+                System.debug('Oportunidade não encontrada: ' + opp.Id);
+                continue;
+            }
+            Opportunity owner = ownerList[0];
+
+            List<User> userOwnerList = [SELECT Id, Email, Reportase__c FROM User WHERE Id = :owner.OwnerId LIMIT 1];
+            if (userOwnerList.isEmpty()) {
+                System.debug('Usuário dono da oportunidade não encontrado: ' + owner.OwnerId);
+                continue;
+            }
+            User userOwner = userOwnerList[0];
+
+            List<User> userReportaseList = [SELECT Email FROM User WHERE Id = :userOwner.Reportase__c LIMIT 1];
+            if (userReportaseList.isEmpty()) {
+                System.debug('Usuário reportase não encontrado: ' + userOwner.Reportase__c);
+                continue;
+            }
+            User userReportase = userReportaseList[0];
+
+            if (userReportase.Email != null) {
+                Messaging.SingleEmailMessage mail = new Messaging.SingleEmailMessage();
+                mail.setToAddresses(new String[] { userReportase.Email });
+                mail.setSubject(emailTemplate.Subject);
+                mail.setPlainTextBody(emailBody);
+
+                Messaging.sendEmail(new List<Messaging.SingleEmailMessage>{ mail });
+                System.debug('E-mail enviado para: ' + userReportase.Email);
+            } else {
+                System.debug('E-mail do reportase não encontrado para o usuário: ' + userReportase.Id);
+            }
+        }
+        
+
+        System.debug('Send email Missing docs');
+    }
+
+    public static void handlePreAnalise(List<Opportunity> newOpps, Map<Id, Opportunity> oldOpps) {
+
+        Set<Id> produtosId = new Set<Id>();
+        Set<Id> opportunityIds = new Set<Id>();
+    
+        for (Opportunity newOpp : newOpps) {
+            Opportunity oldOpp = oldOpps.get(newOpp.Id);
+
+            system.debug('nova oportunidade: ' + newOpp);
+            system.debug('veia oportunidade: ' + oldOpp);
+    
+            if (oldOpp != null && oldOpp.StageName != 'Pré-análise' && newOpp.StageName == 'Pré-análise') {
+                if (newOpp.Produto__c != null) {
+                    produtosId.add(newOpp.Produto__c);
+                }
+                opportunityIds.add(newOpp.Id);
+            }
+        }
+    
+        List<Product2> oppsUnitys = ProdutoSelector.obterUnidadesPorSetId(produtosId);
+        
+        
+        system.debug('id das oportunidades:'  + opportunityIds);
+        system.debug('id das unidades das oportunidades'  + produtosId);
+        system.debug('unidades das oportunidades:'  + oppsUnitys);
+
+        List<Checklist_de_Documentos__c> oppDocs = ChecklistDA.getWithDocumentsByOpportunity(opportunityIds);
+        system.debug('checklist de documentos das oportunidades: ' + oppDocs);
+
+
+        Map<Id, Product2> produtoMap = new Map<Id, Product2>();
+        for (Product2 produto : oppsUnitys) {
+            produtoMap.put(produto.Id, produto);
+        }
+    
+        Map<Id, List<Checklist_de_Documentos__c>> checklistMap = new Map<Id, List<Checklist_de_Documentos__c>>();
+       
+        
+
+        for (Checklist_de_Documentos__c doc : oppDocs) {
+            if (!checklistMap.containsKey(doc.Oportunidade__c)) {
+                checklistMap.put(doc.Oportunidade__c, new List<Checklist_de_Documentos__c>());
+            }
+            checklistMap.get(doc.Oportunidade__c).add(doc);
+        }
+    
+        List<Product2> updatedProducts = new List<Product2>();
+        List<FeedItem> postsChatter = new List<FeedItem>();
+
+        for (Opportunity newOpp : newOpps) {
+            Opportunity oldOpp = oldOpps.get(newOpp.Id);
+    
+            Product2 product = produtoMap.get(newOpp.Produto__c);
+    
+            system.debug('unidade da oportunidade: ' + product);
+            if (product != null) {
+                if (product.Status__c == 'Reservada') {
+                    Date dataDeReserva = (product != null && product.DataDeReserva__c != null) ? product.DataDeReserva__c : null;
+
+                    String mensagemChatter; 
+
+                    if(dataDeReserva == null){
+                        mensagemChatter = 
+                        'A unidade da oportunidade esta reservada. Por favor, analise a situação.';
+                    } else {
+                        mensagemChatter = 
+                        'A unidade permanece reservada até: ' + dataDeReserva.format() + 
+                        '. Por favor, avalie a situação.';
+                    } 
+
+                    
+                    FeedItem post = new FeedItem();
+                    post.ParentId = newOpp.Id;
+                    post.Body = mensagemChatter;
+
+                    postsChatter.add(post);
+                
+                } else {
+                    product.Status__c = 'Reservada';
+                    updatedProducts.add(product);
+                }
+            }
+    
+            if (product != null && product.Enquadramento__c == 'HIS') {
+                List<Checklist_de_Documentos__c> docs = checklistMap.get(newOpp.Id);
+                
+                system.debug('documentos da oportunidade: ' + docs);
+
+                if (docs != null && !docs.isEmpty()) {
+                    for (Checklist_de_Documentos__c doc : docs) {
+                        system.debug('documento da oportunidade obrigatorio: ' + doc.Documenta_o__r.Obrigatorio__c);
+                        system.debug('documento da oportunidade entregue: ' + doc.Documenta_o__r.Entregue__c);
+
+                        if (doc.Documenta_o__r.Obrigatorio__c && !doc.Documenta_o__r.Entregue__c) {
+                                newOpp.addError('Para prosseguir para a fase de Pré-Análise, é necessário preencher todos os documentos obrigatórios.');
+                        }
+                    }
+                }
+            }
+        }
+ 
+        if (!postsChatter.isEmpty()) {
+            try{
+                insert postsChatter;    
+            } catch (DmlException e) {
+                System.debug('Erro ao inserir mensagem no chatter: ' + e.getMessage());
+            }
+        }
+
+        
+        if (!updatedProducts.isEmpty()) {
+            try {
+                update updatedProducts;
+            } catch (DmlException e) {
+                System.debug('Erro ao atualizar as unidades: ' + e.getMessage());
+                
+            }
+        }
+    }
 }

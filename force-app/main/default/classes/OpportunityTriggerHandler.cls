@@ -12,6 +12,9 @@ public with sharing class OpportunityTriggerHandler extends TriggerHandler {
         // OpportunityHelper.handleOpportunityUpdate((List<Opportunity>) Trigger.new, (Map<Id, Opportunity>) Trigger.oldMap);
         // OpportunityHelper.handleOpportunityUpdate((List<Opportunity>) Trigger.new);
         OpportunityHelper.handleStageFichaCadastralChangeFarolColor((List<Opportunity>)Trigger.new, (Map<Id, Opportunity>)Trigger.oldMap);
+        OpportunityHelper.handleStageGeracaoContrato((List<Opportunity>) Trigger.new, (Map<Id, Opportunity>) Trigger.oldMap);
+        OpportunityHelper.handlePreAnalise((List<Opportunity>) Trigger.new, (Map<Id, Opportunity>) Trigger.oldMap);
+
     }
 
 /*       public override void afterInsert() {
@@ -20,6 +23,7 @@ public with sharing class OpportunityTriggerHandler extends TriggerHandler {
 
     public override void afterUpdate() {
         OpportunityHelper.handleOpportunityUpdate((List<Opportunity>) Trigger.new);
+        OpportunityHelper.sendEmailNotificationForMissingDocs((List<Opportunity>) Trigger.new);
     }
 
 }
