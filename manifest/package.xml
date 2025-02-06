@@ -23,7 +23,6 @@
         <members>simuladorDataTable</members>
         <members>simuladorDeVendas</members>
         <members>simuladorTelaExtrato</members>
-        <members>simuladorTelaExtratoAnaliseProposta</members>
         <members>simuladorTelaExtratoPropostaCliente</members>
         <members>simuladorTelaNegociacao</members>
         <members>simuladorTelaNegociacaoInfoComplementares</members>
