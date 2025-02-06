@@ -1,45 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
-    <fullName>SimuladorVendasYou</fullName>
     <types>
-        <members>analiseCreditoDocumentosList</members>
-        <members>checklistDocumentos</members>
-		<members>documentChecklist</members>
-		<members>equipeVendasOpp</members>
-        <members>geradorVariaveis</members>
-        <members>picklistPesquisavel</members>
-		<members>modal</members>
-        <members>customMultiPickList</members>
-        <members>espelhoDeVendas</members>
-        <members>espelhoDeVendasApartmentCards</members>
-        <members>espelhoDeVendasFiltros</members>
-        <members>espelhoDeVendasFundo</members>
-        <members>espelhoDeVendasHeader</members>
-        <members>espelhoDeVendasPipeline</members>
-        <members>espelhoVendasFiltrosExtras</members>
-        <members>lwcTooltip</members>
-        <members>seriePagamento</members>
-		<members>seriePagamentoPropostaCliente</members>
-		<members>seriePagamentoSerieMesAMes</members>
-        <members>simuladorDataTable</members>
-        <members>simuladorDeVendas</members>
-        <members>simuladorTelaExtrato</members>
-        <members>simuladorTelaExtratoPropostaCliente</members>
-        <members>simuladorTelaNegociacao</members>
-        <members>simuladorTelaNegociacaoInfoComplementares</members>
-        <members>simuladorTelaNegociacaoModalDesconto</members>
-        <members>simuladorTelaNegociacaoPropostaCliente</members>
-        <members>simuladorTelaNegociacaoTabelaVendas</members>
-        <members>unidadeCard</members>
-        <members>unidadeInfoDisplay</members>
-        <members>utils</members>
-        <name>LightningComponentBundle</name>
-    </types>
-       <types>
-        <members>ObjectHelper</members>
-        <members>ObjectHelperTest</members>
-        <members>ObjectController</members>
-        <members>ObjectControllerTest</members>
+        <members>AccountContactRelationHelper</members>
+        <members>AccountContactRelationHelperTest</members>
+        <members>AccountContactRelationTriggerHandler</members>
         <name>ApexClass</name>
     </types>
-      <version>62.0</version>
+    <types>
+        <members>ValidateConjugeCompanheiroTrigger</members>
+        <name>ApexTrigger</name>
+    </types>
+    <types>
+        <members>OpportunityContactRole.Numero_negativo</members>
+        <name>ValidationRule</name>
+    </types>
+    <version>63.0</version>
 </Package>
