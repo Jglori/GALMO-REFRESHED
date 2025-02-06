@@ -5,7 +5,6 @@
         <members>checklistDocumentos</members>
 		<members>documentChecklist</members>
 		<members>equipeVendasOpp</members>
-		<members>gerarContrato</members>
         <members>geradorVariaveis</members>
         <members>picklistPesquisavel</members>
 		<members>modal</members>
