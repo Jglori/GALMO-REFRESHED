@@ -52,7 +52,10 @@ jobs:
         run: cat deploy/package/package.xml
       - name: Implantar usando o pacote delta gerado
         run: |
-          sf project deploy start --manifest deploy/package/package.xml --test-level NoTestRun --target-org prd > deploy/deploy_output.log || true
+         sf project deploy start --manifest deploy/package/package.xml --dry-run --test-level RunSpecifiedTests --tests AccountControllerTest,AccountDATest,AccountHelperTest,ChecklistDATest,ChecklistHelperTest,ChecklistControllerTest,ChecklistTrigggerHandlerTest,ContractSelectorTest,ContractControllerTest,ContratoServiceTest,ContractDATest,ContractHelperTest,ContractTriggerHandlerTest,DocumentacaoDATest,DocumentControllerTest,DocumentacaoHelperTest,QuoteDATest,QuoteHelper,QuoteHelperTest,QueryHelperTest,QuoteLineItemHelper,QuoteLineItemHelperTest,QuoteLineItemTriggerHandler,QuoteLineItemTriggerHandlerTest,QuoteSyncHelper,QuoteSyncHelperTest,SalesTeamControllerTest,QuoteSyncTriggerHandler,QuoteSyncTriggerHandlerTest,QuoteTriggerHandler,QuoteTriggerHandlerTest,AccountContactRelationHelperTest,AnaliseCreditoHelperTest,AnaliseCreditoTriggerHandlerTest,TriggerHandler_Test,EmailManagerTest,ObjectHelperTest,ObjectControllerTest,OpportunityHelperTest,OpportunityTriggerHandlerTest,GerarContratoControllerTest,OpportunityDATest,IntegrationD4SignTest,AnaliseCreditoDATest,TemplateDocumentoHelperTest,UtilTest,TemplateDocumentoTriggerHandlerTest,TemplateDocumentoDATest,TemplateDocumentoControllerTest,TemplateDocumentoDATest,EmpreendimentoSelectorTest,ComparativoControllerTest,ComparativoServiceTest,EspelhoVendasControllerTest,comissaoControllerTest,CotacaoControllerTest,EspelhoVendasServiceTest,ExtratoTabelaServiceTest,ProdutoSelectorTest,SeriePagamentoSelectorTest,SeriePagamentosServiceTest,SimuladorVendasControllerTest,SeriePagamentosTriggerHandlerTest,SimuladorTelaNegociacaoControllerTest,TabelaVendaHandlerTest,TabelaVendaSelectorTest,TabelaVendasServiceTest,TestDataFactoryTest,TestDataFactorySimuladorTest,UnidadeTabelaSelectorTest,UnidadeTabelaServiceTest,ParametrizarCriterioServiceTest,ParametrizarCriterioControllerTest --target-org prd > deploy/deploy_output.log || true
+
+
+      - name: Salvar package.xml
 
       - name: Salvar package.xml
         uses: actions/upload-artifact@v4
