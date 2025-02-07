@@ -219,5 +219,17 @@ public with sharing class QuoteHelper {
             System.debug('Nenhum tipo de notificação personalizada encontrado.');
         }
     }
+
+    public static void 
+ 
     
+    public class CotacaoAnalisePropostaDTO {
+        public TabelaVendas__c tabelaVenda { get; set; }
+        public 
+
+    }
+
+    public class CotacaoPropostaDTO {
+        public 
+    }
 }

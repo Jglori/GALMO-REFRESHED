@@ -14,4 +14,13 @@ public with sharing class ParametrizarCriteriosController {
     public static List<Decimal> testarConjuntoCriterios(Decimal valorTabela, Decimal valorProposta){
         return ParametrizarCriteriosService.testarConjuntoCriterios(valorTabela, valorProposta);
     }
+
+    @AuraEnabled
+    public static ConjuntoCriteriosAnalise__c getConjuntoCriteriosAnaliseById(Id id){
+        try {
+            return ParametrizarCriteriosService.getConjuntoCriteriosAnaliseById(id);
+        } catch (Exception e) {
+            throw new AuraHandledException(e.getMessage());
+        }
+    }
 }
