@@ -3,12 +3,12 @@ public class TemplateDocumentoHelperTest {
 
     @TestSetup
     static void setupData() {
-        Account acc = new Account(Name = 'Conta Teste', CNPJ__c = '11084433000199');
+        Account acc = new Account(Name = 'Conta Teste', CNPJ__c = '04470781000139');
         insert acc;
 
         Empreendimento__c emp = new Empreendimento__c();
         emp.Name = 'Empreendimento de Teste';
-        emp.CNPJEmpreendimento__c = '11084433000199';
+        emp.CNPJEmpreendimento__c = '04470781000139';
         insert emp;
 
         TemplateDocumento__c activeTemplate = new TemplateDocumento__c(
@@ -80,7 +80,7 @@ public class TemplateDocumentoHelperTest {
     @IsTest
     static void testGetByOpportunityId_Exception_NoTemplatesFound() {
         // Criando uma Oportunidade válida mas que não tem templates associados
-        Empreendimento__c newEmp = new Empreendimento__c(Name = 'Empreendimento Sem Template');
+        Empreendimento__c newEmp = new Empreendimento__c(Name = 'Empreendimento Sem Template',CNPJEmpreendimento__c ='04470781000139');
         insert newEmp;
 
         Opportunity newOpp = new Opportunity(
