@@ -66,32 +66,43 @@ public with sharing class ObjectHelper {
         return objectFields;
     }
 
-    public static SubsequencialObjectMetada getSubReferenceFields(String objectName, String fieldName, String relationship){
-        List<Schema.SObjectType> objects = Schema.getGlobalDescribe().get(objectName).getDescribe().fields.getMap().get(fieldName).getDescribe().getReferenceTo();
-        String objectSelected = objects[0].toString();
-
-        List<Schema.SObjectType> objectSubReference = Schema.getGlobalDescribe().get(objectSelected).getDescribe().fields.getMap().get(relationship).getDescribe().getReferenceTo();
-        String objectSubSelected = objectSubReference[0].toString();
-        Map<String, Schema.SObjectField> fieldsMap = Schema.getGlobalDescribe().get(objectSubSelected).getDescribe().fields.getMap();
-        
-        SubsequencialObjectMetada subObject = new SubsequencialObjectMetada();
-        subObject.objectMetadata = objectSelected;
-        subObject.subObjectMetadata = objectSubSelected;
-
-        List<FieldMetadata> objectFields = new List<FieldMetadata>(); 
-        for(String key : fieldsMap.keyset()){
-            Schema.DescribeFieldResult fieldDesc = fieldsMap.get(key).getDescribe();
-
-            objectFields.add(new FieldMetadata(
-                fieldDesc.getLabel(),
-                fieldDesc.getName(),
-                fieldDesc.getType().toString()
-            ));
-        }
-        subObject.values = objectFields;
-        
-        return subObject;
+    public static SubsequencialObjectMetada getSubReferenceFields(String objectName, String fieldName, String relationship) {
+    List<Schema.SObjectType> objects = Schema.getGlobalDescribe().get(objectName).getDescribe().fields.getMap().get(fieldName).getDescribe().getReferenceTo();
+    
+    if (objects.isEmpty()) {
+        // Verifica se não encontrou referências
+        return null;
     }
+
+    String objectSelected = objects[0].toString();
+    List<Schema.SObjectType> objectSubReference = Schema.getGlobalDescribe().get(objectSelected).getDescribe().fields.getMap().get(relationship).getDescribe().getReferenceTo();
+    
+    if (objectSubReference.isEmpty()) {
+        // Verifica se não encontrou a sub-referência
+        return null;
+    }
+
+    String objectSubSelected = objectSubReference[0].toString();
+    Map<String, Schema.SObjectField> fieldsMap = Schema.getGlobalDescribe().get(objectSubSelected).getDescribe().fields.getMap();
+
+    SubsequencialObjectMetada subObject = new SubsequencialObjectMetada();
+    subObject.objectMetadata = objectSelected;
+    subObject.subObjectMetadata = objectSubSelected;
+
+    List<FieldMetadata> objectFields = new List<FieldMetadata>();
+    for (String key : fieldsMap.keySet()) {
+        Schema.DescribeFieldResult fieldDesc = fieldsMap.get(key).getDescribe();
+        objectFields.add(new FieldMetadata(
+            fieldDesc.getLabel(),
+            fieldDesc.getName(),
+            fieldDesc.getType().toString()
+        ));
+    }
+    subObject.values = objectFields;
+
+    return subObject;
+}
+
 
     public class ObjectMetadata {
         @AuraEnabled public String Label { get; set; }
