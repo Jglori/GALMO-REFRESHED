@@ -63,14 +63,14 @@ public class ComparativoService {
            if (
                 tabelaVenda != null && 
                 nominalTabela != null && 
-                unidadeTabelaVendaProduto != null && unidadeTabelaVendaProduto.PrecoLista__c != null && 
-                unidadeTabelaVendaProduto.MetragemUnidade__c != null && unidadeTabelaVendaProduto.MetragemUnidade__c > 0.0
+                unidadeTabelaVendaProduto?.PrecoLista__c != null && 
+                unidadeTabelaVendaProduto?.MetragemUnidade__c > 0.0
             ) {
                 valorM2.valorTabela = nominalTabela / unidadeTabelaVendaProduto.MetragemUnidade__c;
             }
 
            if (
-                unidadeTabelaVendaProduto.MetragemUnidade__c > 0.0 && 
+                unidadeTabelaVendaProduto?.MetragemUnidade__c > 0.0 && 
                 (produtoSelecionado != null || produtoSelecionado.MetragemTotal__c != null || nominalProposta != null)
             ) {
                 valorM2.valorProposta = nominalProposta / unidadeTabelaVendaProduto.MetragemUnidade__c;
