@@ -1,13 +1,27 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
-  <types>
-    <members>UtilTest</members>
-    <members>AnaliseCreditoHelperTest</members>
-    <members>AnaliseCreditoDATest</members>
-    <members>ChecklistControllerTest</members>
-    <members>TemplateDocumentoDATest</members>
-    <name>ApexClass</name>
-  </types>
-  <version>54.0</version>
-
+	<types>
+		<members>ComparativoController</members>
+		<members>ComparativoControllerTest</members>
+		<members>ComparativoService</members>
+		<members>ComparativoServiceTest</members>
+		<members>ConciergeService</members>
+		<members>ExtratoTabelaService</members>
+		<members>ExtratoTabelaServiceTest</members>
+		<members>ParametrizarCriteriosController</members>
+		<members>ParametrizarCriteriosControllerTest</members>
+		<members>ParametrizarCriteriosSelector</members>
+		<members>ParametrizarCriteriosSelectorTest</members>
+		<members>ParametrizarCriteriosService</members>
+		<members>ParametrizarCriteriosServiceTest</members>
+		<members>QuoteHelper</members>
+		<members>comissaoController</members>
+		<name>ApexClass</name>
+	</types>
+	<types>
+		<members>simuladorTelaExtratoAnaliseProposta</members>
+		<members>simuladorTelaExtratoTabelaComparativa</members>
+		<name>LightningComponentBundle</name>
+	</types>
+	<version>63.0</version>
 </Package>
