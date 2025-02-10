@@ -36,7 +36,9 @@ public with sharing class ContractSelector {
         WHERE Oportunidade__c IN :oppsId];
     }
     
-    public static List<OpportunityContactRole> getRolesContatoOpp(String oppId) {
+    public static List<OpportunityContactRole> getRolesContatoOpp(Id oppId) {
+        if (oppId == null) return null;
+
         return [SELECT Id, ContactId, OpportunityId, Contact.Name, Contact.Email, Role FROM OpportunityContactRole WHERE OpportunityId = :oppId AND Role != null];
     }
 

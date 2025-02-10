@@ -4,7 +4,7 @@ public with sharing class ContractHelper {
         String status = (String) data.get('status');
         Date dataInicioContrato = Date.valueOf((String) data.get('dataInicioContrato'));
         Date dataEnvioAssinatura = Date.valueOf((String) data.get('dataEnvioParaAssinatura'));
-        Date dataAssinaturaClienteDocuSign = Date.valueOf((String) data.get('dataAssinaturaCliente'));
+        Date dataAssinaturaClienteD4Sign = Date.valueOf((String) data.get('dataAssinaturaCliente'));
         Map<String, String> contaMap = (Map<String, String>) JSON.deserialize(JSON.serialize(data.get('conta')), Map<String, String>.class);
         Id templateId = (Id) data.get('template');
         List<Map<String, String>> contactsMaps = (List<Map<String, String>>) JSON.deserialize(JSON.serialize(data.get('signatarios')), List<Map<String, String>>.class);
@@ -16,7 +16,7 @@ public with sharing class ContractHelper {
                 DataInicioContrato__c = dataInicioContrato,
                 Name = contaMap.get('Name'), // Contrato está com o nome da conta
                 DataEnvioAssinatura__c = dataEnvioAssinatura,
-                DataAssinaturaClienteDocuSign__c = dataAssinaturaClienteDocuSign,
+                DataAssinaturaClienteD4Sign__c = dataAssinaturaClienteD4Sign,
                 Template__c = templateId,
                 AccountId = contaMap.get('Id'),
                 Oportunidade__c = oppId

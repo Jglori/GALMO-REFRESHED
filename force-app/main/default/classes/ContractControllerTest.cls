@@ -43,7 +43,7 @@ private class ContractControllerTest {
             Status = 'Rascunho',
             Name = 'Contrato Test',
             DataEnvioAssinatura__c = Date.today(),
-            DataAssinaturaClienteDocuSign__c = Date.today(),
+            DataAssinaturaClienteD4Sign__c = Date.today(),
             Template__c = template.Id
         );
         insert contract;

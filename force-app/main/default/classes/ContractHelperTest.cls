@@ -43,7 +43,7 @@ private class ContractHelperTest {
             Status = 'Rascunho',
             Name = 'Contrato Test',
             DataEnvioAssinatura__c = Date.today(),
-            DataAssinaturaClienteDocuSign__c = Date.today(),
+            DataAssinaturaClienteD4Sign__c = Date.today(),
             Template__c = template.Id
         );
         insert contract;
@@ -51,7 +51,7 @@ private class ContractHelperTest {
         Contact contato = new Contact();
         contato.FirstName = 'Elera';
         contato.LastName = 'Teste';
-        contato.Email = 'thiagovieirab2b@gmail.com';
+        contato.Email = 'teste@gmail.com';
         contato.AccountId = conta.Id;
         insert contato;
 

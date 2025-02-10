@@ -1,9 +1,13 @@
 public class ContratoService {
     public static String contratoText(Opportunity opp, TemplateDocumento__c template) {
-        String text = template.ConteudoTemplate__c;
+        // String text = template.ConteudoTemplate__c;
+        String text = '';
 
         Empreendimento__c emp = EmpreendimentoSelector.getEmpreendimentoById(opp.Empreendimento__c);
         Account conta = (Account) QueryHelper.selectAllFields('Account', opp.AccountId);
+        
+        System.debug(opp);
+        System.debug([SELECT Id, OpportunityId, Product2Id FROM OpportunityLineItem LIMIT 10]);
         OpportunityLineItem opli = OpportunityDA.getProductsById(opp.Id)[0]; // Acho que está errado fixar uma posição "Sant-Thiago"
         Product2 prd = (Product2) QueryHelper.selectAllFields('Product2', opli.Product2Id);
         Bloco__c bloco = (Bloco__c) QueryHelper.selectAllFields('Bloco__c', prd.Bloco__c);
