@@ -67,7 +67,7 @@ private class ComparativoServiceTest {
     static void testCalcularComparacao() {
 
         TabelaVendas__c tabelaVenda = [
-            SELECT Id FROM TabelaVendas __c
+            SELECT Id FROM TabelaVendas__c
         ];
 
         List<SeriePagamentos__c> series = [
