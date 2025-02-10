@@ -31,4 +31,13 @@ public class CotacaoController {
     public static List<TabelaVendas__c> cotacaoTabelaRelacionada(Id idCotacao){
         return SeriePagamentosService.cotacaoTabelaRelacionada(idCotacao);
     }
+
+    @AuraEnabled
+    public static void getTabelaVendasById(Id tabelaVendaId){
+        try {
+            QuoteHelper.get
+        } catch (Exception e) {
+            throw new AuraHandledException(e.getMessage());
+        }
+    }
 }
