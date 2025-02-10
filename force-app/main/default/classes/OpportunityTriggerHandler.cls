@@ -6,6 +6,7 @@ public with sharing class OpportunityTriggerHandler extends TriggerHandler {
     }
     
     public override void beforeUpdate() {
+     // OpportunityHelper.validateTransitionFromCanceled((List<Opportunity>) Trigger.new, (Map<Id, Opportunity>) Trigger.oldMap);
         OpportunityHelper.validateTransitionToFichaCadastral((List<Opportunity>) Trigger.new, (Map<Id, Opportunity>) Trigger.oldMap);
         OpportunityHelper.handleBeforeUpdate((List<Opportunity>) Trigger.new, (Map<Id, Opportunity>) Trigger.oldMap);
         OpportunityHelper.handleOpportunityCancelation((List<Opportunity>) Trigger.new, (Map<Id, Opportunity>) Trigger.oldMap);
@@ -20,6 +21,7 @@ public with sharing class OpportunityTriggerHandler extends TriggerHandler {
 
     public override void afterUpdate() {
         OpportunityHelper.handleOpportunityUpdate((List<Opportunity>) Trigger.new);
+        OpportunityHelper.sendEmailNotificationForMissingDocs((List<Opportunity>)Trigger.new);
     }
 
 }

@@ -165,4 +165,38 @@ private class ChecklistHelperTest {
         
         System.assertEquals(expected.size(), result.size(), 'Deveria retornar ao menos um item na lista');
     }
+
+    @IsTest
+    static void testVerifyMissingDocs() {
+        Opportunity oppInApproval = new Opportunity(
+            Name = 'Teste',
+            Amount = 1000,
+            CanalAtendimento__c = 'WhatsApp',
+            Probability = 20,
+            TipoVenda__c = 'Negócio novo',
+            ProcessoAprovacao__c = true,
+            CloseDate = System.today().addDays(15),
+            StageName = 'Ficha Cadastral'
+        );
+
+        insert oppInApproval;
+
+        List<Opportunity> opps = new List<Opportunity>{oppInApproval};
+
+        Contact ctt = [SELECT Id FROM Contact WHERE LastName = 'Silva' LIMIT 1];
+
+        OpportunityContactRole cr = new OpportunityContactRole(
+            OpportunityId = oppInApproval.Id,
+            ContactId = ctt.Id,
+            Role = 'Comprador'
+        );
+
+        insert cr;
+
+        Test.startTest();
+            Map<Id, List<Documento__mdt>> missingDocs = ChecklistHelper.verifyMissingDocs(opps);
+        Test.stopTest();
+
+        System.assert(!missingDocs.isEmpty(), 'Encontrado os documentos faltantes');
+    }
 }

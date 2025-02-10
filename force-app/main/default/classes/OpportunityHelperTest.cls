@@ -83,7 +83,7 @@ private class OpportunityHelperTest {
     @isTest
     static void testValidateTransitionToFichaCadastral_AllFieldsFilled() {        
         List<Opportunity> opps = [
-            SELECT Id, Name, StageName, FarolChecklistDocumento__c, CanalAtendimento__c, TipoVenda__c, Probability, AccountId, Amount, SyncedQuoteId, Corretor__c
+            SELECT Id, Name, StageName, FarolChecklistDocumento__c, CanalAtendimento__c, TipoVenda__c, Probability, AccountId, Amount, SyncedQuoteId, Corretor__c, Contato__c,RecordTypeId
             FROM Opportunity
         ];
         Quote cotacao = [
@@ -511,4 +511,119 @@ public static void testSendWinNotification() {
 
     System.assert(true, 'Notificação de vitória enviada com sucesso!');
  }
+
+    @IsTest
+    static void testSendEmailNotificationForMissingDocs() {
+        Id perfilAdministradorSistema = [SELECT Id FROM Profile WHERE Name = 'Administrador do sistema' OR Name = 'System Administrator'].id;
+
+        User userManager = new User(
+            LastName = 'Usuario Manager',
+            Email = 'email@exeample.com',
+            Alias = 'usrmg',
+            EmailEncodingKey = 'UTF-8',
+            LanguageLocaleKey = 'en_US',
+            LocaleSidKey = 'en_US',
+            TimeZoneSidKey = 'America/Los_Angeles',
+            UserName = 'usuariomanager@exemplo.com',
+            ProfileId = perfilAdministradorSistema,
+            Situacao__c = 'Online'
+        );
+
+        User owner = new User(
+            LastName = 'Usuario Owner',
+            Email = 'email.owner@exeample.com',
+            Reportase__c = userManager.Id,
+            Alias = 'usrow',
+            EmailEncodingKey = 'UTF-8',
+            LanguageLocaleKey = 'en_US',
+            LocaleSidKey = 'en_US',
+            TimeZoneSidKey = 'America/Los_Angeles',
+            UserName = 'usuarioowner@exemplo.com',
+            ProfileId = perfilAdministradorSistema,
+            Situacao__c = 'Online'
+        );
+
+        insert new List<User>{userManager, owner};
+
+        Contact ctt = new Contact();
+        ctt.FirstName = 'Elera Checklist';
+        ctt.LastName = 'Teste Checklist';
+        ctt.Email = 'teste.dev@elera.io.checklist';
+        insert ctt;
+
+        Opportunity opp = new Opportunity();
+        opp.Name = 'Teste Checklist';
+        opp.Amount = 1000;
+        opp.CanalAtendimento__c = 'WhatsApp';
+        opp.Probability = 20;
+        opp.TipoVenda__c = 'Negócio novo';
+        opp.StageName = 'Ficha Cadastral';
+        opp.OwnerId = owner.Id;
+        opp.CloseDate = System.today().addDays(15);
+        insert opp;
+
+        OpportunityContactRole ocr = new OpportunityContactRole(); 
+        ocr.Role = 'Comprador'; 
+        ocr.OpportunityId = opp.Id;
+        ocr.ContactId = ctt.Id;
+        insert ocr;
+
+        List<String> docsObrigatorios = new List<String>{'RG'};
+        List<String> docsOpcionais = new List<String>{'Certidão de Estado Civil'};
+
+        List<Documentacao__c> docsList = new List<Documentacao__c>();
+        List<Checklist_de_Documentos__c> checklistList = new List<Checklist_de_Documentos__c>();
+
+        for (String docName : docsObrigatorios) {
+            Documentacao__c doc = new Documentacao__c(
+                Name = docName,
+                Contato__c = ocr.ContactId,
+                Obrigatorio__c = true,
+                Entregue__c = true,
+                Validado__c = true
+            );
+            docsList.add(doc);
+        }
+
+        for (String docName : docsOpcionais) {
+            Documentacao__c doc = new Documentacao__c(
+                Name = docName,
+                Contato__c = ocr.ContactId,
+                Obrigatorio__c = false,
+                Entregue__c = true,
+                Validado__c = true
+            );
+            docsList.add(doc);
+        }
+
+        insert docsList;
+
+        for (Documentacao__c doc : docsList) {
+            Checklist_de_Documentos__c cklist = new Checklist_de_Documentos__c(
+                Oportunidade__c = opp.Id,
+                Documenta_o__c = doc.Id
+            );
+            checklistList.add(cklist);
+        }
+
+        insert checklistList;
+
+
+
+        List<Opportunity> opps = new List<Opportunity>([SELECT Id FROM Opportunity]);
+
+        Test.startTest();
+            opp.ProcessoAprovacao__c = true;
+            update opp;
+            OpportunityHelper.sendEmailNotificationForMissingDocs(opps);
+        Test.stopTest();
+
+        EmailTemplate emailTemplate = [
+            SELECT Id, Body, Subject FROM EmailTemplate
+            WHERE DeveloperName = 'AprovacaoChecklistDocumentos' LIMIT 1
+        ];
+
+
+        System.assert(emailTemplate != null, 'Template de email não encontrado!');
+    }
 }
