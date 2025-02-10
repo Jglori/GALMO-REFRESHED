@@ -34,7 +34,7 @@ public class ComparativoService {
             obj.inicioPagamento = (Integer)item.InicioPagamento__c;
             obj.tabelaVenda = tabelaId;
             obj.aposHabiteSe = item.AposHabiteSe__c;
-
+    
             propostasConvertidas.add(obj);
         }
 
@@ -64,7 +64,7 @@ public class ComparativoService {
                 tabelaVenda != null && 
                 nominalTabela != null && 
                 unidadeTabelaVendaProduto?.PrecoLista__c != null && 
-                unidadeTabelaVendaProduto?.MetragemUnidade__c != null && unidadeTabelaVendaProduto?.MetragemUnidade__c > 0.0
+                unidadeTabelaVendaProduto?.MetragemUnidade__c > 0.0
             ) {
                 valorM2.valorTabela = nominalTabela / unidadeTabelaVendaProduto.MetragemUnidade__c;
             }
