@@ -52,4 +52,10 @@ public with sharing class ParametrizarCriteriosService {
     
         return valores;
     }
+
+    public static ConjuntoCriteriosAnalise__c getConjuntoCriteriosAnaliseById(Id id) {
+        if (id == null) return null;
+
+        return ParametrizarCriteriosSelector.getConjuntoCriteriosAnaliseById(id);
+    }
 }

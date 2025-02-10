@@ -71,7 +71,7 @@ public class ComparativoService {
 
            if (
                 unidadeTabelaVendaProduto?.MetragemUnidade__c > 0.0 && 
-                (produtoSelecionado != null || produtoSelecionado.MetragemTotal__c != null || nominalProposta != null)
+                (produtoSelecionado?.MetragemTotal__c != null || nominalProposta != null)
             ) {
                 valorM2.valorProposta = nominalProposta / unidadeTabelaVendaProduto.MetragemUnidade__c;
            }
