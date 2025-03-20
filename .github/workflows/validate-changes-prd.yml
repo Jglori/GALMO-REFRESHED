@@ -57,26 +57,84 @@ jobs:
       - name: Exibir conteúdo do package.xml
         run: cat deploy/package/package.xml
 
-      # Implantar usando o pacote delta gerado
-      - name: Implantar usando o pacote delta gerado
+      # CONVERTER METADATA
+      - name: Convertendo Metadados do package
         run: |
-          sf project deploy start --manifest deploy/package/package.xml --dry-run --test-level RunSpecifiedTests --tests AccountControllerTest,AccountDATest,AccountHelperTest,ChecklistDATest,ChecklistHelperTest,ChecklistControllerTest,ChecklistTrigggerHandlerTest,ContractSelectorTest,ContractControllerTest,ContratoServiceTest,ContractDATest,ContractHelperTest,ContractTriggerHandlerTest,DocumentacaoDATest,DocumentControllerTest,DocumentacaoHelperTest,QuoteDATest,QuoteHelper,QuoteHelperTest,QueryHelperTest,QuoteLineItemHelper,QuoteLineItemHelperTest,QuoteLineItemTriggerHandler,QuoteLineItemTriggerHandlerTest,QuoteSyncHelper,QuoteSyncHelperTest,SalesTeamControllerTest,QuoteSyncTriggerHandler,QuoteSyncTriggerHandlerTest,QuoteTriggerHandler,QuoteTriggerHandlerTest,AccountContactRelationHelperTest,AnaliseCreditoHelperTest,AnaliseCreditoTriggerHandlerTest,TriggerHandler_Test,EmailManagerTest,ObjectHelperTest,ObjectControllerTest,OpportunityHelperTest,OpportunityTriggerHandlerTest,GerarContratoControllerTest,OpportunityDATest,IntegrationD4SignTest,AnaliseCreditoDATest,TemplateDocumentoHelperTest,UtilTest,TemplateDocumentoTriggerHandlerTest,TemplateDocumentoDATest,TemplateDocumentoControllerTest,TemplateDocumentoDATest,EmpreendimentoSelectorTest,ComparativoControllerTest,ComparativoServiceTest,EspelhoVendasControllerTest,comissaoControllerTest,CotacaoControllerTest,EspelhoVendasServiceTest,ExtratoTabelaServiceTest,ProdutoSelectorTest,SeriePagamentoSelectorTest,SeriePagamentosServiceTest,SimuladorVendasControllerTest,SeriePagamentosTriggerHandlerTest,SimuladorTelaNegociacaoControllerTest,TabelaVendaHandlerTest,TabelaVendaSelectorTest,TabelaVendasServiceTest,TestDataFactoryTest,TestDataFactorySimuladorTest,UnidadeTabelaSelectorTest,UnidadeTabelaServiceTest,ParametrizarCriterioServiceTest,ParametrizarCriterioControllerTest --target-org prd > deploy/deploy_output.log || true
+          sfdx force:source:convert --manifest=deploy/package/package.xml --outputdir=convert
 
-      # Verificar falhas de componentes no log de deploy
-      - name: Verificar falhas de componentes no log de deploy
+      # VERIFICAR SE HÁ CLASSES APEX
+      - name: Verificar Classes Apex
+        id: check-apex-classes
         run: |
-          if grep -i "Component Failures" deploy/deploy_output.log; then
-            echo "Falhas de componente detectadas! O deploy falhou."
+          if grep -q '<name>ApexClass</name>' deploy/package/package.xml; then
+            echo "Classes Apex encontradas."
+            echo "has_apex_classes=true" >> $GITHUB_ENV
+          else
+            echo "Nenhuma classe Apex encontrada."
+            echo "has_apex_classes=false" >> $GITHUB_ENV
+          fi
+
+      # Executar o deploy e testar
+      - name: Executar Deploy e Testes
+        run: |
+              set -e  # Interrompe o script caso o deploy falhe
+              if [ "${{ env.has_apex_classes }}" == "true" ]; then
+              echo "Executando deploy com testes específicos."
+              sf project deploy start --manifest deploy/package/package.xml --dry-run --test-level RunSpecifiedTests --tests UtilTest --tests ConciergeControllerTest --tests ConciergeServiceTest  --tests ConciergeControllerTest --tests ConciergeServiceTest --tests AccountControllerTest --tests AccountDATest --tests AccountHelperTest --tests ChecklistDATest --tests ChecklistHelperTest --tests ChecklistControllerTest --tests ChecklistTrigggerHandlerTest --tests ContractSelectorTest --tests ContractControllerTest --tests ContratoServiceTest --tests ContractDATest --tests ContractHelperTest --tests ContractTriggerHandlerTest --tests DocumentacaoDATest --tests DocumentControllerTest --tests DocumentacaoHelperTest --tests QuoteDATest --tests QuoteHelper --tests QuoteHelperTest --tests QueryHelperTest --tests QuoteLineItemHelper --tests QuoteLineItemHelperTest --tests QuoteLineItemTriggerHandler --tests QuoteLineItemTriggerHandlerTest --tests QuoteSyncHelper --tests QuoteSyncHelperTest --tests SalesTeamControllerTest --tests QuoteSyncTriggerHandler --tests QuoteSyncTriggerHandlerTest --tests QuoteTriggerHandler --tests QuoteTriggerHandlerTest --tests AccountContactRelationHelperTest --tests AnaliseCreditoHelperTest --tests AnaliseCreditoTriggerHandlerTest --tests TriggerHandler_Test --tests EmailManagerTest --tests ObjectHelperTest --tests ObjectControllerTest --tests OpportunityHelperTest --tests OpportunityTriggerHandlerTest --tests GerarContratoControllerTest --tests OpportunityDATest --tests IntegrationD4SignTest --tests AnaliseCreditoDATest --tests TemplateDocumentoHelperTest --tests UtilTest --tests TemplateDocumentoTriggerHandlerTest --tests TemplateDocumentoDATest --tests TemplateDocumentoControllerTest --tests TemplateDocumentoDATest --tests EmpreendimentoSelectorTest --tests ComparativoControllerTest --tests ComparativoServiceTest --tests EspelhoVendasControllerTest --tests comissaoControllerTest --tests CotacaoControllerTest --tests EspelhoVendasServiceTest --tests ExtratoTabelaServiceTest --tests ProdutoSelectorTest --tests SeriePagamentoSelectorTest --tests SeriePagamentosServiceTest --tests SimuladorVendasControllerTest --tests SeriePagamentosTriggerHandlerTest --tests SimuladorTelaNegociacaoControllerTest --tests TabelaVendaHandlerTest --tests TabelaVendaSelectorTest --tests TabelaVendasServiceTest --tests TestDataFactoryTest --tests TestDataFactorySimuladorTest --tests UnidadeTabelaSelectorTest --tests UnidadeTabelaServiceTest --tests ParametrizarCriterioServiceTest --tests ParametrizarCriterioControllerTest --target-org prd | tee deploy/deploy_output.log
+              else
+              echo "Executando deploy sem testes."
+              sf project deploy start --manifest deploy/package/package.xml --dry-run --test-level NoTestRun --target-org prd | tee deploy/deploy_output.log
+              fi
+
+      # Verificar falhas no deploy
+      - name: Verificar falhas no deploy
+        run: |
+          # Verifica falhas em componentes
+          if grep -qi "Component Failures" deploy/deploy_output.log; then
+            echo "❌ Falhas de componente detectadas! O deploy falhou."
             cat deploy/deploy_output.log
             exit 1
           fi
 
-      # Exibir o Log de Deploy diretamente no console
-      - name: Exibir o Log de Deploy diretamente no console
-        run: |
-          echo "Log de Deploy - Erros e Detalhes"
-          cat deploy/deploy_output.log
+          # Verifica falhas em testes
+          if grep -qi "Assertion Failed" deploy/deploy_output.log; then
+            echo "❌ Falhas nos testes detectadas!"
+            cat deploy/deploy_output.log
+            exit 1
+          fi
 
+           # Verifica cobertura de código insuficiente
+          if grep -qi "Failing: [1-9][0-9]*" deploy/deploy_output.log; then
+            echo "❌ Testes falhando detectados!"
+            cat deploy/deploy_output.log
+            exit 1
+          fi
+
+
+          # Verifica falhas em testes
+          if grep -qi "System.DmlException: Insert failed" deploy/deploy_output.log; then
+            echo "❌ Falhas nos testes detectadas!"
+            cat deploy/deploy_output.log
+            exit 1
+          fi
+
+          # Verifica cobertura de código insuficiente
+          if grep -qi "São necessários pelo menos 75% de cobertura do teste" deploy/deploy_output.log; then
+            echo "❌ Cobertura de código insuficiente detectada!"
+            cat deploy/deploy_output.log
+            exit 1
+          fi
+
+          # Verificar se houve falhas durante a execução do dry-run
+          if grep -qi "Failed to run" deploy/deploy_output.log; then
+            echo "❌ O dry-run falhou!"
+            cat deploy/deploy_output.log
+            exit 1
+          fi
+
+          echo "✅ Deploy validado com sucesso! Nenhuma falha encontrada."
+
+          
       # Definir nome do artefato com org, data e hora
       - name: Definir nome do artefato com org, data e hora
         id: set-artifact-name
