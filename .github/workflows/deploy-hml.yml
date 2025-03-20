@@ -52,7 +52,16 @@ jobs:
         run: cat deploy/package/package.xml
       - name: Implantar usando o pacote delta gerado
         run: |
-            sf project deploy start --manifest deploy/package/package.xml --test-level NoTestRun --target-org uat > deploy/deploy_output.log || true
+          sf project deploy start --manifest deploy/package/package.xml --test-level NoTestRun --target-org hml | tee deploy/deploy_output.log
+
+         # Verificar falhas de componentes no log de deploy
+      - name: Verificar falhas de componentes no log de deploy
+        run: |
+          if grep -i "Component Failures" deploy/deploy_output.log; then
+            echo "Falhas de componente detectadas! O deploy falhou."
+            cat deploy/deploy_output.log
+            exit 1
+          fi
 
 
       - name: Salvar package.xml
