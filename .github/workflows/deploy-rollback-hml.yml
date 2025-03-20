@@ -1,0 +1,108 @@
+name: Rollback de Deploy alterações para GalmoBox
+
+on:
+  workflow_dispatch:  # Gatilho manual
+
+jobs:
+  rollback_deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do repositório
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Para garantir todo o histórico de commits
+
+      - name: Instalar dependências do sistema e do Salesforce CLI
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget curl jq
+          npm install @salesforce/cli --global
+
+      - name: Autenticar com a org GalmoBox
+        run: |
+          echo "${{ secrets.AUTH_URL_HML }}" > sfdx-auth-url.txt
+          sf org login sfdx-url -f sfdx-auth-url.txt --alias hml
+
+      - name: Instalar plugin sfdx-git-delta
+        run: echo "y" | sf plugins install sfdx-git-delta
+
+      - name: Criar diretório de saída para o pacote delta
+        run: mkdir -p deploy
+
+      - name: Gerar pacote delta e destructiveChanges.xml
+        run: |
+          BASE_COMMIT=$(git rev-parse HEAD^1)  # Commit antes do merge
+          MERGE_COMMIT=$(git rev-parse HEAD)   # Commit do merge
+
+          # Gerar pacote delta e destructiveChanges.xml
+          sf sgd source delta --from $BASE_COMMIT --to $MERGE_COMMIT --output-dir deploy --generate-delta
+
+          # Verificar se o destructiveChanges.xml foi criado
+          if [ -f "deploy/destructiveChanges/destructiveChanges.xml" ]; then
+            echo "Arquivo destructiveChanges.xml gerado com sucesso:"
+            cat deploy/destructiveChanges/destructiveChanges.xml
+          else
+            echo "Nenhuma exclusão detectada, seguindo sem destructiveChanges.xml."
+          fi
+
+      - name: Verificar se o pacote delta contém arquivos
+        run: |
+          if [ ! -s deploy/package/package.xml ]; then
+            echo "Nenhuma alteração detectada, não há necessidade de rollback."
+            exit 0
+          fi
+
+      - name: Definir nome do artefato com org, data e hora
+        id: set-artifact-name
+        run: |
+          ORG_NAME="GalmoBox"
+          export TZ="America/Sao_Paulo"
+          TIMESTAMP=$(date +'%d-%m-%Y--%H-%M-%S')
+          echo "PACKAGE_XML_ARTIFACT=${ORG_NAME}_Package_xml_${TIMESTAMP}" >> $GITHUB_OUTPUT
+          echo "DEPLOY_LOG_ARTIFACT=${ORG_NAME}_Deploy_log_${TIMESTAMP}" >> $GITHUB_OUTPUT
+
+      - name: Listar conteúdo do diretório deploy
+        run: ls -R deploy
+
+      - name: Exibir conteúdo do package.xml
+        run: cat deploy/package/package.xml
+
+      - name: Implantar rollback (reverter alterações)
+        run: |
+          echo "Executando deploy real do rollback..."
+          sf project deploy start --manifest deploy/package/package.xml --test-level NoTestRun --target-org hml | tee deploy/deploy_output.log
+
+      - name: Verificar falhas de componentes no log de deploy
+        run: |
+          if grep -i "Component Failures" deploy/deploy_output.log; then
+            echo "Falhas de componente detectadas! O deploy falhou."
+            cat deploy/deploy_output.log
+            exit 1
+          fi
+
+      - name: Implantar destructiveChanges.xml (excluir metadados)
+        run: |
+          if [ -f "deploy/destructiveChanges/destructiveChanges.xml" ]; then
+            echo "Executando deploy real do destructiveChanges.xml para exclusão de metadados..."
+            sf project deploy start --manifest deploy/destructiveChanges/destructiveChanges.xml --test-level NoTestRun --target-org hml | tee deploy/destructive_deploy_output.log
+          else
+            echo "Nenhum metadado para excluir."
+          fi
+
+      - name: Salvar package.xml
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.set-artifact-name.outputs.PACKAGE_XML_ARTIFACT }}
+          path: deploy/package/package.xml
+
+      - name: Salvar o Log de Deploy
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.set-artifact-name.outputs.DEPLOY_LOG_ARTIFACT }}
+          path: deploy/deploy_output.log
+
+      - name: Salvar Log do Deploy de destructiveChanges.xml
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ steps.set-artifact-name.outputs.DEPLOY_LOG_ARTIFACT }}_destructive
+          path: deploy/destructive_deploy_output.log
